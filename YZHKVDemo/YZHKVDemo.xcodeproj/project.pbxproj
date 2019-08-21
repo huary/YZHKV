@@ -1,0 +1,776 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1C4724FD2302A360008F9ED1 /* TestObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C4724F82302A360008F9ED1 /* TestObj.m */; };
+		1C4724FE2302A360008F9ED1 /* X.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C4724F92302A360008F9ED1 /* X.m */; };
+		1C4724FF2302A360008F9ED1 /* Account.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C4724FA2302A360008F9ED1 /* Account.m */; };
+		1C4725022302A43C008F9ED1 /* YZHMachTimeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C4725012302A43C008F9ED1 /* YZHMachTimeUtils.m */; };
+		1C69D03922E61982006C2C45 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C69D03822E61982006C2C45 /* AppDelegate.m */; };
+		1C69D03C22E61982006C2C45 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C69D03B22E61982006C2C45 /* ViewController.m */; };
+		1C69D03F22E61982006C2C45 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1C69D03D22E61982006C2C45 /* Main.storyboard */; };
+		1C69D04122E61987006C2C45 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1C69D04022E61987006C2C45 /* Assets.xcassets */; };
+		1C69D04422E61987006C2C45 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1C69D04222E61987006C2C45 /* LaunchScreen.storyboard */; };
+		1C69D04722E61987006C2C45 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C69D04622E61987006C2C45 /* main.m */; };
+		1C69D05122E61987006C2C45 /* YZHKVDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C69D05022E61987006C2C45 /* YZHKVDemoTests.m */; };
+		1C69D05C22E61988006C2C45 /* YZHKVDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C69D05B22E61988006C2C45 /* YZHKVDemoUITests.m */; };
+		1C69D08922E61A68006C2C45 /* YZHCodeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C69D06D22E61A68006C2C45 /* YZHCodeData.m */; };
+		1C69D08A22E61A68006C2C45 /* YZHKV.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C69D06E22E61A68006C2C45 /* YZHKV.m */; };
+		1C69D08B22E61A68006C2C45 /* YZHKVUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C69D06F22E61A68006C2C45 /* YZHKVUtils.m */; };
+		1C69D09A22E61A68006C2C45 /* YZHCoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1C69D08822E61A68006C2C45 /* YZHCoder.mm */; };
+		1CE765D422ED8493009110DA /* openSSL_crypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765D322ED8493009110DA /* openSSL_crypto.cpp */; };
+		1CE765EB22ED9890009110DA /* openSSL_cfb128.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765DC22ED9890009110DA /* openSSL_cfb128.cpp */; };
+		1CE765EC22ED9890009110DA /* openSSL_cbc128.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765DD22ED9890009110DA /* openSSL_cbc128.cpp */; };
+		1CE765ED22ED9890009110DA /* openSSL_cts128.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765DE22ED9890009110DA /* openSSL_cts128.cpp */; };
+		1CE765EE22ED9890009110DA /* openSSL_ofb128.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765DF22ED9890009110DA /* openSSL_ofb128.cpp */; };
+		1CE765EF22ED9890009110DA /* openSSL_gcm128.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765E022ED9890009110DA /* openSSL_gcm128.cpp */; };
+		1CE765F022ED9890009110DA /* openSSL_xts128.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765E122ED9890009110DA /* openSSL_xts128.cpp */; };
+		1CE765F122ED9890009110DA /* openSSL_ocb128.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765E222ED9890009110DA /* openSSL_ocb128.cpp */; };
+		1CE765F222ED9890009110DA /* openSSL_ctr128.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765E322ED9890009110DA /* openSSL_ctr128.cpp */; };
+		1CE765F322ED9890009110DA /* openSSL_aes_core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765E522ED9890009110DA /* openSSL_aes_core.cpp */; };
+		1CE765F422ED9890009110DA /* openSSL_aes_cfb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765E622ED9890009110DA /* openSSL_aes_cfb.cpp */; };
+		1CE765F522ED9890009110DA /* openSSL_aes_ofb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765E822ED9890009110DA /* openSSL_aes_ofb.cpp */; };
+		1CE765F622ED9890009110DA /* openSSL_aes_cbc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765E922ED9890009110DA /* openSSL_aes_cbc.cpp */; };
+		1CE765F722ED9890009110DA /* openSSL_aes_ecb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765EA22ED9890009110DA /* openSSL_aes_ecb.cpp */; };
+		1CE765FD22EDA63A009110DA /* YZHAESCryptor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765FC22EDA63A009110DA /* YZHAESCryptor.mm */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1C69D04D22E61987006C2C45 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1C69D02C22E61982006C2C45 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1C69D03322E61982006C2C45;
+			remoteInfo = YZHKVDemo;
+		};
+		1C69D05822E61988006C2C45 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1C69D02C22E61982006C2C45 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1C69D03322E61982006C2C45;
+			remoteInfo = YZHKVDemo;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1C4724F72302A360008F9ED1 /* Account.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Account.h; sourceTree = "<group>"; };
+		1C4724F82302A360008F9ED1 /* TestObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestObj.m; sourceTree = "<group>"; };
+		1C4724F92302A360008F9ED1 /* X.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = X.m; sourceTree = "<group>"; };
+		1C4724FA2302A360008F9ED1 /* Account.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Account.m; sourceTree = "<group>"; };
+		1C4724FB2302A360008F9ED1 /* X.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = X.h; sourceTree = "<group>"; };
+		1C4724FC2302A360008F9ED1 /* TestObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestObj.h; sourceTree = "<group>"; };
+		1C4725002302A43C008F9ED1 /* YZHMachTimeUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YZHMachTimeUtils.h; sourceTree = "<group>"; };
+		1C4725012302A43C008F9ED1 /* YZHMachTimeUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YZHMachTimeUtils.m; sourceTree = "<group>"; };
+		1C69D03422E61982006C2C45 /* YZHKVDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YZHKVDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C69D03722E61982006C2C45 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		1C69D03822E61982006C2C45 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		1C69D03A22E61982006C2C45 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		1C69D03B22E61982006C2C45 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		1C69D03E22E61982006C2C45 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1C69D04022E61987006C2C45 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1C69D04322E61987006C2C45 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		1C69D04522E61987006C2C45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1C69D04622E61987006C2C45 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		1C69D04C22E61987006C2C45 /* YZHKVDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YZHKVDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C69D05022E61987006C2C45 /* YZHKVDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YZHKVDemoTests.m; sourceTree = "<group>"; };
+		1C69D05222E61988006C2C45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1C69D05722E61988006C2C45 /* YZHKVDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YZHKVDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C69D05B22E61988006C2C45 /* YZHKVDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YZHKVDemoUITests.m; sourceTree = "<group>"; };
+		1C69D05D22E61988006C2C45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1C69D06A22E61A68006C2C45 /* YZHKV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHKV.h; sourceTree = "<group>"; };
+		1C69D06B22E61A68006C2C45 /* YZHCodeData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHCodeData.h; sourceTree = "<group>"; };
+		1C69D06C22E61A68006C2C45 /* YZHKVUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHKVUtils.h; sourceTree = "<group>"; };
+		1C69D06D22E61A68006C2C45 /* YZHCodeData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YZHCodeData.m; sourceTree = "<group>"; };
+		1C69D06E22E61A68006C2C45 /* YZHKV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YZHKV.m; sourceTree = "<group>"; };
+		1C69D06F22E61A68006C2C45 /* YZHKVUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YZHKVUtils.m; sourceTree = "<group>"; };
+		1C69D08322E61A68006C2C45 /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		1C69D08522E61A68006C2C45 /* type.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = type.h; sourceTree = "<group>"; };
+		1C69D08622E61A68006C2C45 /* macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macro.h; sourceTree = "<group>"; };
+		1C69D08722E61A68006C2C45 /* YZHCoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHCoder.h; sourceTree = "<group>"; };
+		1C69D08822E61A68006C2C45 /* YZHCoder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = YZHCoder.mm; sourceTree = "<group>"; };
+		1CE765D222ED8493009110DA /* openSSL_crypto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = openSSL_crypto.h; sourceTree = "<group>"; };
+		1CE765D322ED8493009110DA /* openSSL_crypto.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = openSSL_crypto.cpp; sourceTree = "<group>"; };
+		1CE765D722ED988F009110DA /* openSSL_modes_int.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = openSSL_modes_int.h; sourceTree = "<group>"; };
+		1CE765D922ED988F009110DA /* openSSL_aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = openSSL_aes.h; sourceTree = "<group>"; };
+		1CE765DA22ED988F009110DA /* openSSL_modes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = openSSL_modes.h; sourceTree = "<group>"; };
+		1CE765DC22ED9890009110DA /* openSSL_cfb128.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openSSL_cfb128.cpp; sourceTree = "<group>"; };
+		1CE765DD22ED9890009110DA /* openSSL_cbc128.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openSSL_cbc128.cpp; sourceTree = "<group>"; };
+		1CE765DE22ED9890009110DA /* openSSL_cts128.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openSSL_cts128.cpp; sourceTree = "<group>"; };
+		1CE765DF22ED9890009110DA /* openSSL_ofb128.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openSSL_ofb128.cpp; sourceTree = "<group>"; };
+		1CE765E022ED9890009110DA /* openSSL_gcm128.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openSSL_gcm128.cpp; sourceTree = "<group>"; };
+		1CE765E122ED9890009110DA /* openSSL_xts128.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openSSL_xts128.cpp; sourceTree = "<group>"; };
+		1CE765E222ED9890009110DA /* openSSL_ocb128.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openSSL_ocb128.cpp; sourceTree = "<group>"; };
+		1CE765E322ED9890009110DA /* openSSL_ctr128.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openSSL_ctr128.cpp; sourceTree = "<group>"; };
+		1CE765E522ED9890009110DA /* openSSL_aes_core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openSSL_aes_core.cpp; sourceTree = "<group>"; };
+		1CE765E622ED9890009110DA /* openSSL_aes_cfb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openSSL_aes_cfb.cpp; sourceTree = "<group>"; };
+		1CE765E722ED9890009110DA /* openSSL_aes_locl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = openSSL_aes_locl.h; sourceTree = "<group>"; };
+		1CE765E822ED9890009110DA /* openSSL_aes_ofb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openSSL_aes_ofb.cpp; sourceTree = "<group>"; };
+		1CE765E922ED9890009110DA /* openSSL_aes_cbc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openSSL_aes_cbc.cpp; sourceTree = "<group>"; };
+		1CE765EA22ED9890009110DA /* openSSL_aes_ecb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openSSL_aes_ecb.cpp; sourceTree = "<group>"; };
+		1CE765FB22EDA63A009110DA /* YZHAESCryptor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YZHAESCryptor.h; sourceTree = "<group>"; };
+		1CE765FC22EDA63A009110DA /* YZHAESCryptor.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = YZHAESCryptor.mm; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1C69D03122E61982006C2C45 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1C69D04922E61987006C2C45 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1C69D05422E61988006C2C45 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1C4724F62302A360008F9ED1 /* TestModel */ = {
+			isa = PBXGroup;
+			children = (
+				1C4724F72302A360008F9ED1 /* Account.h */,
+				1C4724FA2302A360008F9ED1 /* Account.m */,
+				1C4724FC2302A360008F9ED1 /* TestObj.h */,
+				1C4724F82302A360008F9ED1 /* TestObj.m */,
+				1C4724FB2302A360008F9ED1 /* X.h */,
+				1C4724F92302A360008F9ED1 /* X.m */,
+			);
+			path = TestModel;
+			sourceTree = "<group>";
+		};
+		1C69D02B22E61982006C2C45 = {
+			isa = PBXGroup;
+			children = (
+				1C69D03622E61982006C2C45 /* YZHKVDemo */,
+				1C69D04F22E61987006C2C45 /* YZHKVDemoTests */,
+				1C69D05A22E61988006C2C45 /* YZHKVDemoUITests */,
+				1C69D03522E61982006C2C45 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1C69D03522E61982006C2C45 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1C69D03422E61982006C2C45 /* YZHKVDemo.app */,
+				1C69D04C22E61987006C2C45 /* YZHKVDemoTests.xctest */,
+				1C69D05722E61988006C2C45 /* YZHKVDemoUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1C69D03622E61982006C2C45 /* YZHKVDemo */ = {
+			isa = PBXGroup;
+			children = (
+				1C4724F62302A360008F9ED1 /* TestModel */,
+				1CCCF7EC22E9D43C00D3E792 /* OpenSSL */,
+				1C69D08322E61A68006C2C45 /* PrefixHeader.pch */,
+				1C69D08422E61A68006C2C45 /* YZHCoder */,
+				1C69D06922E61A68006C2C45 /* YZHKV */,
+				1C69D03722E61982006C2C45 /* AppDelegate.h */,
+				1C69D03822E61982006C2C45 /* AppDelegate.m */,
+				1C69D03A22E61982006C2C45 /* ViewController.h */,
+				1C69D03B22E61982006C2C45 /* ViewController.m */,
+				1C69D03D22E61982006C2C45 /* Main.storyboard */,
+				1C69D04022E61987006C2C45 /* Assets.xcassets */,
+				1C69D04222E61987006C2C45 /* LaunchScreen.storyboard */,
+				1C69D04522E61987006C2C45 /* Info.plist */,
+				1C69D04622E61987006C2C45 /* main.m */,
+				1C4725002302A43C008F9ED1 /* YZHMachTimeUtils.h */,
+				1C4725012302A43C008F9ED1 /* YZHMachTimeUtils.m */,
+			);
+			path = YZHKVDemo;
+			sourceTree = "<group>";
+		};
+		1C69D04F22E61987006C2C45 /* YZHKVDemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				1C69D05022E61987006C2C45 /* YZHKVDemoTests.m */,
+				1C69D05222E61988006C2C45 /* Info.plist */,
+			);
+			path = YZHKVDemoTests;
+			sourceTree = "<group>";
+		};
+		1C69D05A22E61988006C2C45 /* YZHKVDemoUITests */ = {
+			isa = PBXGroup;
+			children = (
+				1C69D05B22E61988006C2C45 /* YZHKVDemoUITests.m */,
+				1C69D05D22E61988006C2C45 /* Info.plist */,
+			);
+			path = YZHKVDemoUITests;
+			sourceTree = "<group>";
+		};
+		1C69D06922E61A68006C2C45 /* YZHKV */ = {
+			isa = PBXGroup;
+			children = (
+				1C69D06B22E61A68006C2C45 /* YZHCodeData.h */,
+				1C69D06D22E61A68006C2C45 /* YZHCodeData.m */,
+				1C69D06A22E61A68006C2C45 /* YZHKV.h */,
+				1C69D06E22E61A68006C2C45 /* YZHKV.m */,
+				1C69D06C22E61A68006C2C45 /* YZHKVUtils.h */,
+				1C69D06F22E61A68006C2C45 /* YZHKVUtils.m */,
+			);
+			path = YZHKV;
+			sourceTree = "<group>";
+		};
+		1C69D08422E61A68006C2C45 /* YZHCoder */ = {
+			isa = PBXGroup;
+			children = (
+				1C69D08522E61A68006C2C45 /* type.h */,
+				1C69D08622E61A68006C2C45 /* macro.h */,
+				1C69D08722E61A68006C2C45 /* YZHCoder.h */,
+				1C69D08822E61A68006C2C45 /* YZHCoder.mm */,
+			);
+			path = YZHCoder;
+			sourceTree = "<group>";
+		};
+		1CCCF7EC22E9D43C00D3E792 /* OpenSSL */ = {
+			isa = PBXGroup;
+			children = (
+				1CCCF7ED22E9D43C00D3E792 /* crypto */,
+				1CE765FB22EDA63A009110DA /* YZHAESCryptor.h */,
+				1CE765FC22EDA63A009110DA /* YZHAESCryptor.mm */,
+			);
+			path = OpenSSL;
+			sourceTree = "<group>";
+		};
+		1CCCF7ED22E9D43C00D3E792 /* crypto */ = {
+			isa = PBXGroup;
+			children = (
+				1CE765E422ED9890009110DA /* aes */,
+				1CE765D622ED988F009110DA /* include */,
+				1CE765DB22ED9890009110DA /* modes */,
+				1CE765D222ED8493009110DA /* openSSL_crypto.h */,
+				1CE765D322ED8493009110DA /* openSSL_crypto.cpp */,
+			);
+			path = crypto;
+			sourceTree = "<group>";
+		};
+		1CE765D622ED988F009110DA /* include */ = {
+			isa = PBXGroup;
+			children = (
+				1CE765D722ED988F009110DA /* openSSL_modes_int.h */,
+				1CE765D922ED988F009110DA /* openSSL_aes.h */,
+				1CE765DA22ED988F009110DA /* openSSL_modes.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		1CE765DB22ED9890009110DA /* modes */ = {
+			isa = PBXGroup;
+			children = (
+				1CE765DC22ED9890009110DA /* openSSL_cfb128.cpp */,
+				1CE765DD22ED9890009110DA /* openSSL_cbc128.cpp */,
+				1CE765DE22ED9890009110DA /* openSSL_cts128.cpp */,
+				1CE765DF22ED9890009110DA /* openSSL_ofb128.cpp */,
+				1CE765E022ED9890009110DA /* openSSL_gcm128.cpp */,
+				1CE765E122ED9890009110DA /* openSSL_xts128.cpp */,
+				1CE765E222ED9890009110DA /* openSSL_ocb128.cpp */,
+				1CE765E322ED9890009110DA /* openSSL_ctr128.cpp */,
+			);
+			path = modes;
+			sourceTree = "<group>";
+		};
+		1CE765E422ED9890009110DA /* aes */ = {
+			isa = PBXGroup;
+			children = (
+				1CE765E522ED9890009110DA /* openSSL_aes_core.cpp */,
+				1CE765E622ED9890009110DA /* openSSL_aes_cfb.cpp */,
+				1CE765E722ED9890009110DA /* openSSL_aes_locl.h */,
+				1CE765E822ED9890009110DA /* openSSL_aes_ofb.cpp */,
+				1CE765E922ED9890009110DA /* openSSL_aes_cbc.cpp */,
+				1CE765EA22ED9890009110DA /* openSSL_aes_ecb.cpp */,
+			);
+			path = aes;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1C69D03322E61982006C2C45 /* YZHKVDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1C69D06022E61988006C2C45 /* Build configuration list for PBXNativeTarget "YZHKVDemo" */;
+			buildPhases = (
+				1C69D03022E61982006C2C45 /* Sources */,
+				1C69D03122E61982006C2C45 /* Frameworks */,
+				1C69D03222E61982006C2C45 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = YZHKVDemo;
+			productName = YZHKVDemo;
+			productReference = 1C69D03422E61982006C2C45 /* YZHKVDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1C69D04B22E61987006C2C45 /* YZHKVDemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1C69D06322E61988006C2C45 /* Build configuration list for PBXNativeTarget "YZHKVDemoTests" */;
+			buildPhases = (
+				1C69D04822E61987006C2C45 /* Sources */,
+				1C69D04922E61987006C2C45 /* Frameworks */,
+				1C69D04A22E61987006C2C45 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1C69D04E22E61987006C2C45 /* PBXTargetDependency */,
+			);
+			name = YZHKVDemoTests;
+			productName = YZHKVDemoTests;
+			productReference = 1C69D04C22E61987006C2C45 /* YZHKVDemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		1C69D05622E61988006C2C45 /* YZHKVDemoUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1C69D06622E61988006C2C45 /* Build configuration list for PBXNativeTarget "YZHKVDemoUITests" */;
+			buildPhases = (
+				1C69D05322E61988006C2C45 /* Sources */,
+				1C69D05422E61988006C2C45 /* Frameworks */,
+				1C69D05522E61988006C2C45 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1C69D05922E61988006C2C45 /* PBXTargetDependency */,
+			);
+			name = YZHKVDemoUITests;
+			productName = YZHKVDemoUITests;
+			productReference = 1C69D05722E61988006C2C45 /* YZHKVDemoUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1C69D02C22E61982006C2C45 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1020;
+				ORGANIZATIONNAME = yuan;
+				TargetAttributes = {
+					1C69D03322E61982006C2C45 = {
+						CreatedOnToolsVersion = 10.2.1;
+					};
+					1C69D04B22E61987006C2C45 = {
+						CreatedOnToolsVersion = 10.2.1;
+						TestTargetID = 1C69D03322E61982006C2C45;
+					};
+					1C69D05622E61988006C2C45 = {
+						CreatedOnToolsVersion = 10.2.1;
+						TestTargetID = 1C69D03322E61982006C2C45;
+					};
+				};
+			};
+			buildConfigurationList = 1C69D02F22E61982006C2C45 /* Build configuration list for PBXProject "YZHKVDemo" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1C69D02B22E61982006C2C45;
+			productRefGroup = 1C69D03522E61982006C2C45 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1C69D03322E61982006C2C45 /* YZHKVDemo */,
+				1C69D04B22E61987006C2C45 /* YZHKVDemoTests */,
+				1C69D05622E61988006C2C45 /* YZHKVDemoUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1C69D03222E61982006C2C45 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1C69D04422E61987006C2C45 /* LaunchScreen.storyboard in Resources */,
+				1C69D04122E61987006C2C45 /* Assets.xcassets in Resources */,
+				1C69D03F22E61982006C2C45 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1C69D04A22E61987006C2C45 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1C69D05522E61988006C2C45 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1C69D03022E61982006C2C45 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1CE765F422ED9890009110DA /* openSSL_aes_cfb.cpp in Sources */,
+				1C69D08922E61A68006C2C45 /* YZHCodeData.m in Sources */,
+				1CE765F322ED9890009110DA /* openSSL_aes_core.cpp in Sources */,
+				1C69D03C22E61982006C2C45 /* ViewController.m in Sources */,
+				1C4724FD2302A360008F9ED1 /* TestObj.m in Sources */,
+				1C69D09A22E61A68006C2C45 /* YZHCoder.mm in Sources */,
+				1C4724FE2302A360008F9ED1 /* X.m in Sources */,
+				1CE765F722ED9890009110DA /* openSSL_aes_ecb.cpp in Sources */,
+				1C4724FF2302A360008F9ED1 /* Account.m in Sources */,
+				1C69D08B22E61A68006C2C45 /* YZHKVUtils.m in Sources */,
+				1C69D08A22E61A68006C2C45 /* YZHKV.m in Sources */,
+				1CE765ED22ED9890009110DA /* openSSL_cts128.cpp in Sources */,
+				1CE765F522ED9890009110DA /* openSSL_aes_ofb.cpp in Sources */,
+				1CE765F022ED9890009110DA /* openSSL_xts128.cpp in Sources */,
+				1CE765EB22ED9890009110DA /* openSSL_cfb128.cpp in Sources */,
+				1C69D04722E61987006C2C45 /* main.m in Sources */,
+				1CE765EF22ED9890009110DA /* openSSL_gcm128.cpp in Sources */,
+				1CE765F222ED9890009110DA /* openSSL_ctr128.cpp in Sources */,
+				1CE765EE22ED9890009110DA /* openSSL_ofb128.cpp in Sources */,
+				1CE765F622ED9890009110DA /* openSSL_aes_cbc.cpp in Sources */,
+				1CE765EC22ED9890009110DA /* openSSL_cbc128.cpp in Sources */,
+				1C69D03922E61982006C2C45 /* AppDelegate.m in Sources */,
+				1CE765D422ED8493009110DA /* openSSL_crypto.cpp in Sources */,
+				1CE765FD22EDA63A009110DA /* YZHAESCryptor.mm in Sources */,
+				1CE765F122ED9890009110DA /* openSSL_ocb128.cpp in Sources */,
+				1C4725022302A43C008F9ED1 /* YZHMachTimeUtils.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1C69D04822E61987006C2C45 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1C69D05122E61987006C2C45 /* YZHKVDemoTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1C69D05322E61988006C2C45 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1C69D05C22E61988006C2C45 /* YZHKVDemoUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1C69D04E22E61987006C2C45 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1C69D03322E61982006C2C45 /* YZHKVDemo */;
+			targetProxy = 1C69D04D22E61987006C2C45 /* PBXContainerItemProxy */;
+		};
+		1C69D05922E61988006C2C45 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1C69D03322E61982006C2C45 /* YZHKVDemo */;
+			targetProxy = 1C69D05822E61988006C2C45 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		1C69D03D22E61982006C2C45 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1C69D03E22E61982006C2C45 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		1C69D04222E61987006C2C45 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1C69D04322E61987006C2C45 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1C69D05E22E61988006C2C45 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		1C69D05F22E61988006C2C45 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1C69D06122E61988006C2C45 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7C6YPJQ829;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = YZHKVDemo/PrefixHeader.pch;
+				INFOPLIST_FILE = YZHKVDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = yuan.YZHKVDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1C69D06222E61988006C2C45 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7C6YPJQ829;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = YZHKVDemo/PrefixHeader.pch;
+				INFOPLIST_FILE = YZHKVDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = yuan.YZHKVDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		1C69D06422E61988006C2C45 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = YZHKVDemoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = yuan.YZHKVDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/YZHKVDemo.app/YZHKVDemo";
+			};
+			name = Debug;
+		};
+		1C69D06522E61988006C2C45 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = YZHKVDemoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = yuan.YZHKVDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/YZHKVDemo.app/YZHKVDemo";
+			};
+			name = Release;
+		};
+		1C69D06722E61988006C2C45 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = YZHKVDemoUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = yuan.YZHKVDemoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = YZHKVDemo;
+			};
+			name = Debug;
+		};
+		1C69D06822E61988006C2C45 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = YZHKVDemoUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = yuan.YZHKVDemoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = YZHKVDemo;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1C69D02F22E61982006C2C45 /* Build configuration list for PBXProject "YZHKVDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1C69D05E22E61988006C2C45 /* Debug */,
+				1C69D05F22E61988006C2C45 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1C69D06022E61988006C2C45 /* Build configuration list for PBXNativeTarget "YZHKVDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1C69D06122E61988006C2C45 /* Debug */,
+				1C69D06222E61988006C2C45 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1C69D06322E61988006C2C45 /* Build configuration list for PBXNativeTarget "YZHKVDemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1C69D06422E61988006C2C45 /* Debug */,
+				1C69D06522E61988006C2C45 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1C69D06622E61988006C2C45 /* Build configuration list for PBXNativeTarget "YZHKVDemoUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1C69D06722E61988006C2C45 /* Debug */,
+				1C69D06822E61988006C2C45 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1C69D02C22E61982006C2C45 /* Project object */;
+}
