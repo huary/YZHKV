@@ -11,6 +11,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "macro.h"
+
 typedef NS_ENUM(uint8_t, _AESKeySize)
 {
     _AESKeySize128   = 16,

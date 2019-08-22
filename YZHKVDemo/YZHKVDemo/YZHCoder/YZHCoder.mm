@@ -7,7 +7,6 @@
 //
 
 #import "YZHCoder.h"
-#import "type.h"
 #import "macro.h"
 #import <objc/runTime.h>
 
@@ -21,6 +20,37 @@
 
 
 #define YZH_CODER_ESTIMATE_RESERVED_BYTE_CNT     (3)
+
+
+
+#define _SUPPRESS_AVAILABILITY_BEGIN         _Pragma("clang diagnostic push") \
+                                            _Pragma("clang diagnostic ignored \"-Wunsupported-availability-guard\"")\
+                                            _Pragma("clang diagnostic ignored \"-Wunguarded-availability-new\"")
+
+#define _SUPPRESS_AVAILABILITY_END           _Pragma("clang diagnostic pop")
+
+#define _AVAILABLE_GUARD(platform, os, future, conditions, IfAvailable, IfUnavailable) \
+                                            _SUPPRESS_AVAILABILITY_BEGIN \
+                                            if (__builtin_available(platform os, future) && conditions) {\
+                                                _SUPPRESS_AVAILABILITY_END \
+                                                if (@available(platform os, future)) { \
+                                                    IfAvailable \
+                                                } \
+                                                else { \
+                                                    IfUnavailable \
+                                                } \
+                                            } \
+                                            else { \
+                                                _SUPPRESS_AVAILABILITY_END \
+                                                IfUnavailable \
+                                            } \
+
+
+#define _IOS_AVAILABLE_GUARD(os, conditions, IfAvailable, IfUnavailable)     \
+_AVAILABLE_GUARD(iOS, os, *, conditions, IfAvailable, IfUnavailable)
+
+
+
 
 template <typename F, typename T>
 union Converter {
@@ -46,7 +76,7 @@ public:
         if (buffer == NULL) return;
         uint8_t len = sizeof(from);
         for (uint8_t i = 0; i < len; ++i) {
-            buffer[i] = TYPE_AND(TYPE_RS(to, TYPE_LS(i, 3)), FIR_BYTE_MASK);
+            buffer[i] = TYPE_AND(TYPE_RS(to, TYPE_LS(i, 3)), 0XFF);
         }
     }
     NSData *encodeToData() {
@@ -105,7 +135,7 @@ static inline int64_t zigzagToInteger(int64_t n)
     NSMutableData *dt = [NSMutableData dataWithLength:len];
     uint8_t *ptr = (uint8_t*)dt.mutableBytes;
     for (uint8_t i = 0; i < len; ++i) {
-        ptr[i] = TYPE_AND(TYPE_RS(val, TYPE_LS(i, 3)), FIR_BYTE_MASK);
+        ptr[i] = TYPE_AND(TYPE_RS(val, TYPE_LS(i, 3)), 0XFF);
     }
     return dt;//[dt copy];
 }
@@ -117,7 +147,7 @@ static inline int64_t zigzagToInteger(int64_t n)
     }
     uint8_t len = TYPEULL_BYTES_N(val);
     for (uint8_t i = 0; i < len; ++i) {
-        buffer[i] = TYPE_AND(TYPE_RS(val, TYPE_LS(i, 3)), FIR_BYTE_MASK);
+        buffer[i] = TYPE_AND(TYPE_RS(val, TYPE_LS(i, 3)), 0XFF);
     }
     return len;
 }
@@ -188,7 +218,11 @@ static inline int64_t zigzagToInteger(int64_t n)
     if ([object conformsToProtocol:@protocol(NSCoding)]) {
         if ([NSKeyedArchiver respondsToSelector:@selector(archivedDataWithRootObject:requiringSecureCoding:error:)]) {
             NSError *error = nil;
-            data = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:&error];
+            
+            _IOS_AVAILABLE_GUARD(11.0, YES, {
+                data = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:&error];
+            }, {});
+            
             NSLog(@"error=%@",error);
         }
         if (data == nil && [NSKeyedArchiver respondsToSelector:@selector(archivedDataWithRootObject:)]) {
@@ -207,7 +241,9 @@ static inline int64_t zigzagToInteger(int64_t n)
     if ([object conformsToProtocol:@protocol(NSCoding)]) {
         if ([NSKeyedUnarchiver respondsToSelector:@selector(unarchivedObjectOfClass:fromData:error:)]) {
             NSError *error = nil;
-            object = [NSKeyedUnarchiver unarchivedObjectOfClass:cls fromData:data error:&error];
+            _IOS_AVAILABLE_GUARD(11.0, YES, {
+                object = [NSKeyedUnarchiver unarchivedObjectOfClass:cls fromData:data error:&error];
+            }, {});
             NSLog(@"error=%@",error);
         }
         

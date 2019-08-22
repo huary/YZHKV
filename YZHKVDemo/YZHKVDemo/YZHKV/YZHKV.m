@@ -16,6 +16,7 @@
 #import "YZHCodeData.h"
 #import "YZHKVUtils.h"
 #import "YZHMachTimeUtils.h"
+#import "macro.h"
 
 static int DEFAULT_PAGE_SIZE_s;
 static int MIN_MMAP_SIZE_s;     //64KB
@@ -466,6 +467,7 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
         return NO;
     }
     
+    NSLog(@"AppendSize:%lld,fullwriteBack",newSize);
     if ([self _shouldFullWriteBack]) {
         dict = [self _fullWriteBack:dict checkCondition:YES error:NULL];
         if (newDict) {
