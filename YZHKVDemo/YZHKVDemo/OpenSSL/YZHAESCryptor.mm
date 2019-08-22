@@ -18,6 +18,15 @@ typedef NS_ENUM(uint8_t, _AESKeySize)
     _AESKeySize256   = 32,
 };
 
+typedef NS_ENUM(NSInteger, _AESVectorType)
+{
+    _AESVectorTypeNone          = 0,
+    //各自的
+    _AESVectorTypeSingle        = 1,
+    //公用的
+    _AESVectorTypePublic        = 2,
+};
+
 static const NSInteger AESBlockSize_s   = 16;
 
 typedef void(*_AES_CFB)(const unsigned char *in, unsigned char *out, size_t length, const openSSL::AES_KEY *key, unsigned char *ivec, int *num, const int enc);
@@ -45,7 +54,7 @@ typedef struct _YZHAESCryptKey
 }
 
 @property (nonatomic, assign) int offset;
-
+@property (nonatomic, assign) _AESVectorType vectorType;
 @property (nonatomic, copy) _YZHAESEncryptSizeBlock  encryptSizeBlock;
 @property (nonatomic, copy) YZHAESCryptDataPaddingBlock    paddingBlock;
 
@@ -96,7 +105,6 @@ void _AES_ecb_crypt_block_data(const unsigned char *in, unsigned char *out,
     _YZHAESCryptKey_S *ptr_cryptKey = (_YZHAESCryptKey_S*)key;
 
     openSSL::AES_KEY AESKey = (enc == AES_ENCRYPT) ? *(ptr_cryptKey->ptr_AESEncryptKey) : *(ptr_cryptKey->ptr_AESDecryptKey);
-
     
     size_t cryptLen = 0;
     uint8_t *inTmp = (uint8_t*)in;
@@ -119,6 +127,7 @@ void _AES_ecb_crypt_block_data(const unsigned char *in, unsigned char *out,
     if (self) {
         _offset = 0;
         _ptr_func = nullptr;
+        _vectorType = _AESVectorTypeNone;
         memset(&_AESEncryptKey, 0, sizeof(openSSL::AES_KEY));
         memset(&_AESDecryptKey, 0, sizeof(openSSL::AES_KEY));
         
@@ -137,7 +146,7 @@ void _AES_ecb_crypt_block_data(const unsigned char *in, unsigned char *out,
 //输入加密模式及输入向量，如果为YZHCryptModeECB，输入向量不起作用
 - (instancetype)initWithAESKey:(NSData *)AESKey keyType:(YZHAESKeyType)keyType inVector:(nullable NSData*)inVector cryptMode:(YZHCryptMode)cryptMode
 {
-    self = [super init];
+    self = [self init];
     if (self) {
         _key = [self _checkKey:AESKey type:keyType];
         if (_key) {
@@ -160,9 +169,14 @@ void _AES_ecb_crypt_block_data(const unsigned char *in, unsigned char *out,
 - (void)reset
 {
     self.offset = 0;
-    if (_inVector) {
-        _encryptVector = [self _copyData:_inVector];
-        _decryptVector = [self _copyData:_inVector];
+    if (_inVector && self.vectorType != _AESVectorTypeNone) {
+        if (self.vectorType == _AESVectorTypeSingle) {
+            _encryptVector = [self _copyData:_inVector];
+            _decryptVector = [self _copyData:_inVector];
+        }
+        else if (self.vectorType == _AESVectorTypePublic) {
+            _encryptVector = _decryptVector = [self _copyData:_inVector];
+        }
     }
     [self _setCryptKey];
 }
@@ -262,50 +276,43 @@ void _AES_ecb_crypt_block_data(const unsigned char *in, unsigned char *out,
     switch (cryptMode) {
         case YZHCryptModeCFB: {
             _ptrAESKey = &_AESEncryptKey;
+            _vectorType = _AESVectorTypePublic;
             _ptr_func = (openSSL::AES_cfb128_encrypt);
             self.encryptSizeBlock = ^NSUInteger(NSUInteger inputSize, AESPaddingType paddingType) {
                 return inputSize;
             };
-//            self.paddingBlock = ^NSData *(YZHAESCryptor *cryptor, NSData *cryptData, AESPaddingType paddingType, YZHCryptOperation cryptOperation) {
-//                return cryptData;
-//            };
             break;
         }
         case YZHCryptModeCFB1: {
             _ptrAESKey = &_AESEncryptKey;
+            _vectorType = _AESVectorTypePublic;
             _ptr_func = _AES_cfb1_crypt_block_data;//(openSSL::AES_cfb1_encrypt);
             self.encryptSizeBlock = ^NSUInteger(NSUInteger inputSize, AESPaddingType paddingType) {
                 return inputSize;
             };
-//            self.paddingBlock = ^NSData *(YZHAESCryptor *cryptor, NSData *cryptData, AESPaddingType paddingType, YZHCryptOperation cryptOperation) {
-//                return cryptData;
-//            };
             break;
         }
         case YZHCryptModeCFB8: {
             _ptrAESKey = &_AESEncryptKey;
+            _vectorType = _AESVectorTypePublic;
             _ptr_func = (openSSL::AES_cfb8_encrypt);
             self.encryptSizeBlock = ^NSUInteger(NSUInteger inputSize, AESPaddingType paddingType) {
                 return inputSize;
             };
-//            self.paddingBlock = ^NSData *(YZHAESCryptor *cryptor, NSData *cryptData, AESPaddingType paddingType, YZHCryptOperation cryptOperation) {
-//                return cryptData;
-//            };
             break;
         }
         case YZHCryptModeOFB: {
             _ptrAESKey = &_AESEncryptKey;
+            _vectorType = _AESVectorTypePublic;
             _ptr_func = (openSSL::AES_ofb128_encrypt);
             self.encryptSizeBlock = ^NSUInteger(NSUInteger inputSize, AESPaddingType paddingType) {
                 return inputSize;
             };
-//            self.paddingBlock = ^NSData *(YZHAESCryptor *cryptor, NSData *cryptData, AESPaddingType paddingType, YZHCryptOperation cryptOperation) {
-//                return cryptData;
-//            };
             break;
         }
         case YZHCryptModeCBC: {
             _ptrAESKey = (openSSL::AES_KEY *)&_cryptKey;
+            _vectorType = _AESVectorTypeSingle;
             _ptr_func = _AES_cbc_crypt_block_data;
             self.encryptSizeBlock = ^NSUInteger(NSUInteger inputSize, AESPaddingType paddingType) {
                 return [YZHAESCryptor _getEncryptSize:inputSize paddingType:paddingType];
@@ -317,6 +324,7 @@ void _AES_ecb_crypt_block_data(const unsigned char *in, unsigned char *out,
         }
         case YZHCryptModeECB: {
             _ptrAESKey = (openSSL::AES_KEY *)&_cryptKey;
+            _vectorType = _AESVectorTypeNone;
             _ptr_func = _AES_ecb_crypt_block_data;
             self.encryptSizeBlock = ^NSUInteger(NSUInteger inputSize, AESPaddingType paddingType) {
                 return [YZHAESCryptor _getEncryptSize:inputSize paddingType:paddingType];
@@ -399,7 +407,7 @@ void _AES_ecb_crypt_block_data(const unsigned char *in, unsigned char *out,
         uint8_t *inPtr = input;
         NSData *inData = nil;
         if (paddingBlock) {
-            inData = [NSData dataWithBytes:input length:(NSUInteger)inSize];
+            inData = [NSData dataWithBytesNoCopy:input length:(NSUInteger)inSize freeWhenDone:NO];
             inData = paddingBlock(self, inData, paddingType, operation);
             inPtr = (uint8_t*)inData.bytes;
             

@@ -17,6 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (CGFloat)machTimeToMS:(uint64_t)machTime;
 
++ (void)startRecordPoint;
+
++ (void)recordPointWithText:(NSString*)tagText;
+
 + (CGFloat)elapsedMSTimeInBlock:(void(^)(void))block;
 
 + (uint64_t)elapsedMachTimeInBlock:(void(^)(void))block;

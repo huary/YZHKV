@@ -45,21 +45,22 @@
     
 //    [self _testCoder];
     
-    [self _testAccount];
+//    [self _testAccount];
     
-//    [self kvBaselineTest:10000];
+    [self kvBaselineTest:10000];
     
 //    [self _testCryptor];
     
-//    [self _testSwitch];
 }
 
 
 -(YZHKV*)kv{
     if (_kv == nil) {
-//        NSData *cryptKey = [@"yuanzhen" dataUsingEncoding:NSUTF8StringEncoding];
-        NSData *cryptKey = nil;
+        NSData *cryptKey = [@"yuanzhen" dataUsingEncoding:NSUTF8StringEncoding];
+//        NSData *cryptKey = nil;
+        [YZHMachTimeUtils recordPointWithText:@"开始"];
         _kv = [[YZHKV alloc] initWithName:@"db/test/1/2/3/kv" path:nil cryptKey:cryptKey];
+        [YZHMachTimeUtils recordPointWithText:@"结束"];
     }
     return _kv;
 }
@@ -126,7 +127,7 @@
 
 -(void)_testAccount
 {
-#if 0
+#if 1
     //Account
     Account *accout = [Account new];
     accout.uin = 1234567899;
@@ -196,8 +197,8 @@
 #else
     __block id acc = nil;
     [YZHMachTimeUtils elapsedMSTimeInBlock:^{
-        self.kv;
-//        acc = [self.kv getObjectForKey:@"Account"];
+//        self.kv;
+        acc = [self.kv getObjectForKey:@"Account"];
     }];
     NSLog(@"acc=%@",acc);
     return;
@@ -355,61 +356,172 @@
 
 -(void)_testCryptor
 {
+    [self _testECB];
+    [self _testCBC];
+    [self _testOFB];
+    [self _testCFB];
+    [self _testCFB1];
+    [self _testCFB8];
+}
+
+- (void)_testECB
+{
     NSString *key = @"1234567890123456";
     NSData *keyData = [key dataUsingEncoding:NSUTF8StringEncoding];
-//    self.cryptor = [[YZHAESCryptor alloc] initWithAESKey:keyData keyType:YZHAESKeyType128 inVector:nil cryptMode:YZHCryptModeECB];
-//    self.cryptor = [[YZHAESCryptor alloc] initWithAESKey:keyData keyType:YZHAESKeyType128 inVector:keyData cryptMode:YZHCryptModeCBC];
-//    self.cryptor = [[YZHAESCryptor alloc] initWithAESKey:keyData keyType:YZHAESKeyType128 inVector:keyData cryptMode:YZHCryptModeOFB];
+    self.cryptor = [[YZHAESCryptor alloc] initWithAESKey:keyData keyType:YZHAESKeyType128 inVector:nil cryptMode:YZHCryptModeECB];
     
-    self.cryptor = [[YZHAESCryptor alloc] initWithAESKey:keyData keyType:YZHAESKeyType128 inVector:keyData cryptMode:YZHCryptModeCFB];
-//    self.cryptor = [[YZHAESCryptor alloc] initWithAESKey:keyData keyType:YZHAESKeyType128 inVector:keyData cryptMode:YZHCryptModeCFB1];
-//    self.cryptor = [[YZHAESCryptor alloc] initWithAESKey:keyData keyType:YZHAESKeyType128 inVector:keyData cryptMode:YZHCryptModeCFB8];
-
-    
-    NSString *text = @"12345678901234561234567890123456";//@"12345";//@"1234567890123456";//@"12345678901234561234567890123456";
+    NSString *text = @"12345";//@"12345";//@"1234567890123456";//@"12345678901234561234567890123456";
     NSData *input = [text dataUsingEncoding:NSUTF8StringEncoding];
-    NSLog(@"input=%@",input);
     
     NSData *cipherData = [self.cryptor crypt:YZHCryptOperationEncrypt input:input];
-//    [self.cryptor reset];
-//    NSData *plainData = [self.cryptor crypt:YZHCryptOperationDecrypt input:cipherData];
-//    NSString *plainText = [[NSString alloc] initWithData:plainData encoding:NSUTF8StringEncoding];
-//    NSLog(@"plainText=%@",plainText);
+    NSData *plainData = [self.cryptor crypt:YZHCryptOperationDecrypt input:cipherData];
+    NSString *plainText = [[NSString alloc] initWithData:plainData encoding:NSUTF8StringEncoding];
+    NSLog(@"ECB.plainText.1=%@,same=%@",plainText,@([plainText isEqualToString:text]));
+    
+    text = @"1234567890123456";//@"12345678901234561234567890123456";
+    input = [text dataUsingEncoding:NSUTF8StringEncoding];
+    
+    cipherData = [self.cryptor crypt:YZHCryptOperationEncrypt input:input];
+    plainData = [self.cryptor crypt:YZHCryptOperationDecrypt input:cipherData];
+    plainText = [[NSString alloc] initWithData:plainData encoding:NSUTF8StringEncoding];
+    NSLog(@"ECB.plainText.2=%@,same=%@",plainText,@([plainText isEqualToString:text]));
+    
+    
+    text = @"12345678901234561234567890123456789";
+    input = [text dataUsingEncoding:NSUTF8StringEncoding];
+    
+    cipherData = [self.cryptor crypt:YZHCryptOperationEncrypt input:input];
+    plainData = [self.cryptor crypt:YZHCryptOperationDecrypt input:cipherData];
+    plainText = [[NSString alloc] initWithData:plainData encoding:NSUTF8StringEncoding];
+    NSLog(@"ECB.plainText.3=%@,same=%@",plainText,@([plainText isEqualToString:text]));
+}
+
+- (void)_testCBC
+{
+    NSString *key = @"1234567890123456";
+    NSData *keyData = [key dataUsingEncoding:NSUTF8StringEncoding];
+    self.cryptor = [[YZHAESCryptor alloc] initWithAESKey:keyData keyType:YZHAESKeyType128 inVector:keyData cryptMode:YZHCryptModeCBC];
+
+    NSString *text = @"12345";//@"1234567890123456";//@"12345678901234561234567890123456";
+    NSData *input = [text dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSData *cipherData = [self.cryptor crypt:YZHCryptOperationEncrypt input:input];
+    NSData *plainData = [self.cryptor crypt:YZHCryptOperationDecrypt input:cipherData];
+    NSString *plainText = [[NSString alloc] initWithData:plainData encoding:NSUTF8StringEncoding];
+    NSLog(@"CBC.plainText.1=%@,same=%@",plainText,@([plainText isEqualToString:text]));
+    
+    
+    text = @"1234567890123456";//@"12345678901234561234567890123456";
+    input = [text dataUsingEncoding:NSUTF8StringEncoding];
+    
+    cipherData = [self.cryptor crypt:YZHCryptOperationEncrypt input:input];
+    plainData = [self.cryptor crypt:YZHCryptOperationDecrypt input:cipherData];
+    plainText = [[NSString alloc] initWithData:plainData encoding:NSUTF8StringEncoding];
+    NSLog(@"CBC.plainText.2=%@,same=%@",plainText,@([plainText isEqualToString:text]));
+    
+    
+    text = @"12345678901234561234567890123456789";
+    input = [text dataUsingEncoding:NSUTF8StringEncoding];
+    
+    cipherData = [self.cryptor crypt:YZHCryptOperationEncrypt input:input];
+    plainData = [self.cryptor crypt:YZHCryptOperationDecrypt input:cipherData];
+    plainText = [[NSString alloc] initWithData:plainData encoding:NSUTF8StringEncoding];
+    NSLog(@"CBC.plainText.3=%@,same=%@",plainText,@([plainText isEqualToString:text]));
+}
+
+- (void)_testOFB
+{
+    NSString *key = @"1234567890123456";
+    NSData *keyData = [key dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSLog(@"OFB:");
+    
+    self.cryptor = [[YZHAESCryptor alloc] initWithAESKey:keyData keyType:YZHAESKeyType128 inVector:keyData cryptMode:YZHCryptModeOFB];
+    
+    [self _testFlowCrypt1];
+    [self _testFlowCrypt2];
+}
+
+- (void)_testCFB
+{
+    NSString *key = @"1234567890123456";
+    NSData *keyData = [key dataUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"CFB:");
+    self.cryptor = [[YZHAESCryptor alloc] initWithAESKey:keyData keyType:YZHAESKeyType128 inVector:keyData cryptMode:YZHCryptModeCFB];
+
+    [self _testFlowCrypt1];
+    [self _testFlowCrypt2];
+}
+
+- (void)_testCFB1
+{
+    NSString *key = @"1234567890123456";
+    NSData *keyData = [key dataUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"CFB1:");
+    self.cryptor = [[YZHAESCryptor alloc] initWithAESKey:keyData keyType:YZHAESKeyType128 inVector:keyData cryptMode:YZHCryptModeCFB1];
+    
+    [self _testFlowCrypt1];
+    [self _testFlowCrypt2];
+}
+
+- (void)_testCFB8
+{
+    NSString *key = @"1234567890123456";
+    NSData *keyData = [key dataUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"CFB8:");
+    self.cryptor = [[YZHAESCryptor alloc] initWithAESKey:keyData keyType:YZHAESKeyType128 inVector:keyData cryptMode:YZHCryptModeCFB8];
+    
+    [self _testFlowCrypt1];
+    [self _testFlowCrypt2];
+}
+
+- (void)_testFlowCrypt1
+{
+    NSString *text = @"12345678901234561234567890123456";
+    NSMutableString *allInputText = [[NSMutableString alloc] initWithString:text];
+    
+    NSData *input = [text dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSData *cipherData = [self.cryptor crypt:YZHCryptOperationEncrypt input:input];
     
     [self.cryptor reset];
     int64_t outSize = cipherData.length;
     NSMutableData *plainData = [NSMutableData dataWithLength:cipherData.length];
     [self.cryptor crypt:YZHCryptOperationDecrypt input:(uint8_t*)cipherData.bytes inSize:outSize output:(uint8_t*)plainData.mutableBytes outSize:&outSize];
-    NSLog(@"output=%@",[[NSString alloc] initWithData:plainData encoding:NSUTF8StringEncoding]);
+    NSString *plainText = [[NSString alloc] initWithData:plainData encoding:NSUTF8StringEncoding];
+    NSLog(@"plainText.1=%@,isSame=%@",plainText,@([plainText isEqualToString:allInputText]));
+
     
-    
-    
-    text = @"1234567890123456";
+    //在解密的基础上进行加密
+    text = @"123456789012345689";
+    [allInputText appendString:text];
     input = [text dataUsingEncoding:NSUTF8StringEncoding];
-    
-    [self.cryptor reset];
     NSData *cipherData2 = [self.cryptor crypt:YZHCryptOperationEncrypt input:input];
     
+    NSMutableData *all = [NSMutableData dataWithData:cipherData];
+    [all appendData:cipherData2];
+    
+    //重新解密全部
     [self.cryptor reset];
-    plainData = [self.cryptor crypt:YZHCryptOperationDecrypt input:cipherData2];
-    NSString *plainText = [[NSString alloc] initWithData:plainData encoding:NSUTF8StringEncoding];
-    NSLog(@"plainText2=%@",plainText);
-    
-    [self _testFlowCrypt];
-    
+    NSData *p = [self.cryptor crypt:YZHCryptOperationDecrypt input:all];
+    plainText = [[NSString alloc] initWithData:p encoding:NSUTF8StringEncoding];
+    NSLog(@"plainText.2=%@,isSame=%@",plainText,@([plainText isEqualToString:allInputText]));
+
 }
 
--(void)_testFlowCrypt
+-(void)_testFlowCrypt2
 {
     [self.cryptor reset];
     
     NSMutableData *all = [NSMutableData data];
     NSString *text = @"12345";//@"12345";//@"1234567890123456";//@"12345678901234561234567890123456";
+    NSMutableString *allInputText = [[NSMutableString alloc] initWithString:text];
     NSData *input = [text dataUsingEncoding:NSUTF8StringEncoding];
     NSData *cipherData = [self.cryptor crypt:YZHCryptOperationEncrypt input:input];
     [all appendData:cipherData];
     
     text = @"01389";//@"12345";//@"1234567890123456";//@"12345678901234561234567890123456";
+    [allInputText appendString:text];
     input = [text dataUsingEncoding:NSUTF8StringEncoding];
     cipherData = [self.cryptor crypt:YZHCryptOperationEncrypt input:input];
     [all appendData:cipherData];
@@ -417,15 +529,13 @@
     [self.cryptor reset];
     NSData *plainData = [self.cryptor crypt:YZHCryptOperationDecrypt input:all];
     NSString *plainText = [[NSString alloc] initWithData:plainData encoding:NSUTF8StringEncoding];
-    NSLog(@"all=%@",plainText);
+    NSLog(@"all=%@,isSame=%@",plainText,@([plainText isEqualToString:allInputText]));
     
     if ([self.cryptor respondsToSelector:NSSelectorFromString(@"key")]) {
         NSData *key = [self.cryptor valueForKey:@"key"];
         NSData *vector = [self.cryptor valueForKey:@"inVector"];
         NSLog(@"key=%@,vector=%@",key,vector);
     }
-
-    
 }
 
 

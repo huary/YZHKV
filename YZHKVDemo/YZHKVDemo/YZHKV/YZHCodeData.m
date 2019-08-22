@@ -312,15 +312,15 @@ static const int32_t expandBufferSize_s = 4096;
     return data;
 }
 
-- (NSData *)subCopyDataFromOffset:(int64_t)offset
-{
-    if (self->_ptr == NULL || offset < 0 || offset >= self->_length) {
-        return nil;
-    }
-    int64_t length = self->_length - offset;
-    NSData *data = [NSData dataWithBytes:self->_ptr + offset length:(NSUInteger)length];
-    return data;
-}
+//- (NSData *)subCopyDataFromOffset:(int64_t)offset
+//{
+//    if (self->_ptr == NULL || offset < 0 || offset >= self->_length) {
+//        return nil;
+//    }
+//    int64_t length = self->_length - offset;
+//    NSData *data = [NSData dataWithBytes:self->_ptr + offset length:(NSUInteger)length];
+//    return data;
+//}
 
 //-(BOOL)isSame:(YZHCodeData*)codeData
 //{
@@ -362,13 +362,13 @@ static const int32_t expandBufferSize_s = 4096;
 
 - (instancetype)initWithSize:(int64_t)size
 {
-    self = [self init];
+    self = [super init];
     if (self) {
-        if (self->_ptr) {
-            free(self->_ptr);
-            self->_ptr = NULL;
-        }
-        self->_size = size;
+//        if (self->_ptr) {
+//            free(self->_ptr);
+//            self->_ptr = NULL;
+//        }
+        self->_size = size > 0 ? size : expandBufferSize_s;
         self->_ptr = calloc((size_t)self->_size, sizeof(uint8_t));
     }
     return self;
@@ -376,12 +376,12 @@ static const int32_t expandBufferSize_s = 4096;
 
 - (instancetype)initWithData:(NSData *)data
 {
-    self = [self init];
+    self = [super init];
     if (self) {
-        if (self->_ptr) {
-            free(self->_ptr);
-            self->_ptr = NULL;
-        }
+//        if (self->_ptr) {
+//            free(self->_ptr);
+//            self->_ptr = NULL;
+//        }
         self->_size = data.length;
         self->_ptr = calloc((size_t)self->_size, sizeof(uint8_t));
         memcpy(self->_ptr, (uint8_t*)data.bytes, self->_size);

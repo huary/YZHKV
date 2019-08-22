@@ -61,7 +61,9 @@ typedef NS_ENUM(NSInteger, YZHDataSeekType)
 
 -(void)bzero;
 
-//truncate不把内容置零
+/*truncate不把内容置零,
+ *在扩大的时候同seekTo，在缩小的时候不同于seekTo
+ */
 -(BOOL)truncateTo:(int64_t)size;
 
 - (uint8_t*)bytes;
@@ -74,7 +76,7 @@ typedef NS_ENUM(NSInteger, YZHDataSeekType)
 
 - (NSData*)copyData;
 
-- (NSData *)subCopyDataFromOffset:(int64_t)offset;
+//- (NSData *)subCopyDataFromOffset:(int64_t)offset;
 
 //-(BOOL)isSame:(YZHCodeData*)codeData;
 

@@ -291,14 +291,17 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
         
         self.filePath = [path stringByAppendingPathComponent:name];
         
-        [YZHMachTimeUtils elapsedMSTimeInBlock:^{
-            [YZHKVUtils checkAndMakeDirectory:[self.filePath stringByDeletingLastPathComponent]];
-        }];
+        [YZHMachTimeUtils recordPointWithText:@"开始创建文件夹"];
+        
+        [YZHKVUtils checkAndMakeDirectory:[self.filePath stringByDeletingLastPathComponent]];
+        
+        [YZHMachTimeUtils recordPointWithText:@"创建文件夹结束"];
         
         _sync_lock(self.lock, ^{
+            [YZHMachTimeUtils recordPointWithText:@"开始加载文件"];
             NSMutableDictionary *dict = [self _loadFromFileWithCryptKey:cryptKey];
             self.dict = dict;
-//            NSLog(@"dict.count=%ld",dict.count);
+            NSLog(@"dict.count=%ld",dict.count);
         });
     }
     return self;
@@ -459,11 +462,10 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
         newSize = MIN_MMAP_SIZE_s;
     }
 
-    if ([self _updateSize:newSize] == NO) {
+    if ([self _updateSize:newSize truncate:YES] == NO) {
         return NO;
     }
     
-    NSLog(@"AppendSize:%lld,fullwriteBack",newSize);
     if ([self _shouldFullWriteBack]) {
         dict = [self _fullWriteBack:dict checkCondition:YES error:NULL];
         if (newDict) {
@@ -480,6 +482,8 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
     if (self->_fd < 0) {
         return nil;
     }
+    [YZHMachTimeUtils recordPointWithText:@"创建文件"];
+
     int64_t fileSize  = [YZHKVUtils fileSize:self->_fd];
     uint64_t size = 0;
     if (fileSize <= MIN_MMAP_SIZE_s) {
@@ -488,11 +492,13 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
     else {
         size = (fileSize + DEFAULT_PAGE_SIZE_s - 1)/DEFAULT_PAGE_SIZE_s * DEFAULT_PAGE_SIZE_s;
     }
+    [YZHMachTimeUtils recordPointWithText:@"获取文件大小"];
     
-    if ([self _updateSize:size] == NO) {
+    if ([self _updateSize:size truncate:size != fileSize] == NO) {
         [self _closeFile];
         return nil;
     }
+    [YZHMachTimeUtils recordPointWithText:@"mmap文件"];
     
     BOOL fullWriteBack = [self _shouldFullWriteBack];
     if (self->_codeSize > 0 && ![self _checkDataWithCRC]) {
@@ -543,7 +549,7 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
             fullWriteBack = YES;
         }
     }
-    
+    [YZHMachTimeUtils recordPointWithText:@"开始解密"];
     NSError *error = nil;
     YZHCodeData *plainData = [self _startDecryptContentDataWithDecryptCondition:doDecrypt error:&error];
     if (error) {
@@ -552,11 +558,11 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
         return nil;
     }
     
-    __block NSMutableDictionary *dict = nil;
-    NSLog(@"decode.cost:");
-    [YZHMachTimeUtils elapsedMSTimeInBlock:^{
-        dict = [self _decodeBuffer:(uint8_t*)plainData.bytes + YZHKV_CONTENT_HEADER_SIZE cacheObjectDataRangeOffset:YZHKV_CONTENT_HEADER_SIZE size:self->_codeSize];
-    }];
+    [YZHMachTimeUtils recordPointWithText:@"解密完成，开始解码"];
+    
+    NSMutableDictionary *dict = [self _decodeBuffer:(uint8_t*)plainData.bytes + YZHKV_CONTENT_HEADER_SIZE cacheObjectDataRangeOffset:YZHKV_CONTENT_HEADER_SIZE size:self->_codeSize];
+    
+    [YZHMachTimeUtils recordPointWithText:@"解码完毕"];
     
     NSInteger dictCnt = dict.count;
     if ((dictCnt == 0 && self->_codeSize > 0) || self->_keyItemCnt != dictCnt) {
@@ -566,9 +572,13 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
         [self _reportError:error];
         return nil;
     }
+    
     if (fullWriteBack) {
         error = nil;
+        [YZHMachTimeUtils recordPointWithText:@"开始回写"];
         dict = [self _fullWriteBack:dict checkCondition:NO error:&error];
+        [YZHMachTimeUtils recordPointWithText:@"回写完毕"];
+
         if (error) {
             [self _reportError:error];
             return nil;
@@ -607,14 +617,14 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
         }
     
         int64_t dataSize = encodeData.dataSize;
-        int64_t outSize = encodeData.dataSize;
+        int64_t outSize = dataSize;
         
         [encodeData ensureRemSize:dataSize + YZHAESKeySize128];
         
         memcpy(encodeData.bytes, self->_hashKey, sizeof(_hashKey));
         
         [self->_cryptor reset];
-        [self->_cryptor crypt:YZHCryptOperationEncrypt input:encodeData.bytes inSize:encodeData.dataSize output:encodeData.bytes outSize:&outSize];
+        [self->_cryptor crypt:YZHCryptOperationEncrypt input:encodeData.bytes inSize:dataSize output:encodeData.bytes outSize:&outSize];
         if (dataSize != outSize) {
             if (error) {
                 *error = [NSError errorWithDomain:_YZHKVErrorDomain code:_YZHKVInterErrorCryptModeError userInfo:nil];
@@ -629,12 +639,12 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
     YZHKV_CHECK_CODE_QUEUE;
     if (self->_cryptor && decryptCondition) {
         uint8_t *input = [self->_contentData bytes];
-        [self->_cryptor reset];
         
         int64_t dataSize = [_contentData dataSize];
         int64_t outSize = dataSize;
         YZHMutableCodeData *codeData = [[YZHMutableCodeData alloc] initWithSize:outSize];
         
+        [self->_cryptor reset];
         [self->_cryptor crypt:YZHCryptOperationDecrypt input:input inSize:dataSize output:codeData.bytes outSize:&outSize];
         if (outSize < YZHKV_CONTENT_HEADER_SIZE || dataSize != outSize || memcmp(codeData.bytes, self->_hashKey, sizeof(_hashKey))) {
             if (error) {
@@ -758,7 +768,7 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
 }
 
 
-- (BOOL)_updateSize:(int64_t)size
+- (BOOL)_updateSize:(int64_t)size truncate:(BOOL)truncate
 {
     YZHKV_CHECK_CODE_QUEUE;
     if (self->_fd <= 0) {
@@ -771,9 +781,15 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
         size = MIN_MMAP_SIZE_s;
     }
     
-    if (ftruncate(self->_fd, size) != 0) {
-        return NO;
+    [YZHMachTimeUtils recordPointWithText:@"开始 ftruncate"];
+    if (truncate) {
+        //这个函数涉及到IO操作，最影响性能
+        if (ftruncate(self->_fd, size) != 0) {
+            return NO;
+        }
     }
+    [YZHMachTimeUtils recordPointWithText:@"结束 ftruncate"];
+
     
     if (self->_ptr && self->_ptr != MAP_FAILED) {
         if (munmap(self->_ptr, (size_t)self->_size)) {
@@ -813,7 +829,7 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
     
     int64_t dataSize = encodeNewData.dataSize;
     int64_t codeSize = dataSize - YZHKV_CONTENT_HEADER_SIZE;
-    if (self->_codeSize != codeSize || memcmp([self->_contentData bytes] + YZHKV_CONTENT_HEADER_SIZE, encodeNewData.bytes + YZHKV_CONTENT_HEADER_SIZE, (size_t)codeSize) != 0) {
+    if (self->_codeSize != codeSize || memcmp([self->_contentData bytes], encodeNewData.bytes, (size_t)dataSize) != 0) {
         
         [self _updateCodeSize:codeSize];
 
@@ -832,7 +848,7 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
 - (void)_clearEncodeData
 {
     YZHKV_CHECK_CODE_QUEUE;
-    [self _updateSize:0];
+    [self _updateSize:0 truncate:YES];
     [self->_contentData bzero];
     self->_codeSize = 0;
     self->_keyItemCnt = 0;
@@ -881,10 +897,13 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
     _YZHKVCacheObject *cacheObject = [[_YZHKVCacheObject alloc] init];
     int64_t dataSize = [data dataSize];
     if (self->_cryptor) {
-        [self->_cryptor crypt:YZHCryptOperationEncrypt input:data.bytes inSize:dataSize output:data.bytes outSize:&dataSize];
+        int64_t outSize = dataSize;
+        [self->_cryptor crypt:YZHCryptOperationEncrypt input:data.bytes inSize:dataSize output:data.bytes outSize:&outSize];
+        if (outSize != dataSize) {
+            return nil;
+        }
     }
     
-//    [self _ensureAppendSize:dataSize currentDict:dict withNewDict:newDict];
     BOOL isOK = [self _ensureAppendSize:dataSize currentDict:dict withNewDict:newDict];
     if (isOK == NO) {
         return nil;
@@ -918,14 +937,17 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
     NSError *error = nil;
     YZHCodeData *plainData = [self _startDecryptContentDataWithDecryptCondition:YES error:&error];
     if (error) {
+        NSLog(@"解密错误，error=%@",error);
         [self _reportError:error];
         return NO;
     }
 
     NSMutableDictionary *dict = [self _decodeBuffer:(uint8_t*)plainData.bytes + YZHKV_CONTENT_HEADER_SIZE cacheObjectDataRangeOffset:YZHKV_CONTENT_HEADER_SIZE size:self->_codeSize];
-    if (dict.count == 0 && self->_codeSize > 0) {
+    NSInteger dictCnt = [dict count];
+    if ((dict.count == 0 && self->_codeSize > 0) || self->_keyItemCnt != dictCnt) {
         //说明出现解码错误，不回写数据，做close
         NSError *error = [NSError errorWithDomain:_YZHKVErrorDomain code:YZHKVErrorCoderError userInfo:nil];
+        NSLog(@"解码错误，error=%@",error);
         [self _reportError:error];
         return NO;
     }
