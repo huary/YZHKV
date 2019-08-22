@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHCoder/YZHCoder.mm"
-            timestampString = "588147491.743492"
+            timestampString = "588161868.0692509"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "499"
@@ -26,7 +26,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHCoder/YZHCoder.mm"
-            timestampString = "588147491.743557"
+            timestampString = "588161868.069333"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "498"
@@ -42,7 +42,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHCoder/YZHCoder.mm"
-            timestampString = "588147491.7436121"
+            timestampString = "588161868.069397"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "496"
@@ -58,7 +58,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHCodeData.m"
-            timestampString = "588150089.080451"
+            timestampString = "588161868.06946"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "89"
@@ -74,12 +74,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.0808361"
+            timestampString = "588183184.785393"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1022"
-            endingLineNumber = "1022"
-            landmarkName = "-_decodeBuffer:cacheObjectDataRangeOffset:size:"
+            startingLineNumber = "1027"
+            endingLineNumber = "1027"
+            landmarkName = "-_decodeBuffer:cacheObjectDataRangeOffset:size:copyData:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -90,7 +90,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.080928"
+            timestampString = "588183184.785798"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "341"
@@ -106,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.080999"
+            timestampString = "588183184.786085"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "912"
-            endingLineNumber = "912"
+            startingLineNumber = "917"
+            endingLineNumber = "917"
             landmarkName = "-_writeData:keySize:currentDict:newDict:"
             landmarkType = "7">
          </BreakpointContent>
@@ -122,11 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.0810699"
+            timestampString = "588183184.7863671"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "898"
-            endingLineNumber = "898"
+            startingLineNumber = "903"
+            endingLineNumber = "903"
             landmarkName = "-_writeData:keySize:currentDict:newDict:"
             landmarkType = "7">
          </BreakpointContent>
@@ -138,39 +138,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.081141"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "776"
-            endingLineNumber = "776"
-            landmarkName = "-_updateSize:truncate:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.0812089"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "237"
-            endingLineNumber = "237"
-            landmarkName = "-_setupDefault"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.081278"
+            timestampString = "588183184.786646"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "781"
@@ -186,12 +154,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.081345"
+            timestampString = "588183184.786922"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "573"
-            endingLineNumber = "573"
-            landmarkName = "-_loadFromFileWithCryptKey:"
+            startingLineNumber = "237"
+            endingLineNumber = "237"
+            landmarkName = "-_setupDefault"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -202,44 +170,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.081413"
+            timestampString = "588183184.787201"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "469"
-            endingLineNumber = "469"
-            landmarkName = "-_ensureAppendSize:currentDict:withNewDict:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.0814821"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "440"
-            endingLineNumber = "440"
-            landmarkName = "-_ensureAppendSize:currentDict:withNewDict:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.081549"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "821"
-            endingLineNumber = "821"
-            landmarkName = "-_fullWriteBack:checkCondition:error:"
+            startingLineNumber = "786"
+            endingLineNumber = "786"
+            landmarkName = "-_updateSize:truncate:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -250,39 +186,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.081619"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "991"
-            endingLineNumber = "991"
-            landmarkName = "-_encodeDictionary:intoCodeData:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.081687"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "607"
-            endingLineNumber = "607"
-            landmarkName = "-_startEncryptContentDataFromDict:toNewDict:checkCondition:error:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.081753"
+            timestampString = "588183184.787478"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "572"
@@ -298,11 +202,91 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.08182"
+            timestampString = "588183184.787755"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "569"
-            endingLineNumber = "569"
+            startingLineNumber = "469"
+            endingLineNumber = "469"
+            landmarkName = "-_ensureAppendSize:currentDict:withNewDict:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "YZHKVDemo/YZHKV/YZHKV.m"
+            timestampString = "588183184.788027"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "440"
+            endingLineNumber = "440"
+            landmarkName = "-_ensureAppendSize:currentDict:withNewDict:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "YZHKVDemo/YZHKV/YZHKV.m"
+            timestampString = "588183184.7883"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "826"
+            endingLineNumber = "826"
+            landmarkName = "-_fullWriteBack:checkCondition:error:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "YZHKVDemo/YZHKV/YZHKV.m"
+            timestampString = "588183184.7885751"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "996"
+            endingLineNumber = "996"
+            landmarkName = "-_encodeDictionary:intoCodeData:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "YZHKVDemo/YZHKV/YZHKV.m"
+            timestampString = "588183184.788851"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "606"
+            endingLineNumber = "606"
+            landmarkName = "-_startEncryptContentDataFromDict:toNewDict:checkCondition:error:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "YZHKVDemo/YZHKV/YZHKV.m"
+            timestampString = "588183184.7891231"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "571"
+            endingLineNumber = "571"
             landmarkName = "-_loadFromFileWithCryptKey:"
             landmarkType = "7">
          </BreakpointContent>
@@ -314,11 +298,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.081894"
+            timestampString = "588183184.789358"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "558"
-            endingLineNumber = "558"
+            startingLineNumber = "568"
+            endingLineNumber = "568"
             landmarkName = "-_loadFromFileWithCryptKey:"
             landmarkType = "7">
          </BreakpointContent>
@@ -330,7 +314,23 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.081965"
+            timestampString = "588183184.789592"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "557"
+            endingLineNumber = "557"
+            landmarkName = "-_loadFromFileWithCryptKey:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "YZHKVDemo/YZHKV/YZHKV.m"
+            timestampString = "588183184.789827"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "498"
@@ -346,7 +346,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.0820251"
+            timestampString = "588183184.790064"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "394"
@@ -362,7 +362,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.0820839"
+            timestampString = "588183184.790296"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "385"
@@ -378,11 +378,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.082142"
+            timestampString = "588183184.7905281"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "934"
-            endingLineNumber = "934"
+            startingLineNumber = "939"
+            endingLineNumber = "939"
             landmarkName = "-_updateCryptKey:withNewDict:"
             landmarkType = "7">
          </BreakpointContent>
@@ -394,11 +394,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.082197"
+            timestampString = "588183184.790768"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "948"
-            endingLineNumber = "948"
+            startingLineNumber = "953"
+            endingLineNumber = "953"
             landmarkName = "-_updateCryptKey:withNewDict:"
             landmarkType = "7">
          </BreakpointContent>
@@ -410,11 +410,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.082253"
+            timestampString = "588183184.79101"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "956"
-            endingLineNumber = "956"
+            startingLineNumber = "961"
+            endingLineNumber = "961"
             landmarkName = "-_updateCryptKey:withNewDict:"
             landmarkType = "7">
          </BreakpointContent>
@@ -426,11 +426,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.0823081"
+            timestampString = "588183184.7912509"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "968"
-            endingLineNumber = "968"
+            startingLineNumber = "973"
+            endingLineNumber = "973"
             landmarkName = "-_updateCryptKey:withNewDict:"
             landmarkType = "7">
          </BreakpointContent>
@@ -442,11 +442,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.082366"
+            timestampString = "588183184.791496"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "978"
-            endingLineNumber = "978"
+            startingLineNumber = "983"
+            endingLineNumber = "983"
             landmarkName = "-_updateCryptKey:withNewDict:"
             landmarkType = "7">
          </BreakpointContent>
@@ -458,11 +458,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.082423"
+            timestampString = "588183184.791754"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "613"
-            endingLineNumber = "613"
+            startingLineNumber = "612"
+            endingLineNumber = "612"
             landmarkName = "-_startEncryptContentDataFromDict:toNewDict:checkCondition:error:"
             landmarkType = "7">
          </BreakpointContent>
@@ -474,11 +474,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.08248"
+            timestampString = "588183184.791998"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "688"
-            endingLineNumber = "688"
+            startingLineNumber = "693"
+            endingLineNumber = "693"
             landmarkName = "-_setupCryptorWithCryptKey:checkCryptKey:error:"
             landmarkType = "7">
          </BreakpointContent>
@@ -490,11 +490,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.0825371"
+            timestampString = "588183184.792274"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "934"
-            endingLineNumber = "934"
+            startingLineNumber = "939"
+            endingLineNumber = "939"
             landmarkName = "-_updateCryptKey:withNewDict:"
             landmarkType = "7">
          </BreakpointContent>
@@ -506,7 +506,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.082597"
+            timestampString = "588183184.792531"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "406"
@@ -522,11 +522,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.082653"
+            timestampString = "588183184.792771"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "627"
-            endingLineNumber = "627"
+            startingLineNumber = "626"
+            endingLineNumber = "626"
             landmarkName = "-_startEncryptContentDataFromDict:toNewDict:checkCondition:error:"
             landmarkType = "7">
          </BreakpointContent>
@@ -534,15 +534,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.082711"
+            timestampString = "588183184.793005"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "530"
-            endingLineNumber = "530"
+            startingLineNumber = "529"
+            endingLineNumber = "529"
             landmarkName = "-_loadFromFileWithCryptKey:"
             landmarkType = "7">
          </BreakpointContent>
@@ -554,11 +554,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.082769"
+            timestampString = "588183184.7932431"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "644"
-            endingLineNumber = "644"
+            startingLineNumber = "643"
+            endingLineNumber = "643"
             landmarkName = "-_startDecryptContentDataWithDecryptCondition:error:"
             landmarkType = "7">
          </BreakpointContent>
@@ -570,11 +570,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.082826"
+            timestampString = "588183184.793479"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "625"
-            endingLineNumber = "625"
+            startingLineNumber = "624"
+            endingLineNumber = "624"
             landmarkName = "-_startEncryptContentDataFromDict:toNewDict:checkCondition:error:"
             landmarkType = "7">
          </BreakpointContent>
@@ -586,11 +586,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.082882"
+            timestampString = "588183184.793718"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "668"
-            endingLineNumber = "668"
+            startingLineNumber = "673"
+            endingLineNumber = "673"
             landmarkName = "-_setupCryptorWithCryptKey:checkCryptKey:error:"
             landmarkType = "7">
          </BreakpointContent>
@@ -602,11 +602,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.082939"
+            timestampString = "588183184.793957"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "967"
-            endingLineNumber = "967"
+            startingLineNumber = "972"
+            endingLineNumber = "972"
             landmarkName = "-_updateCryptKey:withNewDict:"
             landmarkType = "7">
          </BreakpointContent>
@@ -618,7 +618,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.082996"
+            timestampString = "588183184.794255"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "504"
@@ -630,15 +630,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.083052"
+            timestampString = "588183184.79454"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "528"
-            endingLineNumber = "528"
+            startingLineNumber = "527"
+            endingLineNumber = "527"
             landmarkName = "-_loadFromFileWithCryptKey:"
             landmarkType = "7">
          </BreakpointContent>
@@ -650,11 +650,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.0831079"
+            timestampString = "588183184.7948329"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "554"
-            endingLineNumber = "554"
+            startingLineNumber = "553"
+            endingLineNumber = "553"
             landmarkName = "-_loadFromFileWithCryptKey:"
             landmarkType = "7">
          </BreakpointContent>
@@ -666,11 +666,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.083166"
+            timestampString = "588183184.795114"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "686"
-            endingLineNumber = "686"
+            startingLineNumber = "691"
+            endingLineNumber = "691"
             landmarkName = "-_setupCryptorWithCryptKey:checkCryptKey:error:"
             landmarkType = "7">
          </BreakpointContent>
@@ -682,11 +682,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.083222"
+            timestampString = "588183184.795336"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "656"
-            endingLineNumber = "656"
+            startingLineNumber = "655"
+            endingLineNumber = "655"
             landmarkName = "-_startDecryptContentDataWithDecryptCondition:error:"
             landmarkType = "7">
          </BreakpointContent>
@@ -698,11 +698,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.0832779"
+            timestampString = "588183184.795552"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "650"
-            endingLineNumber = "650"
+            startingLineNumber = "649"
+            endingLineNumber = "649"
             landmarkName = "-_startDecryptContentDataWithDecryptCondition:error:"
             landmarkType = "7">
          </BreakpointContent>
@@ -714,7 +714,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHCodeData.m"
-            timestampString = "588150089.083336"
+            timestampString = "588161868.08421"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "459"
@@ -778,7 +778,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHCoder/YZHCoder.mm"
-            timestampString = "588147491.75862"
+            timestampString = "588161868.084327"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "575"
@@ -804,7 +804,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/ViewController.m"
-            timestampString = "588150089.083671"
+            timestampString = "588161868.0843771"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "87"
@@ -820,7 +820,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.083745"
+            timestampString = "588183184.795822"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "497"
@@ -832,15 +832,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.083807"
+            timestampString = "588183184.796041"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "548"
-            endingLineNumber = "548"
+            startingLineNumber = "547"
+            endingLineNumber = "547"
             landmarkName = "-_loadFromFileWithCryptKey:"
             landmarkType = "7">
          </BreakpointContent>
@@ -852,11 +852,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.083866"
+            timestampString = "588183184.796258"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "622"
-            endingLineNumber = "622"
+            startingLineNumber = "621"
+            endingLineNumber = "621"
             landmarkName = "-_startEncryptContentDataFromDict:toNewDict:checkCondition:error:"
             landmarkType = "7">
          </BreakpointContent>
@@ -864,17 +864,64 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.083925"
+            timestampString = "588183184.7964751"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1092"
             endingLineNumber = "1092"
             landmarkName = "-setObject:topEdgeSuperClass:forKey:"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[YZHKV setObject:topEdgeSuperClass:forKey:]"
+                  moduleName = "YZHKVDemo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yuan/Documents/yuanzh/github/YZHKV/YZHKVDemo/YZHKVDemo/YZHKV/YZHKV.m"
+                  timestampString = "588161868.279348"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1093"
+                  endingLineNumber = "1093"
+                  offsetFromSymbolStart = "416">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__44-[YZHKV setObject:topEdgeSuperClass:forKey:]_block_invoke"
+                  moduleName = "YZHKVDemo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yuan/Documents/yuanzh/github/YZHKV/YZHKVDemo/YZHKVDemo/YZHKV/YZHKV.m"
+                  timestampString = "588161868.28045"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1093"
+                  endingLineNumber = "1093"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__destroy_helper_block_e8_32s40s48s56r"
+                  moduleName = "YZHKVDemo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yuan/Documents/yuanzh/github/YZHKV/YZHKVDemo/YZHKVDemo/YZHKV/YZHKV.m"
+                  timestampString = "588161868.28154"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1093"
+                  endingLineNumber = "1093"
+                  offsetFromSymbolStart = "16">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -884,11 +931,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.083979"
+            timestampString = "588183184.796692"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "899"
-            endingLineNumber = "899"
+            startingLineNumber = "904"
+            endingLineNumber = "904"
             landmarkName = "-_writeData:keySize:currentDict:newDict:"
             landmarkType = "7">
          </BreakpointContent>
@@ -896,15 +943,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.084034"
+            timestampString = "588183184.796945"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "563"
-            endingLineNumber = "563"
+            startingLineNumber = "562"
+            endingLineNumber = "562"
             landmarkName = "-_loadFromFileWithCryptKey:"
             landmarkType = "7">
          </BreakpointContent>
@@ -916,39 +963,39 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.08409"
+            timestampString = "588183184.797236"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1021"
-            endingLineNumber = "1021"
-            landmarkName = "-_decodeBuffer:cacheObjectDataRangeOffset:size:"
+            startingLineNumber = "1026"
+            endingLineNumber = "1026"
+            landmarkName = "-_decodeBuffer:cacheObjectDataRangeOffset:size:copyData:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.084142"
+            timestampString = "588183184.797477"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1025"
-            endingLineNumber = "1025"
-            landmarkName = "-_decodeBuffer:cacheObjectDataRangeOffset:size:"
+            startingLineNumber = "1030"
+            endingLineNumber = "1030"
+            landmarkName = "-_decodeBuffer:cacheObjectDataRangeOffset:size:copyData:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.0841939"
+            timestampString = "588183184.797702"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1100"
@@ -960,11 +1007,11 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.084244"
+            timestampString = "588183184.797959"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1102"
@@ -980,7 +1027,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/OpenSSL/YZHAESCryptor.mm"
-            timestampString = "588150089.0843"
+            timestampString = "588158839.812993"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "105"
@@ -996,7 +1043,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/OpenSSL/YZHAESCryptor.mm"
-            timestampString = "588150089.084344"
+            timestampString = "588158839.813036"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "374"
@@ -1012,7 +1059,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/OpenSSL/YZHAESCryptor.mm"
-            timestampString = "588150089.084386"
+            timestampString = "588158839.813074"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "328"
@@ -1028,7 +1075,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/OpenSSL/YZHAESCryptor.mm"
-            timestampString = "588150089.084427"
+            timestampString = "588158839.8131109"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "134"
@@ -1044,11 +1091,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.084466"
+            timestampString = "588183184.798218"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "579"
-            endingLineNumber = "579"
+            startingLineNumber = "578"
+            endingLineNumber = "578"
             landmarkName = "-_loadFromFileWithCryptKey:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1056,63 +1103,31 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.084511"
+            timestampString = "588183184.798437"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "634"
-            endingLineNumber = "634"
-            landmarkName = "-_startEncryptContentDataFromDict:toNewDict:checkCondition:error:"
+            startingLineNumber = "564"
+            endingLineNumber = "564"
+            landmarkName = "-_loadFromFileWithCryptKey:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.0845571"
+            timestampString = "588183184.798654"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1030"
-            endingLineNumber = "1030"
-            landmarkName = "-_decodeBuffer:cacheObjectDataRangeOffset:size:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.084601"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1039"
-            endingLineNumber = "1039"
-            landmarkName = "-_decodeBuffer:cacheObjectDataRangeOffset:size:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "YZHKVDemo/YZHKV/YZHKV.m"
-            timestampString = "588150089.084644"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "565"
-            endingLineNumber = "565"
+            startingLineNumber = "546"
+            endingLineNumber = "546"
             landmarkName = "-_loadFromFileWithCryptKey:"
             landmarkType = "7">
          </BreakpointContent>

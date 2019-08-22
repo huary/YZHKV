@@ -82,10 +82,10 @@ typedef NS_ENUM(NSInteger, _YZHKVCacheObjectType)
 {
     //空
     _YZHKVCacheObjectTypeNone           = 0,
-    //这个对于无密码时的
+    //这个是明文的区域
     _YZHKVCacheObjectTypeDataRange      = 1,
-    //这个是解码后对象
-    _YZHKVCacheObjectTypeDecodeObject   = 2,
+    //这个就是未编码的对象
+    _YZHKVCacheObjectTypeObject         = 2,
     //这个是明文的data
     _YZHKVCacheObjectTypePlainData      = 3,
 };
@@ -104,59 +104,57 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
 
 
 
-
+//可以考虑用C语言的结构体实现，比_YZHKVCacheObject申请速度要快
 /**********************************************************************
  *_YZHKVCacheObject
- * objectType == _YZHKVCacheObjectTypeDataRange，记录dataRange
- * objectType == _YZHKVCacheObjectTypeDecodeObject,记录decodeObject
- * objectType == _YZHKVCacheObjectTypePlainData, 记录objectData
+ * cacheObjType == _YZHKVCacheObjectTypeDataRange，记录dataRange
+ * cacheObjType == _YZHKVCacheObjectTypeDecodeObject,记录decodeObject
+ * cacheObjType == _YZHKVCacheObjectTypePlainData, 记录objectData
  *对于密文的时候，记录的是解码后的对象
  ***********************************************************************/
 @interface _YZHKVCacheObject : NSObject
 
-@property (nonatomic, assign, readonly) _YZHKVCacheObjectType objectType;
+@property (nonatomic, assign, readonly) _YZHKVCacheObjectType cacheObjectType;
 
 @property (nonatomic, assign, readonly) NSRange dataRange;
+
+//存储解码后的数据对象
+@property (nonatomic, strong) id decodeObject;
 
 @end
 
 @implementation _YZHKVCacheObject
 {
 @private
-    id _object;
-}
-
-- (id)decodeObject
-{
-    return _object;
+    id _cacheObject;
 }
 
 - (NSData*)objectData
 {
-    return (NSData*)_object;
+    return (NSData*)_cacheObject;
 }
 
-- (id)object
+- (id)cacheObject
 {
-    return _object;
+    return _cacheObject;
 }
 
-- (void)setObject:(id)object withObjectType:(_YZHKVCacheObjectType)objectType
+- (void)setCacheObject:(id)cacheObject withType:(_YZHKVCacheObjectType)type
 {
-    if (objectType == _YZHKVCacheObjectTypeNone) {
-        _object = nil;
-        _objectType = objectType;
+    if (type == _YZHKVCacheObjectTypeNone) {
+        _cacheObject = nil;
+        _cacheObjectType = type;
     }
-    else if (objectType == _YZHKVCacheObjectTypeDecodeObject) {
-        if ([object isKindOfClass:[NSObject class]]) {
-            _object = object;
-            _objectType = objectType;
+    else if (type == _YZHKVCacheObjectTypeObject) {
+        if ([cacheObject isKindOfClass:[NSObject class]]) {
+            _cacheObject = cacheObject;
+            _cacheObjectType = type;
         }
     }
-    else if (objectType == _YZHKVCacheObjectTypePlainData) {
-        if ([object isKindOfClass:[NSData class]]) {
-            _object = object;
-            _objectType = objectType;
+    else if (type == _YZHKVCacheObjectTypePlainData) {
+        if ([cacheObject isKindOfClass:[NSData class]]) {
+            _cacheObject = cacheObject;
+            _cacheObjectType = type;
         }
     }
 }
@@ -164,7 +162,7 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
 - (void)setRange:(NSRange)range
 {
     _dataRange = range;
-    _objectType = _YZHKVCacheObjectTypeDataRange;
+    _cacheObjectType = _YZHKVCacheObjectTypeDataRange;
 }
 
 @end
@@ -197,6 +195,8 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
     
     YZHCodeData *_headerData;
     YZHCodeData *_contentData;
+    //这个只是存储从文件mmap后解密后的contentData，主要是为了在decode的时候不需要生成NSData影响性能。
+    YZHCodeData *_plainContentData;
     YZHAESCryptor *_cryptor;
 }
 
@@ -356,13 +356,13 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
 {
     YZHKV_CHECK_CODE_QUEUE;
 
-    if (codeSize < 0) {
+    if (codeSize < 0 || codeSize + YZHKV_CODE_DATA_HEAD_SIZE + YZHKV_CONTENT_HEADER_SIZE > self->_size) {
         return;
     }
-    if (codeSize + YZHKV_CODE_DATA_HEAD_SIZE + YZHKV_CONTENT_HEADER_SIZE > self->_size) {
-        NSLog(@"=============你他妈的什么鬼,codeSize=%@,_size=%@,remSize=%@",@(codeSize),@(_size),@([_contentData remSize]));
-        return;
-    }
+//    if (codeSize + YZHKV_CODE_DATA_HEAD_SIZE + YZHKV_CONTENT_HEADER_SIZE > self->_size) {
+//        NSLog(@"=============你他妈的什么鬼,codeSize=%@,_size=%@,remSize=%@",@(codeSize),@(_size),@([_contentData remSize]));
+//        return;
+//    }
     self->_codeSize = codeSize;
     [self->_headerData seekTo:_YZHHeaderOffsetSize];
     [self->_headerData writeLittleEndian64:self->_codeSize];
@@ -523,7 +523,6 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
         return nil;
     }
     
-    
     BOOL doDecrypt = self->_cryptor ? YES : NO;
     if (self->_cryptor == nil && cryptKey.length > 0) {
         NSError *error = nil;
@@ -562,7 +561,7 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
     
     [YZHMachTimeUtils recordPointWithText:@"解密完成，开始解码"];
     
-    NSMutableDictionary *dict = [self _decodeBuffer:(uint8_t*)plainData.bytes + YZHKV_CONTENT_HEADER_SIZE cacheObjectDataRangeOffset:YZHKV_CONTENT_HEADER_SIZE size:self->_codeSize];
+    NSMutableDictionary *dict = [self _decodeBuffer:(uint8_t*)plainData.bytes + YZHKV_CONTENT_HEADER_SIZE cacheObjectDataRangeOffset:YZHKV_CONTENT_HEADER_SIZE size:self->_codeSize copyData:NO];
     
     [YZHMachTimeUtils recordPointWithText:@"解码完毕"];
     
@@ -654,9 +653,15 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
             }
         }
         [codeData seekTo:outSize];
+        
+        _plainContentData = codeData;
+        
         return codeData;
     }
     else {
+        
+        _plainContentData = _contentData;
+        
         return _contentData;
     }
 }
@@ -783,14 +788,14 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
         size = MIN_MMAP_SIZE_s;
     }
     
-    [YZHMachTimeUtils recordPointWithText:@"开始 ftruncate"];
     if (truncate) {
+        [YZHMachTimeUtils recordPointWithText:@"开始 ftruncate"];
         //这个函数涉及到IO操作，最影响性能
         if (ftruncate(self->_fd, size) != 0) {
             return NO;
         }
+        [YZHMachTimeUtils recordPointWithText:@"结束 ftruncate"];
     }
-    [YZHMachTimeUtils recordPointWithText:@"结束 ftruncate"];
 
     
     if (self->_ptr && self->_ptr != MAP_FAILED) {
@@ -912,7 +917,7 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
     }
     
     if (self->_cryptor == nil) {
-        [cacheObject setRange:NSMakeRange((NSUInteger)(_contentData.dataSize + keySize), (NSUInteger)dataSize - keySize)];
+        [cacheObject setRange:NSMakeRange((NSUInteger)(_contentData.dataSize + keySize), (NSUInteger)(dataSize - keySize))];
     }
     [_contentData writeCodeData:data];
     
@@ -944,7 +949,7 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
         return NO;
     }
 
-    NSMutableDictionary *dict = [self _decodeBuffer:(uint8_t*)plainData.bytes + YZHKV_CONTENT_HEADER_SIZE cacheObjectDataRangeOffset:YZHKV_CONTENT_HEADER_SIZE size:self->_codeSize];
+    NSMutableDictionary *dict = [self _decodeBuffer:(uint8_t*)plainData.bytes + YZHKV_CONTENT_HEADER_SIZE cacheObjectDataRangeOffset:YZHKV_CONTENT_HEADER_SIZE size:self->_codeSize copyData:NO];
     NSInteger dictCnt = [dict count];
     if ((dict.count == 0 && self->_codeSize > 0) || self->_keyItemCnt != dictCnt) {
         //说明出现解码错误，不回写数据，做close
@@ -992,14 +997,14 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
         [YZHCoder encodeObject:key topEdgeSuperClass:nil intoCodeData:codeData];
         int64_t startLoc = [codeData dataSize];
         
-        if (obj.objectType == _YZHKVCacheObjectTypeDataRange) {
+        if (obj.cacheObjectType == _YZHKVCacheObjectTypeDataRange) {
             [codeData appendWriteBuffer:self->_contentData.bytes + obj.dataRange.location size:obj.dataRange.length];
         }
-        else if (obj.objectType == _YZHKVCacheObjectTypePlainData) {
+        else if (obj.cacheObjectType == _YZHKVCacheObjectTypePlainData) {
             [codeData appendWriteData:[obj objectData]];
         }
-        else if (obj.objectType == _YZHKVCacheObjectTypeDecodeObject) {
-            [YZHCoder encodeObject:[obj decodeObject] intoCodeData:codeData];
+        else if (obj.cacheObjectType == _YZHKVCacheObjectTypeObject) {
+            [YZHCoder encodeObject:[obj cacheObject] intoCodeData:codeData];
         }
         
         int64_t endLoc = [codeData dataSize];
@@ -1007,10 +1012,10 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
         _YZHKVCacheObject *cacheObj = [[_YZHKVCacheObject alloc] init];
         if (self->_cryptor) {
             //是加密的话则保持原样
-            [cacheObj setObject:[obj object] withObjectType:obj.objectType];
+            [cacheObj setCacheObject:[obj cacheObject] withType:obj.cacheObjectType];
         }
         else {
-            [cacheObj setRange:NSMakeRange((NSUInteger)startLoc, endLoc - startLoc)];
+            [cacheObj setRange:NSMakeRange((NSUInteger)startLoc, (NSUInteger)(endLoc - startLoc))];
         }
         [newDict setObject:cacheObj forKey:key];
     }];
@@ -1018,7 +1023,7 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
     return newDict;
 }
 
-- (NSMutableDictionary<id, _YZHKVCacheObject*>*)_decodeBuffer:(uint8_t*)ptr cacheObjectDataRangeOffset:(int32_t)offset size:(int64_t)size
+- (NSMutableDictionary<id, _YZHKVCacheObject*>*)_decodeBuffer:(uint8_t*)ptr cacheObjectDataRangeOffset:(int32_t)offset size:(int64_t)size copyData:(BOOL)copyData
 {
     if (ptr == NULL || size <= 0) {
         return [NSMutableDictionary dictionary];
@@ -1026,45 +1031,40 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
     int64_t location = offset;
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     while (size > 0) {
-        int64_t offsetTmp = 0;
-        id key = [YZHCoder decodeObjectFromBuffer:ptr length:(NSInteger)size offset:&offsetTmp];
-        ptr += offsetTmp;
-        size -= offsetTmp;
-        location += offsetTmp;
-        if (size <= 0 || offsetTmp <= 0 /*|| key == nil*/) {
-            break;
-        }
-        
-        NSRange r = [YZHCoder unpackBuffer:ptr bufferSize:size codeType:NULL len:NULL size:NULL offset:&offsetTmp];
-        ptr += offsetTmp;
-        size -= offsetTmp;
-        location += offsetTmp;
-        if (key && r.location != NSNotFound) {
-            if (r.length > 0) {
-                _YZHKVCacheObject *cacheObject = [[_YZHKVCacheObject alloc] init];
-                if (self->_cryptor) {
-                    [cacheObject setObject:[NSData dataWithBytes:ptr - offsetTmp length:offsetTmp] withObjectType:_YZHKVCacheObjectTypePlainData];
+        @autoreleasepool {
+            int64_t offsetTmp = 0;
+            id key = [YZHCoder decodeObjectFromBuffer:ptr length:(NSInteger)size offset:&offsetTmp];
+            ptr += offsetTmp;
+            size -= offsetTmp;
+            location += offsetTmp;
+            if (size <= 0 || offsetTmp <= 0 /*|| key == nil*/) {
+                break;
+            }
+            
+            NSRange r = [YZHCoder unpackBuffer:ptr bufferSize:size codeType:NULL len:NULL size:NULL offset:&offsetTmp];
+            ptr += offsetTmp;
+            size -= offsetTmp;
+            location += offsetTmp;
+            if (key && r.location != NSNotFound) {
+                if (r.length > 0) {
+                    _YZHKVCacheObject *cacheObject = [[_YZHKVCacheObject new] init];
+                    if (copyData) {
+                        [cacheObject setCacheObject:[NSData dataWithBytes:ptr - offsetTmp length:(NSUInteger)offsetTmp] withType:_YZHKVCacheObjectTypePlainData];
+                    }
+                    else {
+                        [cacheObject setRange:NSMakeRange((NSUInteger)(location - offsetTmp),  (NSUInteger)offsetTmp)];
+                    }
+                    [dict setObject:cacheObject forKey:key];
                 }
                 else {
-                    [cacheObject setRange:NSMakeRange((NSUInteger)(location - offsetTmp),  offsetTmp)];
-
-//                    NSData *data = [NSData dataWithBytes:ptrSRC + cacheObject.dataRange.location - offset length:cacheObject.dataRange.length];
-//
-//                    id objTmp = [YZHCoder decodeObjectWithData:data];
-//                    if ([key integerValue] != [objTmp integerValue]) {
-//                        NSLog(@"decode====key=%@,objTmp=%@",key,objTmp);
-//                    }
+                    [dict removeObjectForKey:key];
                 }
-                [dict setObject:cacheObject forKey:key];
             }
             else {
-                [dict removeObjectForKey:key];
-            }
-        }
-        else {
-            //这里避免空转
-            if (offsetTmp <= 0) {
-                break;
+                //这里避免空转
+                if (offsetTmp <= 0) {
+                    break;
+                }
             }
         }
     }
@@ -1111,7 +1111,7 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
         }
         
         if (self->_cryptor) {
-            [cacheObj setObject:object withObjectType:_YZHKVCacheObjectTypeDecodeObject];
+            [cacheObj setCacheObject:object withType:_YZHKVCacheObjectTypeObject];
         }
         
         [self.dict setObject:cacheObj forKey:key];
@@ -1148,7 +1148,8 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
         }
         
         if (self->_cryptor) {
-            [cacheObj setObject:[NSNumber numberWithFloat:val] withObjectType:_YZHKVCacheObjectTypeDecodeObject];
+//            [cacheObj setObject:[NSNumber numberWithFloat:val] withObjectType:_YZHKVCacheObjectTypeDecodeObject];
+            [cacheObj setCacheObject:[NSNumber numberWithFloat:val] withType:_YZHKVCacheObjectTypeObject];
         }
         
         [self.dict setObject:cacheObj forKey:key];
@@ -1185,7 +1186,7 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
         }
         
         if (self->_cryptor) {
-            [cacheObj setObject:[NSNumber numberWithDouble:val] withObjectType:_YZHKVCacheObjectTypeDecodeObject];
+            [cacheObj setCacheObject:[NSNumber numberWithDouble:val] withType:_YZHKVCacheObjectTypeObject];
         }
         
         [self.dict setObject:cacheObj forKey:key];
@@ -1223,7 +1224,7 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
         
         if (self->_cryptor) {
             //有密码时保存decode的object
-            [cacheObj setObject:@(val) withObjectType:_YZHKVCacheObjectTypeDecodeObject];
+            [cacheObj setCacheObject:[NSNumber numberWithLongLong:val] withType:_YZHKVCacheObjectTypeObject];
         }
         
         [self.dict setObject:cacheObj forKey:key];
@@ -1286,17 +1287,26 @@ typedef void(^YZHKVCodeCompletionBlock)(YZHKV *kv, id result);
     __block _YZHKVCacheObject *object = nil;
     _sync_lock(self.lock, ^{
         object = [self.dict objectForKey:key];
-        if (object.objectType == _YZHKVCacheObjectTypeDataRange) {
-            decodeObject = [YZHCoder decodeObjectFromBuffer:self->_contentData.bytes + object.dataRange.location length:object.dataRange.length];
+        decodeObject = object.decodeObject;
+        
+        if (decodeObject == nil) {
+            
+            if (object.cacheObjectType == _YZHKVCacheObjectTypeDataRange) {
+                
+                decodeObject = [YZHCoder decodeObjectFromBuffer:self->_plainContentData.bytes + object.dataRange.location length:object.dataRange.length];
+                
+                object.decodeObject = decodeObject;
+            }
         }
     });
     if (decodeObject == nil) {
-        if (object.objectType == _YZHKVCacheObjectTypeDecodeObject) {
-            decodeObject = [object decodeObject];
+        if (object.cacheObjectType == _YZHKVCacheObjectTypeObject) {
+            decodeObject = [object cacheObject];
         }
-        else if (object.objectType == _YZHKVCacheObjectTypePlainData) {
+        else if (object.cacheObjectType == _YZHKVCacheObjectTypePlainData) {
             decodeObject = [YZHCoder decodeObjectWithData:[object objectData]];
         }
+        object.decodeObject = decodeObject;
     }
     return decodeObject;
 }
