@@ -11,18 +11,35 @@
 		1C4724FE2302A360008F9ED1 /* X.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C4724F92302A360008F9ED1 /* X.m */; };
 		1C4724FF2302A360008F9ED1 /* Account.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C4724FA2302A360008F9ED1 /* Account.m */; };
 		1C4725022302A43C008F9ED1 /* YZHMachTimeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C4725012302A43C008F9ED1 /* YZHMachTimeUtils.m */; };
+		1C4C30A32327621000A1FE7C /* YZHCodeData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1C4C30A22327621000A1FE7C /* YZHCodeData.mm */; };
+		1C4C30A62327647500A1FE7C /* YZHCoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1C4C30A42327647400A1FE7C /* YZHCoder.mm */; };
+		1C4C30AB2327648E00A1FE7C /* YZHCFKV.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1C4C30A72327648E00A1FE7C /* YZHCFKV.mm */; };
+		1C4C30AF232764BD00A1FE7C /* YZHAESCryptor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1C4C30AE232764BD00A1FE7C /* YZHAESCryptor.mm */; };
+		1C4C30B22327651B00A1FE7C /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1C4C30B02327651B00A1FE7C /* ViewController.mm */; };
+		1C4C30B52327759A00A1FE7C /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C4C30B42327759A00A1FE7C /* libz.tbd */; };
+		1C4C30BB232783B800A1FE7C /* NSObject+YZHCodeToTopSuperClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C4C30BA232783B800A1FE7C /* NSObject+YZHCodeToTopSuperClass.m */; };
+		1C4C30BE23279AE800A1FE7C /* YZHKV.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1C4C30BD23279AE800A1FE7C /* YZHKV.mm */; };
+		1C4C30C723280D1500A1FE7C /* YZHCFKVDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1C4C30C623280D1400A1FE7C /* YZHCFKVDelegate.mm */; };
+		1C4D977D2330FF7500ACEE5D /* libMMKV Static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C4D977A2330FD2800ACEE5D /* libMMKV Static.a */; };
 		1C69D03922E61982006C2C45 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C69D03822E61982006C2C45 /* AppDelegate.m */; };
-		1C69D03C22E61982006C2C45 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C69D03B22E61982006C2C45 /* ViewController.m */; };
 		1C69D03F22E61982006C2C45 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1C69D03D22E61982006C2C45 /* Main.storyboard */; };
 		1C69D04122E61987006C2C45 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1C69D04022E61987006C2C45 /* Assets.xcassets */; };
 		1C69D04422E61987006C2C45 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1C69D04222E61987006C2C45 /* LaunchScreen.storyboard */; };
 		1C69D04722E61987006C2C45 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C69D04622E61987006C2C45 /* main.m */; };
 		1C69D05122E61987006C2C45 /* YZHKVDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C69D05022E61987006C2C45 /* YZHKVDemoTests.m */; };
 		1C69D05C22E61988006C2C45 /* YZHKVDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C69D05B22E61988006C2C45 /* YZHKVDemoUITests.m */; };
-		1C69D08922E61A68006C2C45 /* YZHCodeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C69D06D22E61A68006C2C45 /* YZHCodeData.m */; };
-		1C69D08A22E61A68006C2C45 /* YZHKV.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C69D06E22E61A68006C2C45 /* YZHKV.m */; };
 		1C69D08B22E61A68006C2C45 /* YZHKVUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C69D06F22E61A68006C2C45 /* YZHKVUtils.m */; };
-		1C69D09A22E61A68006C2C45 /* YZHCoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1C69D08822E61A68006C2C45 /* YZHCoder.mm */; };
+		1C81B0BB231F5E2A00E62CC3 /* YZHUIExcelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C81B09F231F5E2A00E62CC3 /* YZHUIExcelView.m */; };
+		1C81B0BC231F5E2A00E62CC3 /* YZHUIExcelViewRowCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C81B0A3231F5E2A00E62CC3 /* YZHUIExcelViewRowCollectionViewLayout.m */; };
+		1C81B0BD231F5E2A00E62CC3 /* YZHUIExcelItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C81B0A4231F5E2A00E62CC3 /* YZHUIExcelItemCell.m */; };
+		1C81B0BE231F5E2A00E62CC3 /* YZHUIExcelViewRowContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C81B0A6231F5E2A00E62CC3 /* YZHUIExcelViewRowContentView.m */; };
+		1C81B0BF231F5E2A00E62CC3 /* YZHUIExcelContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C81B0A9231F5E2A00E62CC3 /* YZHUIExcelContentView.m */; };
+		1C81B0C0231F5E2A00E62CC3 /* YZHUIExcelViewRowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C81B0AA231F5E2A00E62CC3 /* YZHUIExcelViewRowCell.m */; };
+		1C81B0C1231F5E2A00E62CC3 /* YZHUIExcelViewType.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C81B0AE231F5E2A00E62CC3 /* YZHUIExcelViewType.m */; };
+		1C81B0C2231F5E2A00E62CC3 /* NSIndexPath+YZHUIExcelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C81B0B2231F5E2A00E62CC3 /* NSIndexPath+YZHUIExcelView.m */; };
+		1C81B0C3231F5E2A00E62CC3 /* UIView+Geometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C81B0B4231F5E2A00E62CC3 /* UIView+Geometry.m */; };
+		1C81B0C4231F5E2A00E62CC3 /* CALayer+Geometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C81B0B8231F5E2A00E62CC3 /* CALayer+Geometry.m */; };
+		1C81B0CA231F632B00E62CC3 /* UIReuseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C81B0C9231F632B00E62CC3 /* UIReuseCell.m */; };
 		1CE765D422ED8493009110DA /* openSSL_crypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765D322ED8493009110DA /* openSSL_crypto.cpp */; };
 		1CE765EB22ED9890009110DA /* openSSL_cfb128.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765DC22ED9890009110DA /* openSSL_cfb128.cpp */; };
 		1CE765EC22ED9890009110DA /* openSSL_cbc128.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765DD22ED9890009110DA /* openSSL_cbc128.cpp */; };
@@ -37,10 +54,23 @@
 		1CE765F522ED9890009110DA /* openSSL_aes_ofb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765E822ED9890009110DA /* openSSL_aes_ofb.cpp */; };
 		1CE765F622ED9890009110DA /* openSSL_aes_cbc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765E922ED9890009110DA /* openSSL_aes_cbc.cpp */; };
 		1CE765F722ED9890009110DA /* openSSL_aes_ecb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765EA22ED9890009110DA /* openSSL_aes_ecb.cpp */; };
-		1CE765FD22EDA63A009110DA /* YZHAESCryptor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1CE765FC22EDA63A009110DA /* YZHAESCryptor.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		1C4D97792330FD2800ACEE5D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1C4D97742330FD2800ACEE5D /* MMKV.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CB1FD4912046984F00931B5F;
+			remoteInfo = "MMKV Static";
+		};
+		1C4D977B2330FD2800ACEE5D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1C4D97742330FD2800ACEE5D /* MMKV.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CBC1A8F620DA946200AD5087;
+			remoteInfo = MMKV;
+		};
 		1C69D04D22E61987006C2C45 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1C69D02C22E61982006C2C45 /* Project object */;
@@ -66,11 +96,27 @@
 		1C4724FC2302A360008F9ED1 /* TestObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestObj.h; sourceTree = "<group>"; };
 		1C4725002302A43C008F9ED1 /* YZHMachTimeUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YZHMachTimeUtils.h; sourceTree = "<group>"; };
 		1C4725012302A43C008F9ED1 /* YZHMachTimeUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YZHMachTimeUtils.m; sourceTree = "<group>"; };
+		1C4C30A12327621000A1FE7C /* YZHCodeData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YZHCodeData.h; sourceTree = "<group>"; };
+		1C4C30A22327621000A1FE7C /* YZHCodeData.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = YZHCodeData.mm; sourceTree = "<group>"; };
+		1C4C30A42327647400A1FE7C /* YZHCoder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = YZHCoder.mm; sourceTree = "<group>"; };
+		1C4C30A52327647500A1FE7C /* YZHCoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHCoder.h; sourceTree = "<group>"; };
+		1C4C30A72327648E00A1FE7C /* YZHCFKV.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = YZHCFKV.mm; sourceTree = "<group>"; };
+		1C4C30A92327648E00A1FE7C /* YZHCFKV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHCFKV.h; sourceTree = "<group>"; };
+		1C4C30AD232764BD00A1FE7C /* YZHAESCryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHAESCryptor.h; sourceTree = "<group>"; };
+		1C4C30AE232764BD00A1FE7C /* YZHAESCryptor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = YZHAESCryptor.mm; sourceTree = "<group>"; };
+		1C4C30B02327651B00A1FE7C /* ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
+		1C4C30B12327651B00A1FE7C /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		1C4C30B42327759A00A1FE7C /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		1C4C30B9232783B800A1FE7C /* NSObject+YZHCodeToTopSuperClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+YZHCodeToTopSuperClass.h"; sourceTree = "<group>"; };
+		1C4C30BA232783B800A1FE7C /* NSObject+YZHCodeToTopSuperClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+YZHCodeToTopSuperClass.m"; sourceTree = "<group>"; };
+		1C4C30BC23279AE800A1FE7C /* YZHKV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHKV.h; sourceTree = "<group>"; };
+		1C4C30BD23279AE800A1FE7C /* YZHKV.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = YZHKV.mm; sourceTree = "<group>"; };
+		1C4C30C523280D1400A1FE7C /* YZHCFKVDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YZHCFKVDelegate.h; sourceTree = "<group>"; };
+		1C4C30C623280D1400A1FE7C /* YZHCFKVDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = YZHCFKVDelegate.mm; sourceTree = "<group>"; };
+		1C4D97742330FD2800ACEE5D /* MMKV.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MMKV.xcodeproj; path = ../MMKV/MMKV.xcodeproj; sourceTree = "<group>"; };
 		1C69D03422E61982006C2C45 /* YZHKVDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YZHKVDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C69D03722E61982006C2C45 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1C69D03822E61982006C2C45 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		1C69D03A22E61982006C2C45 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		1C69D03B22E61982006C2C45 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		1C69D03E22E61982006C2C45 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1C69D04022E61987006C2C45 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1C69D04322E61987006C2C45 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -82,17 +128,34 @@
 		1C69D05722E61988006C2C45 /* YZHKVDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YZHKVDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C69D05B22E61988006C2C45 /* YZHKVDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YZHKVDemoUITests.m; sourceTree = "<group>"; };
 		1C69D05D22E61988006C2C45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1C69D06A22E61A68006C2C45 /* YZHKV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHKV.h; sourceTree = "<group>"; };
-		1C69D06B22E61A68006C2C45 /* YZHCodeData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHCodeData.h; sourceTree = "<group>"; };
 		1C69D06C22E61A68006C2C45 /* YZHKVUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHKVUtils.h; sourceTree = "<group>"; };
-		1C69D06D22E61A68006C2C45 /* YZHCodeData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YZHCodeData.m; sourceTree = "<group>"; };
-		1C69D06E22E61A68006C2C45 /* YZHKV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YZHKV.m; sourceTree = "<group>"; };
 		1C69D06F22E61A68006C2C45 /* YZHKVUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YZHKVUtils.m; sourceTree = "<group>"; };
 		1C69D08322E61A68006C2C45 /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		1C69D08522E61A68006C2C45 /* type.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = type.h; sourceTree = "<group>"; };
 		1C69D08622E61A68006C2C45 /* macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macro.h; sourceTree = "<group>"; };
-		1C69D08722E61A68006C2C45 /* YZHCoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHCoder.h; sourceTree = "<group>"; };
-		1C69D08822E61A68006C2C45 /* YZHCoder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = YZHCoder.mm; sourceTree = "<group>"; };
+		1C81B09F231F5E2A00E62CC3 /* YZHUIExcelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YZHUIExcelView.m; sourceTree = "<group>"; };
+		1C81B0A1231F5E2A00E62CC3 /* YZHUIExcelItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHUIExcelItemCell.h; sourceTree = "<group>"; };
+		1C81B0A2231F5E2A00E62CC3 /* YZHUIExcelViewRowContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHUIExcelViewRowContentView.h; sourceTree = "<group>"; };
+		1C81B0A3231F5E2A00E62CC3 /* YZHUIExcelViewRowCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YZHUIExcelViewRowCollectionViewLayout.m; sourceTree = "<group>"; };
+		1C81B0A4231F5E2A00E62CC3 /* YZHUIExcelItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YZHUIExcelItemCell.m; sourceTree = "<group>"; };
+		1C81B0A5231F5E2A00E62CC3 /* YZHUIExcelViewRowCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHUIExcelViewRowCollectionViewLayout.h; sourceTree = "<group>"; };
+		1C81B0A6231F5E2A00E62CC3 /* YZHUIExcelViewRowContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YZHUIExcelViewRowContentView.m; sourceTree = "<group>"; };
+		1C81B0A8231F5E2A00E62CC3 /* YZHUIExcelViewRowCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHUIExcelViewRowCell.h; sourceTree = "<group>"; };
+		1C81B0A9231F5E2A00E62CC3 /* YZHUIExcelContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YZHUIExcelContentView.m; sourceTree = "<group>"; };
+		1C81B0AA231F5E2A00E62CC3 /* YZHUIExcelViewRowCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YZHUIExcelViewRowCell.m; sourceTree = "<group>"; };
+		1C81B0AB231F5E2A00E62CC3 /* YZHUIExcelContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHUIExcelContentView.h; sourceTree = "<group>"; };
+		1C81B0AD231F5E2A00E62CC3 /* YZHUIExcelViewType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHUIExcelViewType.h; sourceTree = "<group>"; };
+		1C81B0AE231F5E2A00E62CC3 /* YZHUIExcelViewType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YZHUIExcelViewType.m; sourceTree = "<group>"; };
+		1C81B0AF231F5E2A00E62CC3 /* YZHUIExcelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YZHUIExcelView.h; sourceTree = "<group>"; };
+		1C81B0B1231F5E2A00E62CC3 /* NSIndexPath+YZHUIExcelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexPath+YZHUIExcelView.h"; sourceTree = "<group>"; };
+		1C81B0B2231F5E2A00E62CC3 /* NSIndexPath+YZHUIExcelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexPath+YZHUIExcelView.m"; sourceTree = "<group>"; };
+		1C81B0B4231F5E2A00E62CC3 /* UIView+Geometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Geometry.m"; sourceTree = "<group>"; };
+		1C81B0B5231F5E2A00E62CC3 /* UIView+Geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Geometry.h"; sourceTree = "<group>"; };
+		1C81B0B6231F5E2A00E62CC3 /* Macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macro.h; sourceTree = "<group>"; };
+		1C81B0B8231F5E2A00E62CC3 /* CALayer+Geometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+Geometry.m"; sourceTree = "<group>"; };
+		1C81B0B9231F5E2A00E62CC3 /* CALayer+Geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+Geometry.h"; sourceTree = "<group>"; };
+		1C81B0C8231F632B00E62CC3 /* UIReuseCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIReuseCell.h; sourceTree = "<group>"; };
+		1C81B0C9231F632B00E62CC3 /* UIReuseCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIReuseCell.m; sourceTree = "<group>"; };
 		1CE765D222ED8493009110DA /* openSSL_crypto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = openSSL_crypto.h; sourceTree = "<group>"; };
 		1CE765D322ED8493009110DA /* openSSL_crypto.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = openSSL_crypto.cpp; sourceTree = "<group>"; };
 		1CE765D722ED988F009110DA /* openSSL_modes_int.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = openSSL_modes_int.h; sourceTree = "<group>"; };
@@ -112,8 +175,6 @@
 		1CE765E822ED9890009110DA /* openSSL_aes_ofb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openSSL_aes_ofb.cpp; sourceTree = "<group>"; };
 		1CE765E922ED9890009110DA /* openSSL_aes_cbc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openSSL_aes_cbc.cpp; sourceTree = "<group>"; };
 		1CE765EA22ED9890009110DA /* openSSL_aes_ecb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openSSL_aes_ecb.cpp; sourceTree = "<group>"; };
-		1CE765FB22EDA63A009110DA /* YZHAESCryptor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YZHAESCryptor.h; sourceTree = "<group>"; };
-		1CE765FC22EDA63A009110DA /* YZHAESCryptor.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = YZHAESCryptor.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +182,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1C4D977D2330FF7500ACEE5D /* libMMKV Static.a in Frameworks */,
+				1C4C30B52327759A00A1FE7C /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,13 +217,32 @@
 			path = TestModel;
 			sourceTree = "<group>";
 		};
+		1C4C30B32327759A00A1FE7C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1C4C30B42327759A00A1FE7C /* libz.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1C4D97752330FD2800ACEE5D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1C4D977A2330FD2800ACEE5D /* libMMKV Static.a */,
+				1C4D977C2330FD2800ACEE5D /* MMKV.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		1C69D02B22E61982006C2C45 = {
 			isa = PBXGroup;
 			children = (
+				1C4D97742330FD2800ACEE5D /* MMKV.xcodeproj */,
 				1C69D03622E61982006C2C45 /* YZHKVDemo */,
 				1C69D04F22E61987006C2C45 /* YZHKVDemoTests */,
 				1C69D05A22E61988006C2C45 /* YZHKVDemoUITests */,
 				1C69D03522E61982006C2C45 /* Products */,
+				1C4C30B32327759A00A1FE7C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -177,20 +259,25 @@
 		1C69D03622E61982006C2C45 /* YZHKVDemo */ = {
 			isa = PBXGroup;
 			children = (
-				1C4724F62302A360008F9ED1 /* TestModel */,
-				1CCCF7EC22E9D43C00D3E792 /* OpenSSL */,
-				1C69D08322E61A68006C2C45 /* PrefixHeader.pch */,
-				1C69D08422E61A68006C2C45 /* YZHCoder */,
-				1C69D06922E61A68006C2C45 /* YZHKV */,
 				1C69D03722E61982006C2C45 /* AppDelegate.h */,
 				1C69D03822E61982006C2C45 /* AppDelegate.m */,
-				1C69D03A22E61982006C2C45 /* ViewController.h */,
-				1C69D03B22E61982006C2C45 /* ViewController.m */,
-				1C69D03D22E61982006C2C45 /* Main.storyboard */,
 				1C69D04022E61987006C2C45 /* Assets.xcassets */,
-				1C69D04222E61987006C2C45 /* LaunchScreen.storyboard */,
+				1C81B09C231F5E2A00E62CC3 /* common */,
 				1C69D04522E61987006C2C45 /* Info.plist */,
+				1C69D04222E61987006C2C45 /* LaunchScreen.storyboard */,
 				1C69D04622E61987006C2C45 /* main.m */,
+				1C69D03D22E61982006C2C45 /* Main.storyboard */,
+				1CCCF7EC22E9D43C00D3E792 /* OpenSSL */,
+				1C69D08322E61A68006C2C45 /* PrefixHeader.pch */,
+				1C4724F62302A360008F9ED1 /* TestModel */,
+				1C81B0C8231F632B00E62CC3 /* UIReuseCell.h */,
+				1C81B0C9231F632B00E62CC3 /* UIReuseCell.m */,
+				1C4C30B12327651B00A1FE7C /* ViewController.h */,
+				1C4C30B02327651B00A1FE7C /* ViewController.mm */,
+				1C69D08422E61A68006C2C45 /* YZHCoder */,
+				1C69D06922E61A68006C2C45 /* YZHKV */,
+				1C69D06C22E61A68006C2C45 /* YZHKVUtils.h */,
+				1C69D06F22E61A68006C2C45 /* YZHKVUtils.m */,
 				1C4725002302A43C008F9ED1 /* YZHMachTimeUtils.h */,
 				1C4725012302A43C008F9ED1 /* YZHMachTimeUtils.m */,
 			);
@@ -218,12 +305,12 @@
 		1C69D06922E61A68006C2C45 /* YZHKV */ = {
 			isa = PBXGroup;
 			children = (
-				1C69D06B22E61A68006C2C45 /* YZHCodeData.h */,
-				1C69D06D22E61A68006C2C45 /* YZHCodeData.m */,
-				1C69D06A22E61A68006C2C45 /* YZHKV.h */,
-				1C69D06E22E61A68006C2C45 /* YZHKV.m */,
-				1C69D06C22E61A68006C2C45 /* YZHKVUtils.h */,
-				1C69D06F22E61A68006C2C45 /* YZHKVUtils.m */,
+				1C4C30BC23279AE800A1FE7C /* YZHKV.h */,
+				1C4C30BD23279AE800A1FE7C /* YZHKV.mm */,
+				1C4C30A92327648E00A1FE7C /* YZHCFKV.h */,
+				1C4C30A72327648E00A1FE7C /* YZHCFKV.mm */,
+				1C4C30C523280D1400A1FE7C /* YZHCFKVDelegate.h */,
+				1C4C30C623280D1400A1FE7C /* YZHCFKVDelegate.mm */,
 			);
 			path = YZHKV;
 			sourceTree = "<group>";
@@ -231,20 +318,116 @@
 		1C69D08422E61A68006C2C45 /* YZHCoder */ = {
 			isa = PBXGroup;
 			children = (
-				1C69D08522E61A68006C2C45 /* type.h */,
 				1C69D08622E61A68006C2C45 /* macro.h */,
-				1C69D08722E61A68006C2C45 /* YZHCoder.h */,
-				1C69D08822E61A68006C2C45 /* YZHCoder.mm */,
+				1C4C30B9232783B800A1FE7C /* NSObject+YZHCodeToTopSuperClass.h */,
+				1C4C30BA232783B800A1FE7C /* NSObject+YZHCodeToTopSuperClass.m */,
+				1C69D08522E61A68006C2C45 /* type.h */,
+				1C4C30A12327621000A1FE7C /* YZHCodeData.h */,
+				1C4C30A22327621000A1FE7C /* YZHCodeData.mm */,
+				1C4C30A52327647500A1FE7C /* YZHCoder.h */,
+				1C4C30A42327647400A1FE7C /* YZHCoder.mm */,
 			);
 			path = YZHCoder;
+			sourceTree = "<group>";
+		};
+		1C81B09C231F5E2A00E62CC3 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				1C81B09D231F5E2A00E62CC3 /* UIKit */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
+		1C81B09D231F5E2A00E62CC3 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				1C81B09E231F5E2A00E62CC3 /* YZHUIExcelView */,
+				1C81B0B3231F5E2A00E62CC3 /* UIKit */,
+				1C81B0B6231F5E2A00E62CC3 /* Macro.h */,
+				1C81B0B7231F5E2A00E62CC3 /* QuartzCore */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		1C81B09E231F5E2A00E62CC3 /* YZHUIExcelView */ = {
+			isa = PBXGroup;
+			children = (
+				1C81B09F231F5E2A00E62CC3 /* YZHUIExcelView.m */,
+				1C81B0A0231F5E2A00E62CC3 /* YZHUIExcelViewRowCollectionView */,
+				1C81B0A7231F5E2A00E62CC3 /* YZHUIExcelViewRowCell */,
+				1C81B0AC231F5E2A00E62CC3 /* YZHUIExcelViewType */,
+				1C81B0AF231F5E2A00E62CC3 /* YZHUIExcelView.h */,
+				1C81B0B0231F5E2A00E62CC3 /* NSIndexPath+YZHUIExcelView */,
+			);
+			path = YZHUIExcelView;
+			sourceTree = "<group>";
+		};
+		1C81B0A0231F5E2A00E62CC3 /* YZHUIExcelViewRowCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				1C81B0A1231F5E2A00E62CC3 /* YZHUIExcelItemCell.h */,
+				1C81B0A2231F5E2A00E62CC3 /* YZHUIExcelViewRowContentView.h */,
+				1C81B0A3231F5E2A00E62CC3 /* YZHUIExcelViewRowCollectionViewLayout.m */,
+				1C81B0A4231F5E2A00E62CC3 /* YZHUIExcelItemCell.m */,
+				1C81B0A5231F5E2A00E62CC3 /* YZHUIExcelViewRowCollectionViewLayout.h */,
+				1C81B0A6231F5E2A00E62CC3 /* YZHUIExcelViewRowContentView.m */,
+			);
+			path = YZHUIExcelViewRowCollectionView;
+			sourceTree = "<group>";
+		};
+		1C81B0A7231F5E2A00E62CC3 /* YZHUIExcelViewRowCell */ = {
+			isa = PBXGroup;
+			children = (
+				1C81B0A8231F5E2A00E62CC3 /* YZHUIExcelViewRowCell.h */,
+				1C81B0A9231F5E2A00E62CC3 /* YZHUIExcelContentView.m */,
+				1C81B0AA231F5E2A00E62CC3 /* YZHUIExcelViewRowCell.m */,
+				1C81B0AB231F5E2A00E62CC3 /* YZHUIExcelContentView.h */,
+			);
+			path = YZHUIExcelViewRowCell;
+			sourceTree = "<group>";
+		};
+		1C81B0AC231F5E2A00E62CC3 /* YZHUIExcelViewType */ = {
+			isa = PBXGroup;
+			children = (
+				1C81B0AD231F5E2A00E62CC3 /* YZHUIExcelViewType.h */,
+				1C81B0AE231F5E2A00E62CC3 /* YZHUIExcelViewType.m */,
+			);
+			path = YZHUIExcelViewType;
+			sourceTree = "<group>";
+		};
+		1C81B0B0231F5E2A00E62CC3 /* NSIndexPath+YZHUIExcelView */ = {
+			isa = PBXGroup;
+			children = (
+				1C81B0B1231F5E2A00E62CC3 /* NSIndexPath+YZHUIExcelView.h */,
+				1C81B0B2231F5E2A00E62CC3 /* NSIndexPath+YZHUIExcelView.m */,
+			);
+			path = "NSIndexPath+YZHUIExcelView";
+			sourceTree = "<group>";
+		};
+		1C81B0B3231F5E2A00E62CC3 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				1C81B0B4231F5E2A00E62CC3 /* UIView+Geometry.m */,
+				1C81B0B5231F5E2A00E62CC3 /* UIView+Geometry.h */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		1C81B0B7231F5E2A00E62CC3 /* QuartzCore */ = {
+			isa = PBXGroup;
+			children = (
+				1C81B0B8231F5E2A00E62CC3 /* CALayer+Geometry.m */,
+				1C81B0B9231F5E2A00E62CC3 /* CALayer+Geometry.h */,
+			);
+			path = QuartzCore;
 			sourceTree = "<group>";
 		};
 		1CCCF7EC22E9D43C00D3E792 /* OpenSSL */ = {
 			isa = PBXGroup;
 			children = (
+				1C4C30AD232764BD00A1FE7C /* YZHAESCryptor.h */,
+				1C4C30AE232764BD00A1FE7C /* YZHAESCryptor.mm */,
 				1CCCF7ED22E9D43C00D3E792 /* crypto */,
-				1CE765FB22EDA63A009110DA /* YZHAESCryptor.h */,
-				1CE765FC22EDA63A009110DA /* YZHAESCryptor.mm */,
 			);
 			path = OpenSSL;
 			sourceTree = "<group>";
@@ -388,6 +571,12 @@
 			mainGroup = 1C69D02B22E61982006C2C45;
 			productRefGroup = 1C69D03522E61982006C2C45 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 1C4D97752330FD2800ACEE5D /* Products */;
+					ProjectRef = 1C4D97742330FD2800ACEE5D /* MMKV.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				1C69D03322E61982006C2C45 /* YZHKVDemo */,
@@ -396,6 +585,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		1C4D977A2330FD2800ACEE5D /* libMMKV Static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libMMKV Static.a";
+			remoteRef = 1C4D97792330FD2800ACEE5D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1C4D977C2330FD2800ACEE5D /* MMKV.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = MMKV.framework;
+			remoteRef = 1C4D977B2330FD2800ACEE5D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		1C69D03222E61982006C2C45 /* Resources */ = {
@@ -429,31 +635,45 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1C81B0CA231F632B00E62CC3 /* UIReuseCell.m in Sources */,
+				1C81B0C3231F5E2A00E62CC3 /* UIView+Geometry.m in Sources */,
+				1C81B0BF231F5E2A00E62CC3 /* YZHUIExcelContentView.m in Sources */,
 				1CE765F422ED9890009110DA /* openSSL_aes_cfb.cpp in Sources */,
-				1C69D08922E61A68006C2C45 /* YZHCodeData.m in Sources */,
 				1CE765F322ED9890009110DA /* openSSL_aes_core.cpp in Sources */,
-				1C69D03C22E61982006C2C45 /* ViewController.m in Sources */,
+				1C4C30BB232783B800A1FE7C /* NSObject+YZHCodeToTopSuperClass.m in Sources */,
+				1C81B0BD231F5E2A00E62CC3 /* YZHUIExcelItemCell.m in Sources */,
+				1C4C30A32327621000A1FE7C /* YZHCodeData.mm in Sources */,
+				1C81B0C1231F5E2A00E62CC3 /* YZHUIExcelViewType.m in Sources */,
+				1C4C30B22327651B00A1FE7C /* ViewController.mm in Sources */,
 				1C4724FD2302A360008F9ED1 /* TestObj.m in Sources */,
-				1C69D09A22E61A68006C2C45 /* YZHCoder.mm in Sources */,
+				1C81B0BE231F5E2A00E62CC3 /* YZHUIExcelViewRowContentView.m in Sources */,
+				1C81B0C2231F5E2A00E62CC3 /* NSIndexPath+YZHUIExcelView.m in Sources */,
 				1C4724FE2302A360008F9ED1 /* X.m in Sources */,
 				1CE765F722ED9890009110DA /* openSSL_aes_ecb.cpp in Sources */,
 				1C4724FF2302A360008F9ED1 /* Account.m in Sources */,
 				1C69D08B22E61A68006C2C45 /* YZHKVUtils.m in Sources */,
-				1C69D08A22E61A68006C2C45 /* YZHKV.m in Sources */,
 				1CE765ED22ED9890009110DA /* openSSL_cts128.cpp in Sources */,
+				1C81B0C0231F5E2A00E62CC3 /* YZHUIExcelViewRowCell.m in Sources */,
+				1C4C30A62327647500A1FE7C /* YZHCoder.mm in Sources */,
+				1C4C30C723280D1500A1FE7C /* YZHCFKVDelegate.mm in Sources */,
 				1CE765F522ED9890009110DA /* openSSL_aes_ofb.cpp in Sources */,
 				1CE765F022ED9890009110DA /* openSSL_xts128.cpp in Sources */,
+				1C4C30BE23279AE800A1FE7C /* YZHKV.mm in Sources */,
 				1CE765EB22ED9890009110DA /* openSSL_cfb128.cpp in Sources */,
 				1C69D04722E61987006C2C45 /* main.m in Sources */,
 				1CE765EF22ED9890009110DA /* openSSL_gcm128.cpp in Sources */,
 				1CE765F222ED9890009110DA /* openSSL_ctr128.cpp in Sources */,
+				1C81B0C4231F5E2A00E62CC3 /* CALayer+Geometry.m in Sources */,
 				1CE765EE22ED9890009110DA /* openSSL_ofb128.cpp in Sources */,
 				1CE765F622ED9890009110DA /* openSSL_aes_cbc.cpp in Sources */,
 				1CE765EC22ED9890009110DA /* openSSL_cbc128.cpp in Sources */,
 				1C69D03922E61982006C2C45 /* AppDelegate.m in Sources */,
 				1CE765D422ED8493009110DA /* openSSL_crypto.cpp in Sources */,
-				1CE765FD22EDA63A009110DA /* YZHAESCryptor.mm in Sources */,
+				1C81B0BB231F5E2A00E62CC3 /* YZHUIExcelView.m in Sources */,
+				1C81B0BC231F5E2A00E62CC3 /* YZHUIExcelViewRowCollectionViewLayout.m in Sources */,
 				1CE765F122ED9890009110DA /* openSSL_ocb128.cpp in Sources */,
+				1C4C30AF232764BD00A1FE7C /* YZHAESCryptor.mm in Sources */,
+				1C4C30AB2327648E00A1FE7C /* YZHCFKV.mm in Sources */,
 				1C4725022302A43C008F9ED1 /* YZHMachTimeUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -627,8 +847,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7C6YPJQ829;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/YZHKVDemo/Framework",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = YZHKVDemo/PrefixHeader.pch;
+				HEADER_SEARCH_PATHS = " $(PROJECT_DIR)/../MMKV";
 				INFOPLIST_FILE = YZHKVDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -647,8 +872,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7C6YPJQ829;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/YZHKVDemo/Framework",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = YZHKVDemo/PrefixHeader.pch;
+				HEADER_SEARCH_PATHS = " $(PROJECT_DIR)/../MMKV";
 				INFOPLIST_FILE = YZHKVDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -325,23 +325,21 @@
 #define	 	TYPEULL_BITS_N(V) 							( ((V) == 0) ? (0) : ( (TYPE_RS(V,TYPEUINT_BITS) > 0) ? ( TYPEUINT_BITS_N(TYPE_RS(V,TYPEUINT_BITS)) + TYPEUINT_BITS ) : ( TYPEUINT_BITS_N(V) ) ) )
 #else
 
-#define 	TYPEUBYTE_BITS_N(V)							( ((V) == 0) ? (0) : \
-					               											( ((V) > FOU_POWOFTWO_SUB_ONE) ? ( ((V) > SIX_POWOFTWO_SUB_ONE) ? ( ((V) > SEV_POWOFTWO_SUB_ONE) ? (8) : (7) ) : \
-								  									   		( ((V) > FIV_POWOFTWO_SUB_ONE) ? (6) : (5) ) ) : \
-								  					 						( ((V) > TWO_POWOFTWO_SUB_ONE) ? ( ((V) > THR_POWOFTWO_SUB_ONE) ? (4) : (3) ) : \
-								  						               		( ((V) > ONE_POWOFTWO_SUB_ONE) ? (2) : (1) ) ) ) ) 
-
-#define 	TYPEUINT_BITS_N(V)  						( ((V) == 0) ? (0) : \
-							  												( ((V) > TWO_EIG_POWOFTWO_SUB_ONE) ? ( ((V) > THR_EIG_POWOFTWO_SUB_ONE) ? ( TYPEUBYTE_BITS_N(TYPE_RS(V,TYPEUINT_THR_BYTE_BITS)) + TYPEUINT_THR_BYTE_BITS ) : ( TYPEUBYTE_BITS_N(TYPE_RS(V,TYPEUINT_TWO_BYTE_BITS)) + TYPEUINT_TWO_BYTE_BITS ) ) : \
-							   					 																 ( ((V) > EIG_POWOFTWO_SUB_ONE) ? ( TYPEUBYTE_BITS_N(TYPE_RS(V,TYPEUINT_ONE_BYTE_BITS)) + TYPEUINT_ONE_BYTE_BITS ) : ( TYPEUBYTE_BITS_N(V) ) ) ) )
-
-#define		TYPEUINT_BYTES_N(V)							( ((V) == 0) ? (1) : \
-							  												( ((V) > TWO_EIG_POWOFTWO_SUB_ONE) ? ( ((V) > THR_EIG_POWOFTWO_SUB_ONE) ? ( NUM_FOU ) : ( NUM_THR ) ) : \
-							   					 																 ( ((V) > EIG_POWOFTWO_SUB_ONE) ? ( NUM_TWO ) : ( NUM_ONE ) ) ) )
-
-#define	 	TYPEULL_BITS_N(V) 							( ((V) == 0) ? (0) : ( ((V) > FOU_EIG_POWOFTWO_SUB_ONE) ? ( TYPEUINT_BITS_N(TYPE_RS(V,TYPEUINT_BITS)) + TYPEUINT_BITS ) : ( TYPEUINT_BITS_N(V) ) ) )
-
-#define	 	TYPEULL_BYTES_N(V) 							( ((V) == 0) ? (1) : ( ((V) > FOU_EIG_POWOFTWO_SUB_ONE) ? ( TYPEUINT_BYTES_N(TYPE_RS(V,TYPEUINT_BITS)) + NUM_FOU ) : ( TYPEUINT_BYTES_N(V) ) ) )
+//#define     TYPEUBYTE_BITS_N(V)                            ( ((V) == 0) ? (0) : \
+//                                                                               ( ((V) > 0XF) ? ( ((V) > 0X3F) ? ( ((V) > 0X7F) ? (8) : (7) ) : \
+//                                                                                 ( ((V) > 0X1F) ? (6) : (5) ) ) : \
+//                                                                               ( ((V) > 0X3) ? ( ((V) > 0X7) ? (4) : (3) ) : \
+//                                                                                 ( ((V) > 0X1) ? (2) : (1) ) ) ) )
+//
+//#define     TYPEUINT_BITS_N(V)                          ( ((V) == 0) ? (0) : \
+//                                                                              ( ((V) > 0XFFFF) ? ( ((V) > 0XFFFFFF) ? ( TYPEUBYTE_BITS_N(TYPE_RS(V,24)) + 24 ) : ( TYPEUBYTE_BITS_N(TYPE_RS(V,16)) + 16 ) ) : \
+//                                                                                                                     ( ((V) > 0XFF) ? ( TYPEUBYTE_BITS_N(TYPE_RS(V,8)) + 8 ) : ( TYPEUBYTE_BITS_N(V) ) ) ) )
+//
+//#define        TYPEUINT_BYTES_N(V)                            (((V) == 0) ? (1) : ((((SIZE_TYPE_UINT)V) > 0XFFFF) ? ((((SIZE_TYPE_UINT)V) > 0XFFFFFF) ? (4) : (3) ) : ((((SIZE_TYPE_UINT)V) > 0XFF) ? (2) : (1))))
+//
+//#define         TYPEULL_BITS_N(V)                             (((V) == 0) ? (0) : ((((SIZE_TYPE_ULLONG)V) > 0XFFFFFFFF) ? (TYPEUINT_BITS_N(TYPE_RS((SIZE_TYPE_ULLONG)V,32)) + 32) : TYPEUINT_BITS_N(V)))
+//
+//#define         TYPEULL_BYTES_N(V)                          (((V) == 0) ? (1) : ((((SIZE_TYPE_ULLONG)V) > 0XFFFFFFFF) ? (TYPEUINT_BYTES_N(TYPE_RS((SIZE_TYPE_ULLONG)V,32)) + 4) :  TYPEUINT_BYTES_N(V)))
 
 #endif
 

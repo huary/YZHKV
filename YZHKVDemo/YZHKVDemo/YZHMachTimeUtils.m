@@ -54,18 +54,18 @@ static NSString *recordPointText_s = nil;
 
 + (void)recordPointWithText:(NSString *)text
 {
-#if DEBUG
-//    uint64_t last = recordPointTime_s;
-//    NSString *lastText = recordPointText_s;
-//    recordPointTime_s = [self machAbsoluteTime];
-//    recordPointText_s = text;
-//    int64_t diff = recordPointTime_s - last;
-//    if (last > 0 && diff > 0) {
-//        CGFloat ms = [self machTimeToMS:diff];
-//        NSLog(@"从 [%@] -> [%@] 耗时: %f MS", lastText, text,ms);
-//    }
-#else
-#endif
+//#if DEBUG
+    uint64_t last = recordPointTime_s;
+    NSString *lastText = recordPointText_s;
+    recordPointTime_s = [self machAbsoluteTime];
+    recordPointText_s = text;
+    int64_t diff = recordPointTime_s - last;
+    if (last > 0 && diff > 0) {
+        CGFloat ms = [self machTimeToMS:diff];
+        NSLog(@"从 [%@] -> [%@] 耗时: %f MS", lastText, text,ms);
+    }
+//#else
+//#endif
 }
 
 + (uint64_t)elapsedMachTimeInBlock:(void(^)(void))block

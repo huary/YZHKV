@@ -1,9 +1,9 @@
 //
-//  YZHCoder.h
-//  PBDemo
+//  YZHCoderC.h
+//  YZHKVDemo
 //
-//  Created by yuan on 2019/5/26.
-//  Copyright © 2019年 yuan. All rights reserved.
+//  Created by yuan on 2019/9/6.
+//  Copyright © 2019 yuan. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -32,23 +32,20 @@ typedef NS_ENUM(NSInteger, YZHCodeItemType)
     YZHCodeItemTypeMax          = 15,
 };
 
-@protocol YZHCoderObjectProtocol <NSObject>
 
-+(NSArray<NSString*>*)hz_objectCodeKeyPaths;
-
-+(Class)hz_objectCodeTopEdgeSuperClass;
-
-@end
-
-
-/**********************************************************************
- *NSObject (TopEdgeSuperClass)
- ***********************************************************************/
-@interface NSObject (YZHCoderToTopEdgeSuperClass)
-
--(Class)hz_getObjectCodeTopEdgeSuperClass;
-
-@end
+typedef NS_ENUM(NSInteger, YZHCoderError)
+{
+    //指针为空或者执行的内容长度为0
+    YZHCoderErrorPtrNull        = 1,
+    //没有找到编码的range
+    YZHCoderErrorNotFound       = 2,
+    //编码类型错误
+    YZHCoderErrorTypeError      = 3,
+    //数据错误
+    YZHCoderErrorDataError      = 4,
+    //编码的class错误
+    YZHCoderErrorClassError     = 5,
+};
 
 /*
  *第1个字节：最高位为1，第4位到第7位为上面的值，第3位到1位为字节数(最大支持到8字节存储的数值：2^64的值)
@@ -57,84 +54,64 @@ typedef NS_ENUM(NSInteger, YZHCodeItemType)
  *
  */
 
-@interface YZHCoder : NSObject
+//encode
+NSData *encodeObject(id object);
 
-+ (NSData*)encodeObject:(id)object;
+NSData *encodeObjectToTopSuperClass(id object, Class topSuperClass, NSError **error);
 
-+ (NSData*)encodeObject:(id)object topEdgeSuperClass:(Class)topEdgeSuperClass;
+void encodeObjectIntoCodeData(id object, YZHMutableCodeData *codeData, NSError **error);
 
-+ (void)encodeObject:(id)object intoCodeData:(YZHMutableCodeData*)codeData;
+void encodeObjectToTopSuperClassIntoCodeData(id object, Class topSuperClass, YZHMutableCodeData *codeData, NSError **error);
 
-+ (void)encodeObject:(id)object topEdgeSuperClass:(Class)topEdgeSuperClass intoCodeData:(YZHMutableCodeData*)codeData;
+void encodeFloatIntoCodeData(float val, YZHMutableCodeData *codeData);
 
-+ (id)decodeObjectWithData:(NSData*)data;
-
-+ (id)decodeObjectFromBuffer:(uint8_t*)buffer length:(NSInteger)length;
-
-+ (id)decodeObjectFromBuffer:(uint8_t*)buffer length:(NSInteger)length offset:(int64_t*)offset;
-
-+ (NSData*)packetData:(NSData*)data codeType:(YZHCodeItemType)codeType;
-
-+ (void)packetData:(NSData*)data codeType:(YZHCodeItemType)codeType intoCodeData:(YZHMutableCodeData*)codeData;
-
-+ (void)packetCodeData:(YZHCodeData*)data codeType:(YZHCodeItemType)codeType intoCodeData:(YZHMutableCodeData*)codeData;
-
-+ (NSData*)unpackData:(NSData*)data codeType:(YZHCodeItemType*)codeType size:(int64_t*)size offset:(int64_t*)offset;
-
-+ (NSRange)unpackBuffer:(uint8_t*)buffer bufferSize:(int64_t)bufferSize codeType:(YZHCodeItemType*)codeType len:(int8_t*)len size:(int64_t*)size offset:(int64_t*)offset;
-
-+ (NSData*)encodeBool:(BOOL)val;
-
-+ (NSData*)encodeInt8:(int8_t)val;
-
-+ (NSData*)encodeUInt8:(uint8_t)val;
-
-+ (NSData*)encodeInt16:(int16_t)val;
-
-+ (NSData*)encodeUInt16:(uint16_t)val;
-
-+ (NSData*)encodeInt32:(int32_t)val;
-
-+ (NSData*)encodeUInt32:(uint32_t)val;
-
-+ (NSData*)encodeInt64:(int64_t)val;
-
-+ (NSData*)encodeUInt64:(uint64_t)val;
-
-+ (NSData*)encodeFloat:(float)val;
-
-+ (NSData*)encodeDouble:(double)val;
-
-//这三个可以加快编码速度
-+ (void)encodeFloat:(float)val intoCodeData:(YZHMutableCodeData*)codeData;
-
-+ (void)encodeDouble:(double)val intoCodeData:(YZHMutableCodeData*)codeData;
+void encodeDoubleIntoCodeData(double val, YZHMutableCodeData *codeData);
 
 //可以8、U8,16,U16,32,U32,64,U64
-+ (void)encodeInteger:(int64_t)val intoCodeData:(YZHMutableCodeData*)codeData;
+void encodeIntegerIntoCodeData(int64_t val, YZHMutableCodeData *codeData);
 
-+ (void)encodeString:(NSString*)text intoCodeData:(YZHMutableCodeData*)codeData;
+void encodeStringIntoCodeData(NSString *text, YZHMutableCodeData *codeData);
 
-+ (BOOL)decodeBoolWithData:(NSData*)data;
+void encodeDataIntoCodeData(NSData *data, YZHMutableCodeData *codeData);
 
-+ (int8_t)decodeInt8WithData:(NSData*)data;
+//decode
+id decodeObjectFromData(NSData *data);
 
-+ (uint8_t)decodeUInt8WithData:(NSData*)data;
+id decodeObjectFromBuffer(uint8_t *buffer ,int64_t length, int64_t *offset, YZHCodeItemType *codeType, NSError **error);
 
-+ (int16_t)decodeInt16WithData:(NSData*)data;
+float decodeFloatFromBuffer(uint8_t *buffer, int64_t length, int64_t *offset ,NSError **error);
 
-+ (uint16_t)decodeUInt16WithData:(NSData*)data;
+double decodeDoubleFromBuffer(uint8_t *buffer, int64_t length, int64_t *offset, NSError **error);
 
-+ (int32_t)decodeInt32WithData:(NSData*)data;
+int64_t decodeIntegerFromBuffer(uint8_t *buffer, int64_t length, int64_t *offset,NSError **error);
 
-+ (uint32_t)decodeUInt32WithData:(NSData*)data;
+NSString *decodeStringFromBuffer(uint8_t *buffer, int64_t length, int64_t *offset,NSError **error);
 
-+ (int64_t)decodeInt64WithData:(NSData*)data;
+NSData *decodeDataFromBuffer(uint8_t *buffer, int64_t length, int64_t *offset,NSError **error);
 
-+ (uint64_t)decodeUInt64WithData:(NSData*)data;
 
-+ (float)decodeFloatWithData:(NSData*)data;
+//这些是同字节数（sizeof）的转换
+int32_t Int32FromFloat(float val);
 
-+ (double)decodeDoubleWithData:(NSData*)data;
+float FloatFromInt32(int32_t val);
 
-@end
+int64_t Int64FromDouble(double val);
+
+double DoubleFromInt64(int64_t val);
+
+//将float和Int32进行转换，Int32存在Int64上
+int64_t Int64FromFloat(float val);
+
+float FloatFromInt64(int64_t val);
+
+
+//packet
+NSData *packetData(NSData *data,YZHCodeItemType codeType);
+
+void packetDataIntoCodeData(NSData *data,YZHCodeItemType codeType, YZHMutableCodeData *codeData);
+
+void packetCodeData(YZHCodeData *data, YZHCodeItemType codeType, YZHMutableCodeData *codeData);
+
+NSData *unpackData(NSData *data, YZHCodeItemType *codeType, int64_t *size, int64_t *offset);
+
+NSRange unpackBuffer(uint8_t *buffer, int64_t bufferSize, YZHCodeItemType *codeType, int8_t *len, int64_t *size, int64_t *offset);

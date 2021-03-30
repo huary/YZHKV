@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "YZHCoder.h"
+#import "NSObject+YZHCodeToTopSuperClass.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**********************************************************************
  *Account
  ***********************************************************************/
-@interface Account : User <YZHCoderObjectProtocol>
+@interface Account : User <YZHCodeObjectProtocol>
 
 @property (nonatomic, strong) NSData *autoAuthKey;
 @property (nonatomic, strong) NSString *appKey;
@@ -52,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) float weight;
 
-+(Class)hz_objectCodeTopEdgeSuperClass;
++(Class)hz_objectCodeToTopSuperClass;
 
 
 @end

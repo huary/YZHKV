@@ -9,37 +9,13 @@
 #import <Foundation/Foundation.h>
 #import "YZHAESCryptor.h"
 
-typedef void(^YZHKVGetBoolBlock)(BOOL value);
-typedef void(^YZHKVGetInt8Block)(int8_t value);
-typedef void(^YZHKVGetUInt8Block)(uint8_t value);
-typedef void(^YZHKVGetInt16Block)(int16_t value);
-typedef void(^YZHKVGetUInt16Block)(uint16_t value);
-typedef void(^YZHKVGetInt32Block)(int32_t value);
-typedef void(^YZHKVGetUInt32Block)(uint32_t value);
-typedef void(^YZHKVGetInt64Block)(int64_t value);
-typedef void(^YZHKVGetUInt64Block)(uint64_t value);
-typedef void(^YZHKVGetFloatBlock)(float value);
-typedef void(^YZHKVGetDoubleBlock)(double value);
-typedef void(^YZHKVGetObjectBlock)(id object);
-
-typedef NS_ENUM(NSInteger, YZHKVError)
-{
-    //密码错误
-    YZHKVErrorCryptKeyError     = 1,
-    //编码错误
-    YZHKVErrorCoderError        = 2,
-    //CRC不一样错误
-    YZHKVErrorCRCError          = 3,
-    
-};
-
-
 @class YZHKV;
 @protocol YZHKVDelegate <NSObject>
 
-//报告严重错误，一般是直接
-- (void)kv:(YZHKV*)kv reportError:(NSError*)error;
-- (BOOL)kv:(YZHKV*)kv reportCheckFailedError:(NSError*)error;
+//报告严重错误，一般是直接关闭，
+- (void)kv:(YZHKV *)kv reportError:(NSError *)error;
+//报告警告，返回YES表示继续，返回NO表示不再执行
+- (BOOL)kv:(YZHKV *)kv reportWarning:(NSError *)error;
 
 @end
 
@@ -62,7 +38,7 @@ typedef NS_ENUM(NSInteger, YZHKVError)
 
 - (BOOL)setObject:(id)object forKey:(id)key;
 
-- (BOOL)setObject:(id)object topEdgeSuperClass:(Class)topEdgeSuperClass forKey:(id)key;
+- (BOOL)setObject:(id)object topSuperClass:(Class)topSuperClass forKey:(id)key;
 
 - (BOOL)setFloat:(float)val forKey:(id)key;
 
@@ -112,17 +88,23 @@ typedef NS_ENUM(NSInteger, YZHKVError)
 
 - (double)getDoubleForKey:(id)key;
 
+- (int64_t)getIntegerForKey:(id)key;
+
 - (NSDictionary*)allEntries;
 
 - (void)removeObjectForKey:(id)key;
 
-- (void)clear;
-
-- (void)close;
+- (void)updateCryptKey:(NSData*)cryptKey;
 
 - (NSError*)lastError;
 
-- (void)updateCryptKey:(NSData*)cryptKey;
+- (void)clear:(BOOL)truncateFileSize;
+
+- (void)close;
+
+//#if DEBUG
+- (NSString*)filePath;
+//#endif
 
 
 

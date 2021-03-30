@@ -8,17 +8,10 @@
 
 #import "YZHAESCryptor.h"
 #import "openSSL_aes.h"
-#include <stdlib.h>
-#include <string.h>
+#include <string>
 
-#include "macro.h"
-
-typedef NS_ENUM(uint8_t, _AESKeySize)
-{
-    _AESKeySize128   = 16,
-    _AESKeySize192   = 24,
-    _AESKeySize256   = 32,
-};
+//是否使用智能指针
+#define CRYPTOR_USE_SMT_PTR    (1)
 
 typedef NS_ENUM(NSInteger, _AESVectorType)
 {
@@ -29,11 +22,11 @@ typedef NS_ENUM(NSInteger, _AESVectorType)
     _AESVectorTypePublic        = 2,
 };
 
-static const NSInteger AESBlockSize_s   = 16;
+static const int8_t AESBlockSize_s   = YZHAESKeySize128;//16;
 
 typedef void(*_AES_CFB)(const unsigned char *in, unsigned char *out, size_t length, const openSSL::AES_KEY *key, unsigned char *ivec, int *num, const int enc);
 
-typedef NSUInteger(^_YZHAESEncryptSizeBlock)(NSUInteger inputSize, AESPaddingType paddingType);
+typedef int64_t(^_YZHAESEncryptSizeBlock)(int64_t inputSize, AESPaddingType paddingType);
 
 typedef struct _YZHAESCryptKey
 {
@@ -41,35 +34,35 @@ typedef struct _YZHAESCryptKey
     openSSL::AES_KEY *ptr_AESDecryptKey;
 }_YZHAESCryptKey_S, *_PTR_YZHAESCryptKey_S;
 
-@interface YZHAESCryptor ()
+typedef struct _YZHAESCryptorInfo
 {
-@private
-    NSData *_key;
-    NSData *_inVector;
-    NSData *_encryptVector;
-    NSData *_decryptVector;
-    _AES_CFB _ptr_func;
-    openSSL::AES_KEY _AESEncryptKey;
-    openSSL::AES_KEY _AESDecryptKey;
-    openSSL::AES_KEY *_ptrAESKey;
-    _YZHAESCryptKey_S _cryptKey;
-}
+#if CRYPTOR_USE_SMT_PTR
+    std::shared_ptr<YZHCodeData> key;
+    std::shared_ptr<YZHCodeData> inVertor;
+    std::shared_ptr<YZHCodeData> encryptVector;
+    std::shared_ptr<YZHCodeData> decryptVector;
+#else
+    YZHCodeData *key;
+    YZHCodeData *inVertor;
+    YZHCodeData *encryptVector;
+    YZHCodeData *decryptVector;
+#endif
+    
+    _AES_CFB ptr_func;
+    openSSL::AES_KEY AESEncryptKey;
+    openSSL::AES_KEY AESDecryptKey;
+    openSSL::AES_KEY *ptrAESKey;
+    _YZHAESCryptKey_S cryptKey;
 
-@property (nonatomic, assign) int offset;
-@property (nonatomic, assign) _AESVectorType vectorType;
-@property (nonatomic, copy) _YZHAESEncryptSizeBlock  encryptSizeBlock;
-@property (nonatomic, copy) YZHAESCryptDataPaddingBlock    paddingBlock;
-
-
-@end
-
-
-@implementation YZHAESCryptor
-
-+ (BOOL)accessInstanceVariablesDirectly
-{
-    return NO;
-}
+    int32_t offset;
+    _AESVectorType vectorType;
+    _YZHAESEncryptSizeBlock encryptSizeBlock;
+    YZHAESCryptDataPaddingBlock paddingBlock;
+    
+//public
+    YZHAESKeyType keyType;
+    YZHCryptMode cryptMode;
+}_YZHAESCryptorInfo_S;
 
 void _AES_cfb1_crypt_block_data(const unsigned char *in, unsigned char *out,
                                 size_t length, const openSSL::AES_KEY *key,
@@ -79,8 +72,8 @@ void _AES_cfb1_crypt_block_data(const unsigned char *in, unsigned char *out,
 }
 
 void _AES_cbc_crypt_block_data(const unsigned char *in, unsigned char *out,
-                                 size_t length, const openSSL::AES_KEY *key,
-                                 unsigned char *ivec, int *num, const int enc)
+                               size_t length, const openSSL::AES_KEY *key,
+                               unsigned char *ivec, int *num, const int enc)
 {
     if (length <= 0 || key == nullptr) {
         return;
@@ -95,8 +88,8 @@ void _AES_cbc_crypt_block_data(const unsigned char *in, unsigned char *out,
 }
 
 void _AES_ecb_crypt_block_data(const unsigned char *in, unsigned char *out,
-                     size_t length, const openSSL::AES_KEY *key,
-                     unsigned char *ivec, int *num, const int enc)
+                               size_t length, const openSSL::AES_KEY *key,
+                               unsigned char *ivec, int *num, const int enc)
 {
     if (length <= 0 || key == nullptr) {
         return;
@@ -105,7 +98,7 @@ void _AES_ecb_crypt_block_data(const unsigned char *in, unsigned char *out,
     assert(r == 0);
     
     _YZHAESCryptKey_S *ptr_cryptKey = (_YZHAESCryptKey_S*)key;
-
+    
     openSSL::AES_KEY AESKey = (enc == AES_ENCRYPT) ? *(ptr_cryptKey->ptr_AESEncryptKey) : *(ptr_cryptKey->ptr_AESDecryptKey);
     
     size_t cryptLen = 0;
@@ -121,106 +114,21 @@ void _AES_ecb_crypt_block_data(const unsigned char *in, unsigned char *out,
     }
 }
 
-
-
-- (instancetype)init
+static inline YZHCodeData * _copyCodeData(YZHCodeData *codeData)
 {
-    self = [super init];
-    if (self) {
-        _offset = 0;
-        _ptr_func = nullptr;
-        _vectorType = _AESVectorTypeNone;
-        memset(&_AESEncryptKey, 0, sizeof(openSSL::AES_KEY));
-        memset(&_AESDecryptKey, 0, sizeof(openSSL::AES_KEY));
-        
-        _cryptKey.ptr_AESEncryptKey = &_AESEncryptKey;
-        _cryptKey.ptr_AESDecryptKey = &_AESDecryptKey;
-    }
-    return self;
+    int64_t dataSize = codeData->dataSize();
+    YZHCodeData *copy = new YZHMutableCodeData(dataSize);
+    copy->writeBuffer(codeData->bytes(), dataSize);
+    return copy;
 }
 
-//以这种方式初始化，默认为YZHCryptModeECB的加密模式
-- (instancetype)initWithAESKey:(NSData*)AESKey keyType:(YZHAESKeyType)keyType
-{
-    return [self initWithAESKey:AESKey keyType:keyType inVector:nil cryptMode:YZHCryptModeECB];
-}
-
-//输入加密模式及输入向量，如果为YZHCryptModeECB，输入向量不起作用
-- (instancetype)initWithAESKey:(NSData *)AESKey keyType:(YZHAESKeyType)keyType inVector:(nullable NSData*)inVector cryptMode:(YZHCryptMode)cryptMode
-{
-    self = [self init];
-    if (self) {
-        _key = [self _checkKey:AESKey type:keyType];
-        if (_key) {
-            _inVector = [self _checkInVector:inVector cryptMode:cryptMode];
-            _keyType = keyType;
-            _cryptMode = cryptMode;
-            [self reset];
-        }
-    }
-    return self;
-}
-
-- (NSData*)_copyData:(NSData*)data
-{
-    NSMutableData *cp = [NSMutableData data];
-    [cp appendData:data];
-    return cp;
-}
-
-- (void)reset
-{
-    self.offset = 0;
-    if (_inVector && self.vectorType != _AESVectorTypeNone) {
-        if (self.vectorType == _AESVectorTypeSingle) {
-            _encryptVector = [self _copyData:_inVector];
-            _decryptVector = [self _copyData:_inVector];
-        }
-        else if (self.vectorType == _AESVectorTypePublic) {
-            _encryptVector = _decryptVector = [self _copyData:_inVector];
-        }
-    }
-    [self _setCryptKey];
-}
-
-- (void)_setCryptKey
-{
-    openSSL::AES_set_encrypt_key((uint8_t*)_key.bytes, (int32_t)TYPE_LS((int32_t)_key.length, 3), &_AESEncryptKey);
-    openSSL::AES_set_decrypt_key((uint8_t*)_key.bytes, (int32_t)TYPE_LS((int32_t)_key.length, 3), &_AESDecryptKey);
-}
-
-- (NSData*)_checkKey:(NSData*)key type:(YZHAESKeyType)type
-{
-    uint8_t keySize = 0;
-    switch (type) {
-        case YZHAESKeyType128: {
-            keySize = _AESKeySize128;
-            break;
-        }
-        case YZHAESKeyType192: {
-            keySize = _AESKeySize192;
-            break;
-        }
-        case YZHAESKeyType256: {
-            keySize = _AESKeySize256;
-            break;
-        }
-        default:
-            break;
-    }
-    if (keySize > 0 && key.length >= keySize) {
-        return [key subdataWithRange:NSMakeRange(0, keySize)];
-    }
-    return nil;
-}
-
-+(uint8_t)_getPaddingSize:(NSUInteger)inputSize paddingType:(AESPaddingType)paddingType
+static inline uint8_t _getPaddingSize(int64_t inputSize, AESPaddingType paddingType)
 {
     if (inputSize == 0) {
         return 0;
     }
-    NSInteger r = TYPE_AND(inputSize, (AESBlockSize_s - 1));
-    NSInteger appendSize = 0;
+    uint8_t r = TYPE_AND(inputSize, (AESBlockSize_s - 1));
+    uint8_t appendSize = 0;
     if (paddingType == AESPaddingTypeZero) {
         appendSize = r ? AESBlockSize_s - r : 0;
     }
@@ -230,211 +138,400 @@ void _AES_ecb_crypt_block_data(const unsigned char *in, unsigned char *out,
     return appendSize;
 }
 
-+(NSUInteger)_getEncryptSize:(NSUInteger)inputSize paddingType:(AESPaddingType)paddingType
+static inline int64_t _getEncryptSize(int64_t inputSize, AESPaddingType paddingType)
 {
-    uint8_t paddingSize = [self _getPaddingSize:inputSize paddingType:paddingType];
+    uint8_t paddingSize = _getPaddingSize(inputSize, paddingType);
     return inputSize + paddingSize;
 }
 
-+(NSData*)_paddingData:(NSData*)data type:(AESPaddingType)type cryptOperation:(YZHCryptOperation)cryptOperation
+static inline void _paddingData(YZHCodeData *codeData, AESPaddingType paddingType, YZHCryptOperation cryptOperation)
 {
-    NSUInteger len = data.length;
-    if (len == 0) {
-        return data;
+    if (codeData == NULL) {
+        return;
     }
-    uint8_t paddingSize = [self _getPaddingSize:len paddingType:type];
+    int64_t len = codeData->dataSize();
+    if (len == 0) {
+        return;
+    }
+    uint8_t paddingSize = _getPaddingSize(len, paddingType);
     uint8_t paddingValue = 0;
     
-    if (type == AESPaddingTypeZero) {
+    if (paddingType == AESPaddingTypeZero) {
         if (cryptOperation == YZHCryptOperationEncrypt) {
             paddingValue = 0;
         }
     }
-    else if (type == AESPaddingTypePKCS7) {
+    else if (paddingType == AESPaddingTypePKCS7) {
         if (cryptOperation == YZHCryptOperationEncrypt) {
             paddingValue = paddingSize;
         }
         else {
-            uint8_t last = 0;
-            [data getBytes:&last range:NSMakeRange(len - 1, 1)];
+            codeData->seekTo(len-1);
+            uint8_t last = codeData->readByte();
             if (last > 0 && last <= AESBlockSize_s && last < len) {
-                data = [data subdataWithRange:NSMakeRange(0, len - last)];
+                codeData->truncateToWithSeek(len - last, YZHDataSeekTypeEND);
             }
         }
     }
     
-    if (cryptOperation == YZHCryptOperationEncrypt && paddingSize > 0) {
-        NSMutableData *oldData = [NSMutableData dataWithData:data];
-        NSMutableData *paddingData = [NSMutableData dataWithLength:paddingSize];
-        memset((uint8_t*)paddingData.bytes, (uint8_t)paddingValue, paddingSize);
-        [oldData appendData:paddingData];
-        return [oldData copy];
+    int64_t afterPaddingSize = len + paddingSize;
+    if (cryptOperation == YZHCryptOperationEncrypt && paddingSize > 0 && codeData->bufferSize() >= afterPaddingSize) {
+//        codeData->ensureRemSize(paddingSize);
+        uint8_t *ptr = codeData->bytes() + len;
+        memset(ptr, (uint8_t)paddingValue, paddingSize);
+        codeData->truncateToWithSeek(afterPaddingSize, YZHDataSeekTypeEND);
     }
-    return data;
 }
 
-- (NSData*)_checkInVector:(nullable NSData*)inVector cryptMode:(YZHCryptMode)cryptMode
+BOOL _checkKey(YZHCodeData *key, YZHAESKeyType keyType, YZHCodeData **outKeyData)
 {
+    uint8_t keySize = 0;
+    switch (keyType) {
+        case YZHAESKeyType128: {
+            keySize = YZHAESKeySize128;
+            break;
+        }
+        case YZHAESKeyType192: {
+            keySize = YZHAESKeySize192;
+            break;
+        }
+        case YZHAESKeyType256: {
+            keySize = YZHAESKeySize256;
+            break;
+        }
+        default:
+            break;
+    }
+    
+    if (keySize > 0 && key->dataSize() >= keySize) {
+        if (outKeyData) {
+            YZHMutableCodeData *codeData = new YZHMutableCodeData(keySize);
+            codeData->writeBuffer(key->bytes(), keySize);
+            *outKeyData = codeData;
+        }
+        return YES;
+        
+    }
+    return NO;
+}
+
+void YZHAESCryptor::setupDefault()
+{
+    struct _YZHAESCryptorInfo *cryptorInfo = (struct _YZHAESCryptorInfo *)calloc(1, sizeof(struct _YZHAESCryptorInfo));
+    if (cryptorInfo) {
+        cryptorInfo->vectorType = _AESVectorTypeNone;
+        cryptorInfo->cryptKey.ptr_AESEncryptKey = &cryptorInfo->AESEncryptKey;
+        cryptorInfo->cryptKey.ptr_AESDecryptKey = &cryptorInfo->AESDecryptKey;
+    }
+    ptrCryptorInfo = cryptorInfo;
+}
+
+BOOL YZHAESCryptor::setupCryptor(YZHCodeData *key, YZHAESKeyType keyType, YZHCodeData *vector, YZHCryptMode cryptMode)
+{
+    struct _YZHAESCryptorInfo *info = (struct _YZHAESCryptorInfo*)ptrCryptorInfo;
+    if (info == NULL) {
+        return NO;
+    }
+    YZHCodeData *keyData = NULL;
+    BOOL OK = _checkKey(key, keyType, &keyData);
+    if (OK == NO) {
+        return NO;
+    }
+#if CRYPTOR_USE_SMT_PTR
+    std::shared_ptr<YZHCodeData> sharedKey(keyData);
+    info->key = sharedKey;
+#else
+    if (info->key) {
+        delete info->key;
+    }
+    info->key = keyData;
+#endif
+    info->keyType = keyType;
+    info->cryptMode = cryptMode;
+    
     switch (cryptMode) {
         case YZHCryptModeCFB: {
-            _ptrAESKey = &_AESEncryptKey;
-            _vectorType = _AESVectorTypePublic;
-            _ptr_func = (openSSL::AES_cfb128_encrypt);
-            self.encryptSizeBlock = ^NSUInteger(NSUInteger inputSize, AESPaddingType paddingType) {
+            info->ptrAESKey = &(info->AESEncryptKey);
+            info->vectorType = _AESVectorTypePublic;
+            info->ptr_func = (openSSL::AES_cfb128_encrypt);
+            info->encryptSizeBlock = ^int64_t(int64_t inputSize, AESPaddingType paddingType) {
                 return inputSize;
             };
             break;
         }
         case YZHCryptModeCFB1: {
-            _ptrAESKey = &_AESEncryptKey;
-            _vectorType = _AESVectorTypePublic;
-            _ptr_func = _AES_cfb1_crypt_block_data;//(openSSL::AES_cfb1_encrypt);
-            self.encryptSizeBlock = ^NSUInteger(NSUInteger inputSize, AESPaddingType paddingType) {
+            info->ptrAESKey = &(info->AESEncryptKey);
+            info->vectorType = _AESVectorTypePublic;
+            info->ptr_func = _AES_cfb1_crypt_block_data;//(openSSL::AES_cfb1_encrypt);
+            info->encryptSizeBlock = ^int64_t(int64_t inputSize, AESPaddingType paddingType) {
                 return inputSize;
             };
             break;
         }
         case YZHCryptModeCFB8: {
-            _ptrAESKey = &_AESEncryptKey;
-            _vectorType = _AESVectorTypePublic;
-            _ptr_func = (openSSL::AES_cfb8_encrypt);
-            self.encryptSizeBlock = ^NSUInteger(NSUInteger inputSize, AESPaddingType paddingType) {
+            info->ptrAESKey = &(info->AESEncryptKey);
+            info->vectorType = _AESVectorTypePublic;
+            info->ptr_func = (openSSL::AES_cfb8_encrypt);
+            info->encryptSizeBlock = ^int64_t(int64_t inputSize, AESPaddingType paddingType) {
                 return inputSize;
             };
             break;
         }
         case YZHCryptModeOFB: {
-            _ptrAESKey = &_AESEncryptKey;
-            _vectorType = _AESVectorTypePublic;
-            _ptr_func = (openSSL::AES_ofb128_encrypt);
-            self.encryptSizeBlock = ^NSUInteger(NSUInteger inputSize, AESPaddingType paddingType) {
+            info->ptrAESKey = &(info->AESEncryptKey);
+            info->vectorType = _AESVectorTypePublic;
+            info->ptr_func = (openSSL::AES_ofb128_encrypt);
+            info->encryptSizeBlock = ^int64_t(int64_t inputSize, AESPaddingType paddingType) {
                 return inputSize;
             };
             break;
         }
         case YZHCryptModeCBC: {
-            _ptrAESKey = (openSSL::AES_KEY *)&_cryptKey;
-            _vectorType = _AESVectorTypeSingle;
-            _ptr_func = _AES_cbc_crypt_block_data;
-            self.encryptSizeBlock = ^NSUInteger(NSUInteger inputSize, AESPaddingType paddingType) {
-                return [YZHAESCryptor _getEncryptSize:inputSize paddingType:paddingType];
+            info->ptrAESKey = (openSSL::AES_KEY *)&(info->cryptKey);
+            info->vectorType = _AESVectorTypeSingle;
+            info->ptr_func = _AES_cbc_crypt_block_data;
+            info->encryptSizeBlock = ^int64_t(int64_t inputSize, AESPaddingType paddingType) {
+                return _getEncryptSize((int64_t)inputSize, paddingType);
             };
-            self.paddingBlock = ^NSData *(YZHAESCryptor *cryptor, NSData *cryptData, AESPaddingType paddingType, YZHCryptOperation cryptOperation) {
-                return [YZHAESCryptor _paddingData:cryptData type:paddingType cryptOperation:cryptOperation];
+            info->paddingBlock = ^(YZHAESCryptor *cryptor, YZHCodeData *cryptData, AESPaddingType paddingType, YZHCryptOperation cryptOperation) {
+                _paddingData(cryptData, paddingType, cryptOperation);
             };
             break;
         }
         case YZHCryptModeECB: {
-            _ptrAESKey = (openSSL::AES_KEY *)&_cryptKey;
-            _vectorType = _AESVectorTypeNone;
-            _ptr_func = _AES_ecb_crypt_block_data;
-            self.encryptSizeBlock = ^NSUInteger(NSUInteger inputSize, AESPaddingType paddingType) {
-                return [YZHAESCryptor _getEncryptSize:inputSize paddingType:paddingType];
+            info->ptrAESKey = (openSSL::AES_KEY *)&(info->cryptKey);
+            info->vectorType = _AESVectorTypeNone;
+            info->ptr_func = _AES_ecb_crypt_block_data;
+            info->encryptSizeBlock = ^int64_t(int64_t inputSize, AESPaddingType paddingType) {
+                return _getEncryptSize(inputSize, paddingType);
             };
-            self.paddingBlock = ^NSData *(YZHAESCryptor *cryptor, NSData *cryptData, AESPaddingType paddingType, YZHCryptOperation cryptOperation) {
-                return [YZHAESCryptor _paddingData:cryptData type:paddingType cryptOperation:cryptOperation];
+            info->paddingBlock = ^(YZHAESCryptor *cryptor, YZHCodeData *cryptData, AESPaddingType paddingType, YZHCryptOperation cryptOperation) {
+                _paddingData(cryptData, paddingType, cryptOperation);
             };
             break;
         }
         default:
             break;
     }
-    if (cryptMode == YZHCryptModeECB || inVector.length < AESBlockSize_s) {
-        return nil;
+    
+    if (cryptMode != YZHCryptModeECB) {
+        if (vector == NULL || vector->dataSize() < AESBlockSize_s) {
+            return NO;
+        }
+#if CRYPTOR_USE_SMT_PTR
+        if (info->inVertor == NULL) {
+            info->inVertor = std::make_shared<YZHMutableCodeData>(AESBlockSize_s);
+        }
+#else
+        if (info->inVertor == NULL) {
+            info->inVertor = new YZHMutableCodeData(AESBlockSize_s);
+        }
+#endif
+        if (info->inVertor) {
+            info->inVertor->seek(YZHDataSeekTypeSET);
+            info->inVertor->writeBuffer(vector->bytes(), AESBlockSize_s);
+        }
     }
-    return [inVector subdataWithRange:NSMakeRange(0, AESBlockSize_s)];
+    return YES;
 }
 
-- (BOOL)isValidCryptor
+
+YZHAESCryptor::YZHAESCryptor(YZHCodeData *AESKey, YZHAESKeyType keyType)
 {
-    return [self _checkKey:_key type:self.keyType] ? YES : NO;
+    YZHAESCryptor(AESKey, keyType, NULL, YZHCryptModeECB);
+}
+
+YZHAESCryptor::YZHAESCryptor(YZHCodeData *AESKey, YZHAESKeyType keyType, YZHCodeData *inVector, YZHCryptMode cryptMode)
+{
+    setupDefault();
+    struct _YZHAESCryptorInfo *info = (struct _YZHAESCryptorInfo*)ptrCryptorInfo;
+    if (info) {
+        BOOL OK = setupCryptor(AESKey, keyType, inVector, cryptMode);
+        if (OK) {
+            reset();
+        }
+    }
+}
+
+YZHAESCryptor::~YZHAESCryptor()
+{
+    struct _YZHAESCryptorInfo *info = (struct _YZHAESCryptorInfo*)ptrCryptorInfo;
+    if (info) {
+#if CRYPTOR_USE_SMT_PTR
+        info->encryptVector.reset();
+        info->decryptVector.reset();
+        info->inVertor.reset();
+        info->key.reset();
+#else
+        if (info->encryptVector == info->decryptVector) {
+            if (info->encryptVector) {
+                delete info->encryptVector;
+                info->encryptVector = info->decryptVector = NULL;
+            }
+        }
+        else {
+            delete info->encryptVector;
+            info->encryptVector = NULL;
+            delete info->decryptVector;
+            info->decryptVector = NULL;
+        }
+        
+        if (info->inVertor) {
+            delete info->inVertor;
+            info->inVertor = NULL;
+        }
+        
+        if (info->key) {
+            delete info->key;
+            info->key = NULL;
+        }
+#endif
+        free(info);
+        info = NULL;
+        
+        ptrCryptorInfo = NULL;
+    }
+}
+
+
+
+void YZHAESCryptor::reset()
+{
+    struct _YZHAESCryptorInfo *info = (struct _YZHAESCryptorInfo*)ptrCryptorInfo;
+    if (info == NULL) {
+        return;
+    }
+    info->offset = 0;
+    if (info->inVertor && info->vectorType != _AESVectorTypeNone) {
+#if CRYPTOR_USE_SMT_PTR
+        if (info->vectorType == _AESVectorTypeSingle) {
+            
+            info->encryptVector = std::shared_ptr<YZHCodeData>(_copyCodeData(info->inVertor.get()));
+            info->decryptVector = std::shared_ptr<YZHCodeData>(_copyCodeData(info->inVertor.get()));
+        }
+        else if (info->vectorType == _AESVectorTypePublic) {
+            info->encryptVector = info->decryptVector = std::shared_ptr<YZHCodeData>(_copyCodeData(info->inVertor.get()));
+        }
+        else if (info->vectorType == _AESVectorTypeNone) {
+            info->encryptVector = info->decryptVector = std::shared_ptr<YZHCodeData>();
+        }
+#else
+        if (info->encryptVector == info->decryptVector) {
+            if (info->encryptVector) {
+                delete info->encryptVector;
+                info->encryptVector = info->decryptVector = NULL;
+            }
+        }
+        else {
+            delete info->encryptVector;
+            info->encryptVector = NULL;
+            delete info->decryptVector;
+            info->decryptVector = NULL;
+        }
+        
+        if (info->vectorType == _AESVectorTypeSingle) {
+            info->encryptVector = _copyCodeData(info->inVertor);
+            info->decryptVector = _copyCodeData(info->inVertor);
+        }
+        else if (info->vectorType == _AESVectorTypePublic) {
+            info->encryptVector = info->decryptVector = _copyCodeData(info->inVertor);
+        }
+#endif
+    }
+    if (info->key) {
+#if CRYPTOR_USE_SMT_PTR
+        std::shared_ptr<YZHCodeData> key = info->key;
+#else
+        YZHCodeData *key = info->key;
+#endif
+        uint8_t *ptrKey = key->bytes();
+        int32_t keyBits = TYPE_LS((int32_t)info->key->dataSize(), 3);
+        openSSL::AES_set_encrypt_key(ptrKey, keyBits, &info->AESEncryptKey);
+        openSSL::AES_set_decrypt_key(ptrKey, keyBits, &info->AESDecryptKey);
+    }
+}
+
+BOOL YZHAESCryptor::isValidCryptor()
+{
+    struct _YZHAESCryptorInfo *info = (struct _YZHAESCryptorInfo*)ptrCryptorInfo;
+#if CRYPTOR_USE_SMT_PTR
+    BOOL OK = _checkKey(info->key.get(), info->keyType, NULL);
+#else
+    BOOL OK = _checkKey(info->key, info->keyType, NULL);
+#endif
+    return OK;
+}
+
+YZHAESKeyType YZHAESCryptor::getKeyType()
+{
+    struct _YZHAESCryptorInfo *info = (struct _YZHAESCryptorInfo*)ptrCryptorInfo;
+    return info->keyType;
+}
+
+YZHCryptMode YZHAESCryptor::getCryptMode()
+{
+    struct _YZHAESCryptorInfo *info = (struct _YZHAESCryptorInfo*)ptrCryptorInfo;
+    return info->cryptMode;
 }
 
 //http://www.seacha.com/tools/aes.html
-- (NSData*)crypt:(YZHCryptOperation)operation input:(NSData*)input
+BOOL YZHAESCryptor::crypt(YZHCryptOperation cryptOperation, YZHCodeData *input, YZHCodeData *output)
 {
-    return [self crypt:operation input:input paddingType:AESPaddingTypePKCS7 paddingBlock:self.paddingBlock];
+    struct _YZHAESCryptorInfo *info = (struct _YZHAESCryptorInfo*)ptrCryptorInfo;
+
+    return crypt(cryptOperation, input, output, AESPaddingTypePKCS7, info->paddingBlock);
 }
 
-- (NSData*)crypt:(YZHCryptOperation)operation input:(NSData*)input paddingType:(AESPaddingType)paddingType paddingBlock:(YZHAESCryptDataPaddingBlock)paddingBlock
+BOOL YZHAESCryptor::crypt(YZHCryptOperation cryptOperation, YZHCodeData *input, YZHCodeData *output, AESPaddingType paddingType, YZHAESCryptDataPaddingBlock paddingBlock)
 {
-    if (input.length <= 0 || [self isValidCryptor] == NO) {
-        return nil;
-    }
-    NSInteger length = input.length;
-    NSMutableData *output = [NSMutableData data];
-    int offset = self.offset;
     
-    if (operation == YZHCryptOperationEncrypt) {
-        size_t outLength = self.encryptSizeBlock(length, paddingType);
-        output = [NSMutableData dataWithLength:outLength];
-        
-        if (paddingBlock) {
-            input = paddingBlock(self, input, paddingType, operation);
+    if (input == NULL || output == NULL || NO ==  isValidCryptor()) {
+        return NO;
+    }
+    
+    int64_t inputDataSize = input->dataSize();
+    int64_t inputBufferSize = input->bufferSize();
+    int64_t outputBufferSize = output->bufferSize();
+    if (inputDataSize <= 0 || outputBufferSize < inputDataSize) {
+        return NO;
+    }
+
+    struct _YZHAESCryptorInfo *info = (struct _YZHAESCryptorInfo*)ptrCryptorInfo;
+
+    int offset = info->offset;
+    
+    int64_t cryptSize = inputDataSize;
+    if (cryptOperation == YZHCryptOperationEncrypt) {
+        cryptSize = info->encryptSizeBlock(inputDataSize, paddingType);
+        if (inputBufferSize < cryptSize || outputBufferSize < cryptSize) {
+            return NO;
         }
         
-        ((_AES_CFB)*(self->_ptr_func))((uint8_t*)input.bytes, (uint8_t*)output.bytes, input.length, self->_ptrAESKey, (uint8_t*)(_encryptVector.bytes), &offset, AES_ENCRYPT);
+        if (paddingBlock) {
+            paddingBlock(this, input, paddingType, cryptOperation);
+            //在经过paddingBlock后有可能改变input->dataSize != cryptSize;
+            cryptSize = MIN(cryptSize, input->dataSize());
+        }
+        
+        uint8_t *vectorPtr = info->encryptVector.get() ? info->encryptVector->bytes() : NULL;
+        
+        ((_AES_CFB)*(info->ptr_func))((uint8_t*)input->bytes(), (uint8_t*)output->bytes(), (size_t)cryptSize, info->ptrAESKey, (uint8_t*)vectorPtr, &offset, AES_ENCRYPT);
     }
     else {
-        output = [NSMutableData dataWithLength:length];
-        
-        ((_AES_CFB)*(self->_ptr_func))((uint8_t*)input.bytes, (uint8_t*)output.bytes, input.length, self->_ptrAESKey, (uint8_t*)(_decryptVector.bytes), &offset, AES_DECRYPT);
+        uint8_t *vectorPtr = info->decryptVector.get() ? info->decryptVector->bytes() : NULL;
+
+        ((_AES_CFB)*(info->ptr_func))((uint8_t*)input->bytes(), (uint8_t*)output->bytes(), (size_t)inputDataSize, info->ptrAESKey, (uint8_t*)vectorPtr, &offset, AES_DECRYPT);
         
         if (paddingBlock) {
-            output = [paddingBlock(self, output, paddingType, operation) mutableCopy];
-        }
-    }
-    self.offset = offset;
-    
-    return output;//[output copy];
-}
-
-- (void)crypt:(YZHCryptOperation)operation input:(uint8_t*)input inSize:(int64_t)inSize output:(uint8_t*)output outSize:(int64_t*)outSize
-{
-    [self crypt:operation input:input inSize:inSize output:output outSize:outSize paddingType:AESPaddingTypePKCS7 paddingBlock:self.paddingBlock];
-}
-
-- (void)crypt:(YZHCryptOperation)operation input:(uint8_t*)input inSize:(int64_t)inSize output:(uint8_t*)output outSize:(int64_t*)outSize paddingType:(AESPaddingType)paddingType paddingBlock:(YZHAESCryptDataPaddingBlock)paddingBlock
-{
-    if (input == nullptr || inSize <= 0 || output == nullptr || *outSize < inSize || [self isValidCryptor] == NO) {
-        return ;
-    }
-    
-    int offset = self.offset;
-    
-    int64_t cryptSize = inSize;
-    if (operation == YZHCryptOperationEncrypt) {
-        cryptSize = self.encryptSizeBlock((NSUInteger)inSize, paddingType);
-
-        uint8_t *inPtr = input;
-        NSData *inData = nil;
-        if (paddingBlock) {
-            inData = [NSData dataWithBytesNoCopy:input length:(NSUInteger)inSize freeWhenDone:NO];
-            inData = paddingBlock(self, inData, paddingType, operation);
-            inPtr = (uint8_t*)inData.bytes;
+            output->seekTo(cryptSize);
+            paddingBlock(this, output, paddingType, cryptOperation);
             
-            cryptSize = MIN(cryptSize, inData.length);
-        }
-        
-        ((_AES_CFB)*(self->_ptr_func))((uint8_t*)inPtr, (uint8_t*)output, (size_t)cryptSize, self->_ptrAESKey, (uint8_t*)(_encryptVector.bytes), &offset, AES_ENCRYPT);
-    }
-    else {
-        
-        ((_AES_CFB)*(self->_ptr_func))((uint8_t*)input, (uint8_t*)output, (size_t)cryptSize, self->_ptrAESKey, (uint8_t*)(_decryptVector.bytes), &offset, AES_DECRYPT);
-        
-        if (paddingBlock) {
-            NSData *outData = [NSData dataWithBytesNoCopy:output length:(NSUInteger)cryptSize freeWhenDone:NO];
-            outData = paddingBlock(self, outData, paddingType, operation);
-            cryptSize = MIN(cryptSize, outData.length);
-//            memcpy(output, outData.bytes, cryptSize);
-            memmove(output, outData.bytes, (size_t)cryptSize);
+            cryptSize = MIN(cryptSize, output->dataSize());
         }
     }
-    self.offset = offset;
+    info->offset = offset;
     
-    if (outSize) {
-        *outSize = cryptSize;
-    }
+    output->truncateToWithSeek(cryptSize, YZHDataSeekTypeEND);
+    return YES;
 }
 
-@end

@@ -1,14 +1,16 @@
 //
-//  YZHCoder.m
-//  PBDemo
+//  YZHCoderC.m
+//  YZHKVDemo
 //
-//  Created by yuan on 2019/5/26.
-//  Copyright © 2019年 yuan. All rights reserved.
+//  Created by yuan on 2019/9/6.
+//  Copyright © 2019 yuan. All rights reserved.
 //
 
 #import "YZHCoder.h"
 #import "macro.h"
 #import <objc/runTime.h>
+#import "YZHMachTimeUtils.h"
+#import "NSObject+YZHCodeToTopSuperClass.h"
 
 
 #define BYTE_CNT_FIELD_LEN      (4)
@@ -18,38 +20,46 @@
 #define TYPE_FIELD_LEN          (7 - BYTE_CNT_FIELD_LEN)
 #define TYPE_FIELD_MASK         (TYPE_LS(1, TYPE_FIELD_LEN) - 1)
 
+#define INTEGER_TO_ZIGZAG(N)    (((N) << 1) ^ ((N) >> 63))
+#define ZIGZAG_TO_INTEGER(N)    ((((uint64_t)N) >> 1 ) ^ (-((N) & 1)))
 
-#define YZH_CODER_ESTIMATE_RESERVED_BYTE_CNT     (3)
+
+#define YZH_CODER_ESTIMATE_RESERVED_BYTE_CNT        (4)
+#define YZH_CODER_ESTIMATE_RESERVED_MUCH_NOT_MOVE   (0)
 
 
 
-#define _SUPPRESS_AVAILABILITY_BEGIN         _Pragma("clang diagnostic push") \
+#define _SUPPRESS_AVAILABILITY_BEGIN        _Pragma("clang diagnostic push") \
                                             _Pragma("clang diagnostic ignored \"-Wunsupported-availability-guard\"")\
                                             _Pragma("clang diagnostic ignored \"-Wunguarded-availability-new\"")
 
 #define _SUPPRESS_AVAILABILITY_END           _Pragma("clang diagnostic pop")
 
 #define _AVAILABLE_GUARD(platform, os, future, conditions, IfAvailable, IfUnavailable) \
-                                            _SUPPRESS_AVAILABILITY_BEGIN \
-                                            if (__builtin_available(platform os, future) && conditions) {\
-                                                _SUPPRESS_AVAILABILITY_END \
-                                                if (@available(platform os, future)) { \
-                                                    IfAvailable \
-                                                } \
-                                                else { \
-                                                    IfUnavailable \
-                                                } \
-                                            } \
-                                            else { \
-                                                _SUPPRESS_AVAILABILITY_END \
-                                                IfUnavailable \
-                                            } \
+                                             _SUPPRESS_AVAILABILITY_BEGIN \
+                                             if (__builtin_available(platform os, future) && conditions) {\
+                                                 _SUPPRESS_AVAILABILITY_END \
+                                                 if (@available(platform os, future)) { \
+                                                     IfAvailable \
+                                                 } \
+                                                 else { \
+                                                     IfUnavailable \
+                                                 } \
+                                             } \
+                                             else { \
+                                                 _SUPPRESS_AVAILABILITY_END \
+                                                 IfUnavailable \
+                                             } \
 
 
 #define _IOS_AVAILABLE_GUARD(os, conditions, IfAvailable, IfUnavailable)     \
 _AVAILABLE_GUARD(iOS, os, *, conditions, IfAvailable, IfUnavailable)
 
 
+
+NSString *const _YZHCoderErrorDomain = @"YZHCoderErrorDomain";
+
+typedef void(^_YZHCoderEstimateReservedEncodeBlock)(YZHMutableCodeData *codeData);
 
 
 template <typename F, typename T>
@@ -85,34 +95,34 @@ public:
         encodeToBuffer((uint8_t*)dt.bytes);
         return dt;
     }
-
+    
 };
 
+static inline void _encodeObject(id object, Class topSuperClass, YZHMutableCodeData *codeData, NSError **error);
 
-/**********************************************************************
- *<#desc#>
- ***********************************************************************/
-@implementation NSObject (YZHCoderToTopEdgeSuperClass)
-
--(Class)hz_getObjectCodeTopEdgeSuperClass
+BOOL objectIsKindOfClass(id object, Class cls)
 {
-    Class objCls = object_getClass(self);
-    if ([objCls respondsToSelector:@selector(hz_objectCodeTopEdgeSuperClass)]) {
-        return [objCls hz_objectCodeTopEdgeSuperClass];
+//    return [object isKindOfClass:cls];
+    Class objCls = [object class];
+    while (objCls) {
+        objCls = class_getSuperclass(objCls);
+        if (objCls == cls) {
+            return YES;
+        }
     }
-    return nil;
+    return NO;
 }
 
-@end
-
-
-/**********************************************************************
- *YZHCoder
- ***********************************************************************/
-@interface YZHCoder ()
-@end
-
-@implementation YZHCoder
+BOOL classIsSubclassOfClass(Class sub, Class cls)
+{
+    while (sub) {
+        sub = class_getSuperclass(sub);
+        if (sub == cls) {
+            return YES;
+        }
+    }
+    return NO;
+}
 
 static inline int64_t integerToZigzag(int64_t n)
 {
@@ -124,12 +134,7 @@ static inline int64_t zigzagToInteger(int64_t n)
     return (((uint64_t)n) >> 1 ) ^ (-(n & 1));
 }
 
-+ (NSInteger)_encodeInt64Size:(int64_t)val
-{
-    return TYPEULL_BYTES_N(val);
-}
-
-+ (NSData*)_encodeInt64:(int64_t)val
+static inline NSData* _encodeInt64(int64_t val)
 {
     uint8_t len = TYPEULL_BYTES_N(val);
     NSMutableData *dt = [NSMutableData dataWithLength:len];
@@ -140,7 +145,7 @@ static inline int64_t zigzagToInteger(int64_t n)
     return dt;//[dt copy];
 }
 
-+ (uint8_t)_encodeInt64:(int64_t)val toBuffer:(uint8_t*)buffer
+static inline uint8_t _encodeInt64ToBuffer(int64_t val, uint8_t* buffer)
 {
     if (buffer == NULL) {
         return 0;
@@ -152,7 +157,7 @@ static inline int64_t zigzagToInteger(int64_t n)
     return len;
 }
 
-+ (int64_t)_decodeInt64:(uint8_t*)ptr len:(uint8_t)len
+static inline int64_t _decodeInt64(uint8_t *ptr, uint8_t len)
 {
     int64_t val = 0;
     for (uint8_t i = 0; i < len; ++i) {
@@ -162,14 +167,14 @@ static inline int64_t zigzagToInteger(int64_t n)
     return val;
 }
 
-+ (NSData*)_encodeDouble:(double)val
+static inline NSData* _encodeDouble(double val)
 {
     Converter<double, uint64_t> converter;
     converter.from = val;
     return converter.encodeToData();
 }
 
-+ (void)_encodeDouble:(double)val toBuffer:(uint8_t*)buffer
+static inline void _encodeDoubleToBuffer(double val, uint8_t *buffer)
 {
     if (buffer == NULL) {
         return;
@@ -179,7 +184,7 @@ static inline int64_t zigzagToInteger(int64_t n)
     converter.encodeToBuffer(buffer);
 }
 
-+ (double)_decodeDouble:(uint8_t*)ptr
+static inline double _decodeDouble(uint8_t *ptr)
 {
     Converter<double, uint64_t> converter;
     converter.decodeFromBuffer(ptr);
@@ -187,14 +192,14 @@ static inline int64_t zigzagToInteger(int64_t n)
 }
 
 
-+ (NSData*)_encodeFloat:(float)val
+static inline NSData* _encodeFloat(float val)
 {
     Converter<float, uint32_t> converter;
     converter.from = val;
     return converter.encodeToData();
 }
 
-+ (void)_encodeFloat:(float)val toBuffer:(uint8_t*)buffer
+static inline void _encodeFloatToBuffer(float val, uint8_t *buffer)
 {
     if (buffer == NULL) {
         return;
@@ -204,7 +209,7 @@ static inline int64_t zigzagToInteger(int64_t n)
     converter.encodeToBuffer(buffer);
 }
 
-+ (float)_decodeFloat:(uint8_t*)ptr
+static inline float _decodeFloat(uint8_t *ptr)
 {
     Converter<float, uint32_t> converter;
     converter.decodeFromBuffer(ptr);
@@ -212,7 +217,7 @@ static inline int64_t zigzagToInteger(int64_t n)
 }
 
 
-+ (NSData*)_archivedDataWithObject:(id)object
+static inline NSData* _archivedDataWithObject(id object)
 {
     NSData *data = nil;
     if ([object conformsToProtocol:@protocol(NSCoding)]) {
@@ -223,7 +228,7 @@ static inline int64_t zigzagToInteger(int64_t n)
                 data = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:&error];
             }, {});
             
-            NSLog(@"error=%@",error);
+//            NSLog(@"error=%@",error);
         }
         if (data == nil && [NSKeyedArchiver respondsToSelector:@selector(archivedDataWithRootObject:)]) {
             data = [NSKeyedArchiver archivedDataWithRootObject:object];
@@ -232,7 +237,7 @@ static inline int64_t zigzagToInteger(int64_t n)
     return data;
 }
 
-+ (id)_unarchiveObjectWithData:(NSData*)data withClass:(Class)cls
+static inline id _unarchiveObjectWithData(NSData *data, Class cls)
 {
     if (data == nil) {
         return nil;
@@ -244,7 +249,7 @@ static inline int64_t zigzagToInteger(int64_t n)
             _IOS_AVAILABLE_GUARD(11.0, YES, {
                 object = [NSKeyedUnarchiver unarchivedObjectOfClass:cls fromData:data error:&error];
             }, {});
-            NSLog(@"error=%@",error);
+//            NSLog(@"error=%@",error);
         }
         
         if (object == nil && [NSKeyedUnarchiver respondsToSelector:@selector(unarchiveObjectWithData:)]) {
@@ -254,7 +259,7 @@ static inline int64_t zigzagToInteger(int64_t n)
     return object;
 }
 
-+ (NSArray<NSString*>*)_propertiesForClass:(Class)cls
+static inline NSArray<NSString*>* _propertiesForClass(Class cls)
 {
     uint32_t count = 0;
     objc_property_t *properties = class_copyPropertyList(cls, &count);
@@ -281,16 +286,32 @@ static inline int64_t zigzagToInteger(int64_t n)
     return list;//[list copy];
 }
 
+static inline void _mergeEncodeObjectWithKey(id object, Class topSuperClass, id key, YZHMutableCodeData *codeData)
+{
+    int64_t start = codeData->currentSeek();
+    _encodeObject(key, NULL, codeData, NULL);
+    int64_t keyOffset = codeData->currentSeek();
+    if (keyOffset - start <= 0) {
+        codeData->truncateToWithSeek(start, YZHDataSeekTypeEND);
+        return;
+    }
+    _encodeObject(object, topSuperClass, codeData, NULL);
+    int64_t objectOffset = codeData->currentSeek();
+    if (objectOffset - keyOffset <= 0) {
+        codeData->truncateToWithSeek(start, YZHDataSeekTypeEND);
+    }
+}
+
 /*
  *这个是不对参数object、from、topEdgeSupperClass检查
  */
-+ (void)_recursionObjectWithoutCheck:(id)object fromClass:(Class)from topEdgeSuperClass:(Class)topEdgeSuperClass intoCodeData:(YZHMutableCodeData*)codeData
+static inline void _recursionObjectWithoutCheck(id object, Class from, Class topSuperClass, YZHMutableCodeData *codeData)
 {
     if (codeData == nil) {
         return;
     }
-    if (topEdgeSuperClass && [from isEqual:topEdgeSuperClass] == NO) {
-        [self _recursionObjectWithoutCheck:object fromClass:[from superclass] topEdgeSuperClass:topEdgeSuperClass intoCodeData:codeData];
+    if (topSuperClass && [from isEqual:topSuperClass] == NO) {
+        _recursionObjectWithoutCheck(object, [from superclass], topSuperClass, codeData);
     }
     
     NSArray *codeKeyPaths = nil;
@@ -298,257 +319,383 @@ static inline int64_t zigzagToInteger(int64_t n)
         codeKeyPaths = [from hz_objectCodeKeyPaths];
     }
     else {
-        codeKeyPaths = [self _propertiesForClass:from];
+        codeKeyPaths = _propertiesForClass(from);
     }
     
     [codeKeyPaths enumerateObjectsUsingBlock:^(id  _Nonnull key, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([object respondsToSelector:NSSelectorFromString(key)]) {
             id propertyValue = [object valueForKeyPath:key];
             
-            [self _mergeEncodeObject:propertyValue topEdgeSuperClass:[propertyValue hz_getObjectCodeTopEdgeSuperClass] withKey:key intoCodeData:codeData];
+            _mergeEncodeObjectWithKey(propertyValue, [propertyValue hz_codeToTopSuperClass], key, codeData);
         }
     }];
 }
 
-+ (void)_encodeObject:(id)object fromClass:(Class)from topEdgeSuperClass:(Class)topEdgeSuperClass intoCodeData:(YZHMutableCodeData*)codeData
+static inline void _encodeObjectFromClassToTopSuperClassIntoCodeData(id object, Class from, Class topSuperClass,YZHMutableCodeData *codeData)
 {
     if (!object) {
         return;
     }
     
-    if (from == NULL || [object isKindOfClass:from] == NO) {
+    if (from == NULL || objectIsKindOfClass(object, from) == NO) {
         from = object_getClass(object);
     }
     
-    if (topEdgeSuperClass == NULL) {
-        topEdgeSuperClass = from;
+    if (topSuperClass == NULL) {
+        topSuperClass = from;
     }
     else {
-        if ([object isKindOfClass:topEdgeSuperClass] == NO || [from isSubclassOfClass:topEdgeSuperClass] == NO) {
-            topEdgeSuperClass = NULL;
+        if (objectIsKindOfClass(object, topSuperClass) == NO ||
+            classIsSubclassOfClass(from, topSuperClass) == NO ) {
+            topSuperClass = NULL;
         }
     }
-    [self _recursionObjectWithoutCheck:object fromClass:from topEdgeSuperClass:topEdgeSuperClass intoCodeData:codeData];
+    _recursionObjectWithoutCheck(object, from, topSuperClass, codeData);
 }
 
-/*
- *这个是不对参数object、from、topEdgeSupperClass检查
- */
-//+ (NSMutableData*)_recursionObjectWithoutCheck:(id)object fromClass:(Class)from topEdgeSuperClass:(Class)topEdgeSuperClass
-//{
-//    YZHMutableCodeData *codeData = [[YZHMutableCodeData alloc] init];
-//    [self _recursionObjectWithoutCheck:object fromClass:from topEdgeSuperClass:topEdgeSuperClass intoCodeData:codeData];
-//    return [codeData mutableCopyData];
-//}
-
-//+ (NSData*)_encodeObject:(id)object fromClass:(Class)from topEdgeSuperClass:(Class)topEdgeSuperClass
-//{
-//    YZHMutableCodeData *codeData = [[YZHMutableCodeData alloc] init];
-//    [self _encodeObject:object fromClass:from topEdgeSuperClass:topEdgeSuperClass intoCodeData:codeData];
-//    return [codeData copyData];
-//}
-
-//+ (NSData*)_mergeEncodeObject:(id)object topEdgeSuperClass:(Class)topEdgeSuperClass withKey:(id)key
-//{
-//    YZHMutableCodeData *codeData = [[YZHMutableCodeData alloc] init];
-//    [self _mergeEncodeObject:object topEdgeSuperClass:topEdgeSuperClass withKey:key intoCodeData:codeData];
-//    return [codeData copyData];
-//}
-
-+ (void)_mergeEncodeObject:(id)object topEdgeSuperClass:(Class)topEdgeSuperClass withKey:(id)key intoCodeData:(YZHMutableCodeData*)codeData
+static inline void _packetHeader(int64_t payloadLength, YZHCodeItemType codeType,YZHMutableCodeData *codeData)
 {
-    int64_t start = [codeData currentSeek];
-    [self _encodeObject:key topEdgeSuperClass:nil intoCodeData:codeData];
-    int64_t keyOffset = [codeData currentSeek];
-    if (keyOffset - start <= 0) {
-        [codeData truncateTo:start];
-        return;
+    uint8_t type = TYPE_LS(1, 7);
+    int64_t len = payloadLength;
+    uint8_t cnt = TYPEULL_BYTES_N(len);
+    BOOL haveLoadLength = YES;
+    if (codeType == YZHCodeItemTypeReal || codeType == YZHCodeItemTypeRealF || codeType == YZHCodeItemTypeInteger) {
+        cnt = len;
+        haveLoadLength = NO;
     }
-    [self _encodeObject:object topEdgeSuperClass:topEdgeSuperClass intoCodeData:codeData];
-    int64_t objectOffset = [codeData currentSeek];
-    if (objectOffset - keyOffset <= 0) {
-        [codeData truncateTo:start];
-    }
-}
-
-+ (void)_estimateReservedEncodeObjectWithCodeType:(YZHCodeItemType)codeType intoCodeData:(YZHMutableCodeData*)codeData withEncodeBlock:(void(^)(YZHMutableCodeData *codeData))encodeBlock
-{
-    int64_t oldSize = [codeData dataSize];
-    [codeData ensureRemSize:YZH_CODER_ESTIMATE_RESERVED_BYTE_CNT];
-    int64_t startOffset = oldSize + YZH_CODER_ESTIMATE_RESERVED_BYTE_CNT;
-    [codeData seekTo:startOffset];
+    type |= TYPE_AND(cnt - 1, BYTE_CNT_FIELD_MASK);
+    type |= TYPE_LS(TYPE_AND(codeType, TYPE_FIELD_MASK), TYPE_FIELD_OFFSET);
     
+    codeData->appendWriteByte(type);
+    
+    if (haveLoadLength) {
+        codeData->ensureRemSize(cnt);
+        int64_t startOffset = codeData->currentSeek();
+        _encodeInt64ToBuffer(len, codeData->bytes() + startOffset);
+        codeData->seekTo(startOffset + cnt);
+    }
+}
+
+
+static inline NSData* _unpackData(NSData *data, YZHCodeItemType *codeType, int8_t *len, int64_t *size, int64_t *offset)
+{
+    NSRange r = unpackBuffer((uint8_t*)data.bytes, data.length, codeType, len, size, offset);
+    if (r.location == NSNotFound) {
+        return nil;
+    }
+    return [data subdataWithRange:r];
+}
+
+static inline void _estimateReservedEncodeObjectWithCodeType(YZHCodeItemType codeType, YZHMutableCodeData *codeData, _YZHCoderEstimateReservedEncodeBlock encodeBlock)
+{
+    int64_t oldSize = codeData->currentSeek();
+    codeData->ensureRemSize(YZH_CODER_ESTIMATE_RESERVED_BYTE_CNT);
+    int64_t startOffset = oldSize + YZH_CODER_ESTIMATE_RESERVED_BYTE_CNT;
+    codeData->seekTo(startOffset);
+
     if (encodeBlock) {
         encodeBlock(codeData);
     }
-    
-    int64_t endOffset = [codeData dataSize];
+
+    int64_t endOffset = codeData->currentSeek();
     int64_t addSize = endOffset - startOffset;
     if (addSize > 0) {
         int8_t payloadHeaderSize = TYPEULL_BYTES_N(addSize) + 1;
         int8_t shift = payloadHeaderSize - YZH_CODER_ESTIMATE_RESERVED_BYTE_CNT;
         if (shift != 0) {
             if (shift > 0) {
-                [codeData ensureRemSize:shift];
+                codeData->ensureRemSize(shift);
             }
-            memmove(codeData.bytes + oldSize + payloadHeaderSize, codeData.bytes + startOffset, codeData.dataSize - startOffset);
+            memmove(codeData->bytes() + oldSize + payloadHeaderSize, codeData->bytes() + startOffset, (size_t)addSize);
         }
-        [codeData seekTo:oldSize];
-        [self _packetHeader:addSize codeType:codeType intoCodeData:codeData];
-//        [codeData seekTo:oldSize + payloadHeaderSize + addSize];
-        [codeData truncateTo:oldSize + payloadHeaderSize + addSize];
+        codeData->seekTo(oldSize);
+        _packetHeader(addSize, codeType, codeData);
+        codeData->truncateToWithSeek(oldSize + payloadHeaderSize + addSize, YZHDataSeekTypeEND);
     }
     else {
-        [codeData truncateTo:oldSize];
+        codeData->truncateToWithSeek(oldSize, YZHDataSeekTypeEND);
     }
 }
-    
 
-+ (void)_encodeObject:(id)object topEdgeSuperClass:(Class)topEdgeSuperClass intoCodeData:(YZHMutableCodeData*)codeData
+
+static inline void _encodeObject(id object, Class topSuperClass, YZHMutableCodeData *codeData, NSError **error)
 {
-    if (object == nil || codeData == nil) {
+    if (object == nil || codeData == nullptr) {
+        if (error) {
+            *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorPtrNull userInfo:nil];
+        }
         return;
     }
     
-    if ([object isKindOfClass:[NSNumber class]]) {
+    if (objectIsKindOfClass(object, [NSNumber class])) {
         NSNumber *num = object;
         int8_t type = num.objCType ? num.objCType[0] : 0;
         if (type == 'd') {
             double val = [num doubleValue];
-            [self encodeDouble:val intoCodeData:codeData];
+            encodeDoubleIntoCodeData(val, codeData);
         }
         else if (type == 'f') {
             float val = [num floatValue];
-            [self encodeFloat:val intoCodeData:codeData];
+            encodeFloatIntoCodeData(val, codeData);
         }
         else {
             int64_t val = [num longLongValue];
-            [self encodeInteger:val intoCodeData:codeData];
+            encodeIntegerIntoCodeData(val, codeData);
         }
     }
-    else if ([object isKindOfClass:[NSString class]]) {
+    else if (objectIsKindOfClass(object, [NSString class])) {
         NSString *text = object;
-        [self encodeString:text intoCodeData:codeData];
+        encodeStringIntoCodeData(text, codeData);
     }
-    else if ([object isKindOfClass:[NSData class]]) {
+    else if (objectIsKindOfClass(object, [NSData class])) {
         NSData *data = object;
-        return [self packetData:data codeType:YZHCodeItemTypeBlob intoCodeData:codeData];
+        encodeDataIntoCodeData(data, codeData);
     }
-    else if ([object isKindOfClass:[NSArray class]]) {
+    else if (objectIsKindOfClass(object, [NSArray class])) {
         NSArray *array = object;
         
-        [self _estimateReservedEncodeObjectWithCodeType:YZHCodeItemTypeArray intoCodeData:codeData withEncodeBlock:^(YZHMutableCodeData *codeData) {
+        _estimateReservedEncodeObjectWithCodeType(YZHCodeItemTypeArray, codeData, ^(YZHMutableCodeData *codeData) {
             [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                [self encodeObject:obj intoCodeData:codeData];
+                encodeObjectIntoCodeData(obj, codeData, NULL);
             }];
-        }];
+        });
     }
-    else if ([object isKindOfClass:[NSDictionary class]]) {
+    else if (objectIsKindOfClass(object, [NSDictionary class])) {
         NSDictionary *dict = object;
         
-        [self _estimateReservedEncodeObjectWithCodeType:YZHCodeItemTypeDictionary intoCodeData:codeData withEncodeBlock:^(YZHMutableCodeData *codeData) {
+        _estimateReservedEncodeObjectWithCodeType(YZHCodeItemTypeDictionary, codeData, ^(YZHMutableCodeData *codeData) {
             [dict enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-                [self _mergeEncodeObject:obj topEdgeSuperClass:[obj hz_getObjectCodeTopEdgeSuperClass] withKey:key intoCodeData:codeData];
+                
+                _mergeEncodeObjectWithKey(obj, [obj hz_codeToTopSuperClass], key, codeData);
             }];
-        }];
+        });
     }
-    else if ([object isKindOfClass:[NSObject class]]) {
-        [self _estimateReservedEncodeObjectWithCodeType:YZHCodeItemTypeObject intoCodeData:codeData withEncodeBlock:^(YZHMutableCodeData *codeData) {
+    else if (objectIsKindOfClass(object, [NSObject class])) {
+        _estimateReservedEncodeObjectWithCodeType(YZHCodeItemTypeObject, codeData, ^(YZHMutableCodeData *codeData) {
             
-            uint64_t startOffset = codeData.dataSize;
+            uint64_t startOffset = codeData->currentSeek();
             
             Class cls = object_getClass(object);
             NSString *clsName = [NSString stringWithUTF8String:class_getName(cls)];
-            [self encodeString:clsName intoCodeData:codeData];
+            encodeStringIntoCodeData(clsName, codeData);
             
-            uint64_t startObjOffset = codeData.dataSize;
+            uint64_t startObjOffset = codeData->currentSeek();
             
-            [self _estimateReservedEncodeObjectWithCodeType:YZHCodeItemTypeBlob intoCodeData:codeData withEncodeBlock:^(YZHMutableCodeData *codeData) {
+            _estimateReservedEncodeObjectWithCodeType(YZHCodeItemTypeBlob, codeData, ^(YZHMutableCodeData *codeData) {
                 if ([object conformsToProtocol:@protocol(NSCoding)]) {
-                    NSData *objDt = [self _archivedDataWithObject:object];
-                    [codeData appendWriteData:objDt];
+                    NSData *objDt = _archivedDataWithObject(object);
+                    codeData->appendWriteData(objDt);
                 }
                 else {
-                    [self _encodeObject:object fromClass:object_getClass(object) topEdgeSuperClass:topEdgeSuperClass intoCodeData:codeData];
+                    _encodeObjectFromClassToTopSuperClassIntoCodeData(object, object_getClass(object), topSuperClass, codeData);
                 }
-            }];
+            });
             
-            int64_t endObjOffset = codeData.dataSize;
+            int64_t endObjOffset = codeData->currentSeek();
             if (endObjOffset - startObjOffset <= 0) {
-                [codeData truncateTo:startOffset];
+                codeData->truncateToWithSeek(startOffset, YZHDataSeekTypeEND);
             }
-        }];
+        });
     }
     else {
-        
+        if (*error) {
+            *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorTypeError userInfo:nil];
+        }
     }
 }
 
-+ (NSData*)encodeObject:(id)object
+NSData *_encodeObjectToTopSuperClass(id object, Class topSuperClass, NSError **error)
 {
-    Class topEdgeClass = [object hz_getObjectCodeTopEdgeSuperClass];
-    return [self encodeObject:object topEdgeSuperClass:topEdgeClass];
+    YZHMutableCodeData codeData;
+    _encodeObject(object, topSuperClass, &codeData, error);
+    return codeData.copyData();
 }
 
-+ (NSData*)encodeObject:(id)object topEdgeSuperClass:(Class)topEdgeSuperClass
+NSData *encodeObject(id object)
 {
-    return [self _encodeObject:object topEdgeSuperClass:topEdgeSuperClass];
+    Class topSuperClass = [object hz_codeToTopSuperClass];
+    return _encodeObjectToTopSuperClass(object, topSuperClass, NULL);
 }
 
-+ (void)encodeObject:(id)object intoCodeData:(YZHMutableCodeData*)codeData
+NSData *encodeObjectToTopSuperClass(id object, Class topSuperClass, NSError **error)
 {
-    Class topEdgeClass = [object hz_getObjectCodeTopEdgeSuperClass];
-    [self _encodeObject:object topEdgeSuperClass:topEdgeClass intoCodeData:codeData];
+    return _encodeObjectToTopSuperClass(object, topSuperClass, error);
 }
 
-+ (void)encodeObject:(id)object topEdgeSuperClass:(Class)topEdgeSuperClass intoCodeData:(YZHMutableCodeData*)codeData
+void encodeObjectIntoCodeData(id object, YZHMutableCodeData *codeData, NSError **error)
 {
-    [self _encodeObject:object topEdgeSuperClass:topEdgeSuperClass intoCodeData:codeData];
+    Class topSuperClass = [object hz_codeToTopSuperClass];
+    _encodeObject(object, topSuperClass, codeData, error);
 }
 
-+ (NSData*)_encodeObject:(id)object topEdgeSuperClass:(Class)topEdgeSuperClass
+void encodeObjectToTopSuperClassIntoCodeData(id object, Class topSuperClass, YZHMutableCodeData *codeData, NSError **error)
 {
-    YZHMutableCodeData *codeData = [[YZHMutableCodeData alloc] init];
-    [self _encodeObject:object topEdgeSuperClass:topEdgeSuperClass intoCodeData:codeData];
-    return [codeData copyData];
+    _encodeObject(object, topSuperClass, codeData, error);
+}
+
+void encodeFloatIntoCodeData(float val, YZHMutableCodeData *codeData)
+{
+    if (codeData == NULL) {
+        return;
+    }
+    
+    uint8_t type = TYPE_LS(1, 7);
+    uint8_t cnt = sizeof(val);
+    YZHCodeItemType codeType = YZHCodeItemTypeRealF;
+    
+    type |= TYPE_AND(cnt - 1, BYTE_CNT_FIELD_MASK);
+    type |= TYPE_LS(TYPE_AND(codeType, TYPE_FIELD_MASK), TYPE_FIELD_OFFSET);
+    
+    codeData->appendWriteByte(type);
+    
+    codeData->ensureRemSize(cnt);
+    
+    int64_t startOffset = codeData->currentSeek();
+    _encodeFloatToBuffer(val, codeData->bytes() + startOffset);
+    codeData->seekTo(startOffset + cnt);
+}
+
+void encodeDoubleIntoCodeData(double val, YZHMutableCodeData *codeData)
+{
+    if (codeData == NULL) {
+        return;
+    }
+    uint8_t type = TYPE_LS(1, 7);
+    uint8_t cnt = sizeof(val);
+    YZHCodeItemType codeType = YZHCodeItemTypeReal;
+    
+    type |= TYPE_AND(cnt - 1, BYTE_CNT_FIELD_MASK);
+    type |= TYPE_LS(TYPE_AND(codeType, TYPE_FIELD_MASK), TYPE_FIELD_OFFSET);
+    
+    codeData->appendWriteByte(type);
+    
+    codeData->ensureRemSize(cnt);
+    
+    int64_t startOffset = codeData->currentSeek();
+    _encodeDoubleToBuffer(val, codeData->bytes() + startOffset);
+    codeData->seekTo(startOffset + cnt);
+}
+
+//可以8、U8,16,U16,32,U32,64,U64
+void encodeIntegerIntoCodeData(int64_t val, YZHMutableCodeData *codeData)
+{
+    if (codeData == NULL) {
+        return;
+    }
+    val = integerToZigzag(val);
+    uint8_t type = TYPE_LS(1, 7);
+    uint8_t cnt = TYPEULL_BYTES_N(val);
+    YZHCodeItemType codeType = YZHCodeItemTypeInteger;
+    
+    type |= TYPE_AND(cnt - 1, BYTE_CNT_FIELD_MASK);
+    type |= TYPE_LS(TYPE_AND(codeType, TYPE_FIELD_MASK), TYPE_FIELD_OFFSET);
+
+    codeData->appendWriteByte(type);
+    
+    codeData->ensureRemSize(cnt);
+    
+    int64_t startOffset = codeData->currentSeek();
+    _encodeInt64ToBuffer(val, codeData->bytes() + startOffset);
+    codeData->seekTo(startOffset + cnt);
+}
+
+void encodeStringIntoCodeData(NSString *text, YZHMutableCodeData *codeData)
+{
+    if (text == nil || codeData == NULL) {
+        return;
+    }
+    uint8_t type = TYPE_LS(1, 7);
+    int64_t len = [text lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+    uint8_t cnt = TYPEULL_BYTES_N(len);
+    YZHCodeItemType codeType = YZHCodeItemTypeText;
+    
+    type |= TYPE_AND(cnt - 1, BYTE_CNT_FIELD_MASK);
+    type |= TYPE_LS(TYPE_AND(codeType, TYPE_FIELD_MASK), TYPE_FIELD_OFFSET);
+    
+    codeData->appendWriteByte(type);
+    
+    codeData->ensureRemSize(cnt + len);
+    
+    int64_t startOffset = codeData->currentSeek();
+    _encodeInt64ToBuffer(len, codeData->bytes() + startOffset);
+    codeData->seekTo(startOffset + cnt);
+    
+    [text getBytes:codeData->bytes() + startOffset + cnt
+         maxLength:(NSUInteger)len
+        usedLength:0
+          encoding:NSUTF8StringEncoding
+           options:0
+             range:NSMakeRange(0, text.length)
+    remainingRange:NULL];
+    
+    codeData->seekTo(startOffset + cnt + len);
+}
+
+void encodeDataIntoCodeData(NSData *data, YZHMutableCodeData *codeData)
+{
+    if (data == nil || codeData == NULL) {
+        return;
+    }
+    uint8_t type = TYPE_LS(1, 7);
+    int64_t len = data.length;
+    uint8_t cnt = TYPEULL_BYTES_N(len);
+    YZHCodeItemType codeType = YZHCodeItemTypeBlob;
+    
+    type |= TYPE_AND(cnt - 1, BYTE_CNT_FIELD_MASK);
+    type |= TYPE_LS(TYPE_AND(codeType, TYPE_FIELD_MASK), TYPE_FIELD_OFFSET);
+    
+    codeData->appendWriteByte(type);
+    
+    codeData->ensureRemSize(cnt + len);
+    
+    int64_t startOffset = codeData->currentSeek();
+    _encodeInt64ToBuffer(len, codeData->bytes() + startOffset);
+    codeData->seekTo(startOffset + cnt);
+    
+    codeData->writeData(data);
 }
 
 #pragma mark decode
-+ (id)decodeObjectWithData:(NSData*)data
+id decodeObjectFromData(NSData *data)
 {
-    return [self decodeObjectFromBuffer:(uint8_t*)data.bytes length:data.length offset:NULL];
+    id obj = decodeObjectFromBuffer((uint8_t*)data.bytes, data.length, NULL, NULL, NULL);
+    return obj;
 }
 
-+ (id)decodeObjectFromBuffer:(uint8_t*)buffer length:(NSInteger)length
-{
-    return [self decodeObjectFromBuffer:buffer length:length offset:NULL];
-}
-
-+ (id)decodeObjectFromBuffer:(uint8_t*)buffer length:(NSInteger)length offset:(int64_t*)offset
+id decodeObjectFromBuffer(uint8_t *buffer ,int64_t length, int64_t *offset, YZHCodeItemType *codeType, NSError **error)
 {
     if (buffer == nil || length <= 0) {
         if (offset) {
             *offset = 0;
+        }
+        if (error) {
+            *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorPtrNull userInfo:nil];
         }
         return nil;
     }
     
     int8_t len = 0;
     int64_t size = 0;
-    YZHCodeItemType codeType;
-    NSRange r = [self unpackBuffer:buffer bufferSize:length codeType:&codeType len:&len size:&size offset:offset];
+    YZHCodeItemType codeTypeTmp;
+    NSRange r = unpackBuffer(buffer, length, &codeTypeTmp, &len, &size, offset);
     if (r.location == NSNotFound) {
+        if (error) {
+            *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorNotFound userInfo:nil];
+        }
         return nil;
+    }
+    if (codeType) {
+        *codeType = codeTypeTmp;
     }
     uint8_t *ptr = buffer + r.location;
     
-    switch (codeType) {
+    switch (codeTypeTmp) {
         case YZHCodeItemTypeReal: {
-            double val = [self _decodeDouble:ptr];
+            double val =  _decodeDouble(ptr);
             return [NSNumber numberWithDouble:val];
         }
         case YZHCodeItemTypeRealF: {
-            float val = [self _decodeFloat:ptr];
+            float val = _decodeFloat(ptr);
             return [NSNumber numberWithFloat:val];
         }
         case YZHCodeItemTypeInteger: {
@@ -564,27 +711,28 @@ static inline int64_t zigzagToInteger(int64_t n)
         }
         case YZHCodeItemTypeBlob: {
             return [NSData dataWithBytes:ptr length:r.length];
-//            return [NSData dataWithBytesNoCopy:ptr length:r.length freeWhenDone:NO];
         }
         case YZHCodeItemTypeArray: {
             NSMutableArray *array = [NSMutableArray array];
             while (size > 0) {
                 int64_t offsetTmp = 0;
-                id obj = [self decodeObjectFromBuffer:ptr length:(NSInteger)size offset:&offsetTmp];
+                id obj = decodeObjectFromBuffer(ptr, size, &offsetTmp, NULL, error);
                 if (obj) {
                     [array addObject:obj];
+                }
+                if (offsetTmp == 0) {
+                    break;
                 }
                 ptr += offsetTmp;
                 size -= offsetTmp;
             }
-            
             return array;
         }
         case YZHCodeItemTypeDictionary: {
             NSMutableDictionary *dict = [NSMutableDictionary dictionary];
             while (size > 0) {
                 int64_t offsetTmp = 0;
-                id key = [self decodeObjectFromBuffer:ptr length:(NSInteger)size offset:&offsetTmp];
+                id key = decodeObjectFromBuffer(ptr, size, &offsetTmp, NULL, error);
                 ptr += offsetTmp;
                 size -= offsetTmp;
                 //这里key有可能为nil,但是offsetTmp不能为0
@@ -592,7 +740,7 @@ static inline int64_t zigzagToInteger(int64_t n)
                     break;
                 }
                 
-                id obj = [self decodeObjectFromBuffer:ptr length:(NSInteger)size offset:&offsetTmp];
+                id obj = decodeObjectFromBuffer(ptr, size, &offsetTmp, NULL, error);
                 ptr += offsetTmp;
                 size -= offsetTmp;
                 if (key && obj) {
@@ -602,42 +750,47 @@ static inline int64_t zigzagToInteger(int64_t n)
                     break;
                 }
             }
-            
             return dict;
         }
         case YZHCodeItemTypeObject: {
             int64_t offsetTmp = 0;
-            NSString *clsName = [self decodeObjectFromBuffer:ptr length:(NSInteger)size offset:&offsetTmp];
+            NSString *clsName = decodeObjectFromBuffer(ptr, size, &offsetTmp, NULL, error);
             ptr += offsetTmp;
             size -= offsetTmp;
             if (size <= 0) {
+                if (error) {
+                    *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorDataError userInfo:nil];
+                }
                 return nil;
             }
             Class cls = NSClassFromString(clsName);
             //这里的cls可能为nil,申请的object为nil时判断
             id object = [cls new];
             if (object == nil) {
+                if (error) {
+                    *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorClassError userInfo:nil];
+                }
                 return object;
             }
             
-            NSData *data = [self decodeObjectFromBuffer:ptr length:(NSInteger)size offset:NULL];
+            NSData *data = decodeObjectFromBuffer(ptr, size, NULL, NULL, error);
             ptr = (uint8_t*)data.bytes;
             size = data.length;
             if ([object conformsToProtocol:@protocol(NSCoding)]) {
-                object = [self _unarchiveObjectWithData:data withClass:cls];
+                object = _unarchiveObjectWithData(data, cls);
             }
             else {
                 while (size > 0) {
                     int64_t offsetTmp = 0;
-                    id key = [self decodeObjectFromBuffer:ptr length:(NSInteger)size offset:&offsetTmp];
+                    id key = decodeObjectFromBuffer(ptr, size, &offsetTmp, NULL, error);
                     ptr += offsetTmp;
                     size -= offsetTmp;
                     //key可能为nil，但是offsetTmp必须大于0
-                    if (size <= 0 || offsetTmp <= 0/*|| key == nil*/) {
+                    if (size <= 0 || offsetTmp <= 0) {
                         break;
                     }
                     
-                    id obj = [self decodeObjectFromBuffer:ptr length:(NSInteger)size offset:&offsetTmp];
+                    id obj = decodeObjectFromBuffer(ptr, size, &offsetTmp, NULL, error);
                     ptr += offsetTmp;
                     size -= offsetTmp;
                     if (key) {
@@ -658,69 +811,248 @@ static inline int64_t zigzagToInteger(int64_t n)
     return nil;
 }
 
-#pragma mark packet
-+ (NSData*)packetData:(NSData*)data codeType:(YZHCodeItemType)codeType
+float decodeFloatFromBuffer(uint8_t *buffer, int64_t length, int64_t *offset ,NSError **error)
 {
-    YZHMutableCodeData *codeData = [[YZHMutableCodeData alloc] init];
-    [self packetData:data codeType:codeType intoCodeData:codeData];
-    return [codeData copyData];
-}
-
-+ (void)packetData:(NSData*)data codeType:(YZHCodeItemType)codeType intoCodeData:(YZHMutableCodeData*)codeData
-{
-    [self packetCodeData:[[YZHCodeData alloc] initWithData:data] codeType:codeType intoCodeData:codeData];
-}
-
-+ (void)packetCodeData:(YZHCodeData*)data codeType:(YZHCodeItemType)codeType intoCodeData:(YZHMutableCodeData*)codeData
-{
-    if (codeData == nil) {
-        return;
+    if (buffer == nil || length <= 0) {
+        if (offset) {
+            *offset = 0;
+        }
+        if (error) {
+            *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorPtrNull userInfo:nil];
+        }
+        return 0;
     }
-    int64_t len = data.dataSize;
-    [self _packetHeader:len codeType:codeType intoCodeData:codeData];
-    if (data) {
-        [codeData appendWriteBuffer:data.bytes size:len];
-    }
-}
-
-+ (void)_packetHeader:(int64_t)payloadLength codeType:(YZHCodeItemType)codeType intoCodeData:(YZHMutableCodeData*)codeData
-{
-    uint8_t type = TYPE_LS(1, 7);
-    int64_t len = payloadLength;
-    uint8_t cnt = TYPEULL_BYTES_N(len);
-    BOOL haveLoadLength = YES;
-    if (codeType == YZHCodeItemTypeReal || codeType == YZHCodeItemTypeRealF || codeType == YZHCodeItemTypeInteger) {
-        cnt = len;
-        haveLoadLength = NO;
-    }
-    type |= TYPE_AND(cnt - 1, BYTE_CNT_FIELD_MASK);
-    type |= TYPE_LS(TYPE_AND(codeType, TYPE_FIELD_MASK), TYPE_FIELD_OFFSET);
     
-    [codeData appendWriteByte:type];
-    
-    if (haveLoadLength) {
-        [codeData ensureRemSize:cnt];
-        int64_t startOffset = [codeData dataSize];
-        [self _encodeInt64:len toBuffer:codeData.bytes + startOffset];
-        [codeData seekTo:startOffset + cnt];
-    }
-}
-
-+ (NSData*)unpackData:(NSData*)data codeType:(YZHCodeItemType*)codeType size:(int64_t*)size offset:(int64_t*)offset
-{
-    return [self _unpackData:data codeType:codeType len:NULL size:size offset:offset];
-}
-
-+ (NSData*)_unpackData:(NSData*)data codeType:(YZHCodeItemType*)codeType len:(int8_t*)len size:(int64_t*)size offset:(int64_t*)offset
-{
-    NSRange r = [self unpackBuffer:(uint8_t*)data.bytes bufferSize:data.length codeType:codeType len:len size:size offset:offset];
+    int8_t len = 0;
+    int64_t size = 0;
+    YZHCodeItemType codeType;
+    NSRange r = unpackBuffer(buffer, length, &codeType, &len, &size, offset);
     if (r.location == NSNotFound) {
+        if (error) {
+            *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorNotFound userInfo:nil];
+        }
+        return 0;
+    }
+    if (codeType != YZHCodeItemTypeRealF) {
+        if (error) {
+            *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorTypeError userInfo:nil];
+        }
+        return 0;
+    }
+    uint8_t *ptr = buffer + r.location;
+    float val = _decodeFloat(ptr);
+    return val;
+}
+
+double decodeDoubleFromBuffer(uint8_t *buffer, int64_t length, int64_t *offset, NSError **error)
+{
+    if (buffer == nil || length <= 0) {
+        if (offset) {
+            *offset = 0;
+        }
+        if (error) {
+            *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorPtrNull userInfo:nil];
+        }
+        return 0;
+    }
+    
+    int8_t len = 0;
+    int64_t size = 0;
+    YZHCodeItemType codeType;
+    NSRange r = unpackBuffer(buffer, length, &codeType, &len, &size, offset);
+    if (r.location == NSNotFound) {
+        if (error) {
+            *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorNotFound userInfo:nil];
+        }
+        return 0;
+    }
+    if (codeType != YZHCodeItemTypeReal) {
+        if (error) {
+            *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorTypeError userInfo:nil];
+        }
+        return 0;
+    }
+    uint8_t *ptr = buffer + r.location;
+    double val = _decodeDouble(ptr);
+    return val;
+}
+
+int64_t decodeIntegerFromBuffer(uint8_t *buffer, int64_t length, int64_t *offset,NSError **error)
+{
+    if (buffer == nil || length <= 0) {
+        if (offset) {
+            *offset = 0;
+        }
+        if (error) {
+            *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorPtrNull userInfo:nil];
+        }
+        return 0;
+    }
+    
+    int8_t len = 0;
+    int64_t size = 0;
+    YZHCodeItemType codeType;
+    NSRange r = unpackBuffer(buffer, length, &codeType, &len, &size, offset);
+    if (r.location == NSNotFound) {
+        if (error) {
+            *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorNotFound userInfo:nil];
+        }
+        return 0;
+    }
+    if (codeType != YZHCodeItemTypeInteger) {
+        if (error) {
+            *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorTypeError userInfo:nil];
+        }
+        return 0;
+    }
+    int64_t val = size;
+    val = zigzagToInteger(val);
+    return val;
+}
+
+NSString *decodeStringFromBuffer(uint8_t *buffer, int64_t length, int64_t *offset,NSError **error)
+{
+    if (buffer == nil || length <= 0) {
+        if (offset) {
+            *offset = 0;
+        }
+        if (error) {
+            *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorPtrNull userInfo:nil];
+        }
         return nil;
     }
-    return [data subdataWithRange:r];
+    
+    int8_t len = 0;
+    int64_t size = 0;
+    YZHCodeItemType codeType;
+    NSRange r = unpackBuffer(buffer, length, &codeType, &len, &size, offset);
+    if (r.location == NSNotFound) {
+        if (error) {
+            *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorNotFound userInfo:nil];
+        }
+        return nil;
+    }
+    if (codeType != YZHCodeItemTypeText) {
+        if (error) {
+            *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorTypeError userInfo:nil];
+        }
+        return nil;
+    }
+    uint8_t *ptr = buffer + r.location;
+    NSString *text = [[NSString alloc] initWithBytes:ptr
+                                              length:(NSUInteger)size
+                                            encoding:NSUTF8StringEncoding];
+    return text;
 }
 
-+ (NSRange)unpackBuffer:(uint8_t*)buffer bufferSize:(int64_t)bufferSize codeType:(YZHCodeItemType*)codeType len:(int8_t*)len size:(int64_t*)size offset:(int64_t*)offset
+NSData *decodeDataFromBuffer(uint8_t *buffer, int64_t length, int64_t *offset,NSError **error)
+{
+    if (buffer == nil || length <= 0) {
+        if (offset) {
+            *offset = 0;
+        }
+        if (error) {
+            *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorPtrNull userInfo:nil];
+        }
+        return nil;
+    }
+    
+    int8_t len = 0;
+    int64_t size = 0;
+    YZHCodeItemType codeType;
+    NSRange r = unpackBuffer(buffer, length, &codeType, &len, &size, offset);
+    if (r.location == NSNotFound) {
+        if (error) {
+            *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorNotFound userInfo:nil];
+        }
+        return nil;
+    }
+    if (codeType != YZHCodeItemTypeBlob) {
+        if (error) {
+            *error = [NSError errorWithDomain:_YZHCoderErrorDomain code:YZHCoderErrorTypeError userInfo:nil];
+        }
+        return nil;
+    }
+    uint8_t *ptr = buffer + r.location;
+    
+    return [NSData dataWithBytes:ptr length:r.length];
+}
+
+//这些是同字节数（sizeof）的转换
+int32_t Int32FromFloat(float val)
+{
+    Converter<float, int32_t> cvter;
+    cvter.from = val;
+    return cvter.to;
+}
+
+float FloatFromInt32(int32_t val)
+{
+    Converter<int32_t, float> cvter;
+    cvter.from = val;
+    return cvter.to;
+}
+
+int64_t Int64FromDouble(double val)
+{
+    Converter<double, int64_t> cvter;
+    cvter.from = val;
+    return cvter.to;
+}
+
+double DoubleFromInt64(int64_t val)
+{
+    Converter<int64_t, double> cvter;
+    cvter.from = val;
+    return cvter.to;
+}
+
+
+//将float和Int32进行转换，Int32存在Int64上
+int64_t Int64FromFloat(float val)
+{
+    return Int32FromFloat(val);
+}
+
+float FloatFromInt64(int64_t val)
+{
+    int32_t ival = TYPE_AND(val, 0XFFFFFFFF);
+    return FloatFromInt32(ival);
+}
+
+
+
+NSData* packetData(NSData *data,YZHCodeItemType codeType)
+{
+    YZHMutableCodeData codeData;
+    packetDataIntoCodeData(data, codeType, &codeData);
+    return codeData.copyData();
+}
+
+void packetDataIntoCodeData(NSData *data,YZHCodeItemType codeType, YZHMutableCodeData *codeData)
+{
+    YZHCodeData cdData(data);
+    packetCodeData(&cdData, codeType, codeData);
+}
+
+void packetCodeData(YZHCodeData *data, YZHCodeItemType codeType, YZHMutableCodeData *codeData)
+{
+    if (codeData == NULL) {
+        return;
+    }
+    int64_t len = data->dataSize();
+    _packetHeader(len, codeType, codeData);
+    if (data) {
+        codeData->appendWriteBuffer(data->bytes(), len);
+    }
+}
+
+NSData* unpackData(NSData *data, YZHCodeItemType *codeType, int64_t *size, int64_t *offset)
+{
+    return _unpackData(data, codeType, NULL, size, offset);
+}
+
+NSRange unpackBuffer(uint8_t *buffer, int64_t bufferSize, YZHCodeItemType *codeType, int8_t *len, int64_t *size, int64_t *offset)
 {
     NSRange r = NSMakeRange(NSNotFound, 0);
     if (buffer == nullptr || bufferSize <= 0) {
@@ -750,7 +1082,7 @@ static inline int64_t zigzagToInteger(int64_t n)
         *offset = 1;
     }
     
-    uint64_t sizeTmp = [self _decodeInt64:ptr len:lenTmp];
+    uint64_t sizeTmp = _decodeInt64(ptr, lenTmp);
     ptr += lenTmp;
     if (offset) {
         *offset = 1 + lenTmp;
@@ -771,217 +1103,3 @@ static inline int64_t zigzagToInteger(int64_t n)
     }
     return NSMakeRange(NSUInteger(1 + lenTmp), (NSUInteger)sizeTmp);
 }
-
-
-+ (NSData*)encodeBool:(BOOL)val
-{
-    return [self encodeObject:[NSNumber numberWithBool:val]];
-}
-
-+ (NSData*)encodeInt8:(int8_t)val
-{
-    return [self encodeObject:[NSNumber numberWithChar:val]];
-}
-
-+ (NSData*)encodeUInt8:(uint8_t)val
-{
-    return [self encodeObject:[NSNumber numberWithUnsignedChar:val]];
-}
-
-+ (NSData*)encodeInt16:(int16_t)val
-{
-    return [self encodeObject:[NSNumber numberWithShort:val]];
-}
-
-+ (NSData*)encodeUInt16:(uint16_t)val
-{
-    return [self encodeObject:[NSNumber numberWithUnsignedShort:val]];
-}
-
-+ (NSData*)encodeInt32:(int32_t)val
-{    
-    return [self encodeObject:[NSNumber numberWithInt:val]];
-}
-
-+ (NSData*)encodeUInt32:(uint32_t)val
-{
-    return [self encodeObject:[NSNumber numberWithUnsignedInt:val]];
-
-}
-
-+ (NSData*)encodeInt64:(int64_t)val
-{
-    return [self encodeObject:[NSNumber numberWithLongLong:val]];
-}
-
-+ (NSData*)encodeUInt64:(uint64_t)val
-{
-    return [self encodeObject:[NSNumber numberWithUnsignedLongLong:val]];
-}
-
-+ (NSData*)encodeFloat:(float)val
-{
-    return [self encodeObject:[NSNumber numberWithFloat:val]];
-}
-
-+ (NSData*)encodeDouble:(double)val
-{
-    return [self encodeObject:[NSNumber numberWithDouble:val]];
-}
-
-
-+ (void)encodeFloat:(float)val intoCodeData:(YZHMutableCodeData*)codeData
-{
-    if (codeData == nil) {
-        return;
-    }
-    
-    uint8_t type = TYPE_LS(1, 7);
-    uint8_t cnt = sizeof(val);
-    YZHCodeItemType codeType = YZHCodeItemTypeRealF;
-    
-    type |= TYPE_AND(cnt - 1, BYTE_CNT_FIELD_MASK);
-    type |= TYPE_LS(TYPE_AND(codeType, TYPE_FIELD_MASK), TYPE_FIELD_OFFSET);
-    
-    [codeData appendWriteByte:type];
-    
-    [codeData ensureRemSize:cnt];
-    
-    int64_t startOffset = [codeData dataSize];
-    [self _encodeFloat:val toBuffer:codeData.bytes + startOffset];
-    [codeData seekTo:startOffset + cnt];
-}
-
-+ (void)encodeDouble:(double)val intoCodeData:(YZHMutableCodeData*)codeData
-{
-    if (codeData == nil) {
-        return;
-    }
-    uint8_t type = TYPE_LS(1, 7);
-    uint8_t cnt = sizeof(val);
-    YZHCodeItemType codeType = YZHCodeItemTypeReal;
-    
-    type |= TYPE_AND(cnt - 1, BYTE_CNT_FIELD_MASK);
-    type |= TYPE_LS(TYPE_AND(codeType, TYPE_FIELD_MASK), TYPE_FIELD_OFFSET);
-    
-    [codeData appendWriteByte:type];
-    
-    [codeData ensureRemSize:cnt];
-    
-    int64_t startOffset = [codeData dataSize];
-    [self _encodeDouble:val toBuffer:codeData.bytes + startOffset];
-    [codeData seekTo:startOffset + cnt];
-}
-
-+ (void)encodeInteger:(int64_t)val intoCodeData:(YZHMutableCodeData*)codeData
-{
-    if (codeData == nil) {
-        return;
-    }
-    val = integerToZigzag(val);
-    uint8_t type = TYPE_LS(1, 7);
-    uint8_t cnt = TYPEULL_BYTES_N(val);
-    YZHCodeItemType codeType = YZHCodeItemTypeInteger;
-    
-    type |= TYPE_AND(cnt - 1, BYTE_CNT_FIELD_MASK);
-    type |= TYPE_LS(TYPE_AND(codeType, TYPE_FIELD_MASK), TYPE_FIELD_OFFSET);
-    
-    [codeData appendWriteByte:type];
-    
-    [codeData ensureRemSize:cnt];
-    
-    int64_t startOffset = [codeData dataSize];
-    [self _encodeInt64:val toBuffer:codeData.bytes + startOffset];
-    [codeData seekTo:startOffset + cnt];
-}
-
-+ (void)encodeString:(NSString*)text intoCodeData:(YZHMutableCodeData*)codeData
-{
-    if (text == nil || codeData == nil) {
-        return;
-    }
-    uint8_t type = TYPE_LS(1, 7);
-    int64_t len = [text lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-    uint8_t cnt = TYPEULL_BYTES_N(len);
-    YZHCodeItemType codeType = YZHCodeItemTypeText;
-    
-    type |= TYPE_AND(cnt - 1, BYTE_CNT_FIELD_MASK);
-    type |= TYPE_LS(TYPE_AND(codeType, TYPE_FIELD_MASK), TYPE_FIELD_OFFSET);
-    
-    [codeData appendWriteByte:type];
-    
-    [codeData ensureRemSize:cnt + len];
-    
-    int64_t startOffset = [codeData dataSize];
-    [self _encodeInt64:len toBuffer:codeData.bytes + startOffset];
-    [codeData seekTo:startOffset + cnt];
-    
-    [text getBytes:codeData.bytes + startOffset + cnt
-         maxLength:(NSUInteger)len
-        usedLength:0
-          encoding:NSUTF8StringEncoding
-           options:0
-             range:NSMakeRange(0, text.length)
-    remainingRange:NULL];
-    
-    [codeData seekTo:startOffset + cnt + len];
-}
-
-
-+ (BOOL)decodeBoolWithData:(NSData*)data
-{
-    return [[self decodeObjectWithData:data] boolValue];
-}
-
-+ (int8_t)decodeInt8WithData:(NSData*)data
-{
-    return [[self decodeObjectWithData:data] charValue];
-}
-
-+ (uint8_t)decodeUInt8WithData:(NSData*)data
-{
-    return [[self decodeObjectWithData:data] unsignedCharValue];
-}
-
-+ (int16_t)decodeInt16WithData:(NSData*)data
-{
-    return [[self decodeObjectWithData:data] shortValue];
-}
-
-+ (uint16_t)decodeUInt16WithData:(NSData*)data
-{
-    return [[self decodeObjectWithData:data] unsignedShortValue];
-}
-
-+ (int32_t)decodeInt32WithData:(NSData*)data
-{
-    return [[self decodeObjectWithData:data] intValue];
-}
-
-+ (uint32_t)decodeUInt32WithData:(NSData*)data
-{
-     return [[self decodeObjectWithData:data] unsignedIntValue];
-}
-
-+ (int64_t)decodeInt64WithData:(NSData*)data
-{
-    return [[self decodeObjectWithData:data] longLongValue];
-}
-
-+ (uint64_t)decodeUInt64WithData:(NSData*)data
-{
-    return [[self decodeObjectWithData:data] unsignedLongLongValue];
-}
-
-+ (float)decodeFloatWithData:(NSData*)data
-{
-    return [[self decodeObjectWithData:data] floatValue];
-}
-
-+ (double)decodeDoubleWithData:(NSData*)data
-{
-    return [[self decodeObjectWithData:data] doubleValue];
-
-}
-
-@end

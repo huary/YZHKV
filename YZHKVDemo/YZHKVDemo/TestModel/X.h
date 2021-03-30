@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "YZHCoder.h"
+#import "NSObject+YZHCodeToTopSuperClass.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface X : NSObject<YZHCoderObjectProtocol>
+@interface X : NSObject <YZHCodeObjectProtocol>
 
 @property (nonatomic, copy) NSString *x;
 
